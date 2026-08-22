@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entraînement — Sujets TEF Canada &amp; TCF Canada | LearnFrench</title>
+  <meta name="description" content="Banque de sujets d'expression écrite et orale au format officiel du TEF Canada et du TCF Canada, avec chronomètre, compteur de mots et listes de vérification NCLC 5.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="leaf">&#127809;</span>LearnFrench <small>NCLC&nbsp;5</small></a>
+    <div class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="entrainement.html">Entraînement</a>
+      <a href="evaluation.html">Auto-évaluation</a>
+      <a href="tableaux.html">Tableaux IRCC</a>
+      <a href="conseils.html">Stratégie</a>
+    </div>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">Banque de sujets</div>
+      <h2>Entraînez-vous dans les conditions de l'examen</h2>
+      <p>
+        Chaque tâche reproduit le format officiel. Lancez le chronomètre, respectez le nombre de mots,
+        puis vérifiez votre production avec la liste de vérification NCLC 5 avant de passer à
+        l'<a href="evaluation.html">auto-évaluation</a>.
+      </p>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" data-filter-exam="all">Tous les examens</button>
+      <button class="filter-btn" data-filter-exam="tef">TEF Canada</button>
+      <button class="filter-btn" data-filter-exam="tcf">TCF Canada</button>
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" data-filter-skill="all">Toutes les épreuves</button>
+      <button class="filter-btn" data-filter-skill="writing">Expression écrite</button>
+      <button class="filter-btn" data-filter-skill="speaking">Expression orale</button>
+    </div>
+
+    <div id="task-list"></div>
+
+    <div class="callout">
+      <strong>Pour l'expression orale :</strong> enregistrez-vous avec votre téléphone, puis réécoutez-vous en
+      suivant la liste de vérification. Comptez vos hésitations : au NCLC 5, le débit doit rester régulier,
+      même avec des phrases simples.
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div>
+      <strong style="color:#fff">LearnFrench</strong> — Préparation NCLC 5<br>
+      TEF Canada · TCF Canada
+    </div>
+    <div class="disclaimer">
+      Sujets d'entraînement originaux au format des épreuves officielles. Site indépendant, sans affiliation
+      avec IRCC, France Éducation international ou Le français des affaires.
+    </div>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
