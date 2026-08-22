@@ -219,21 +219,27 @@ const CRITERIA_TIPS = {
  * Score estimation
  * Self-rated criteria (0\u20135 each, total /25) are mapped onto the
  * official scale of the selected exam, then converted to NCLC
- * using the IRCC tables. Deliberately slightly strict.
+ * using the IRCC tables. Calibration is deliberately strict:
+ * a uniform 3/5 ("correct but simple") lands in the middle of
+ * the NCLC 5 band, not above it.
  * ------------------------------------------------------------- */
+const ESTIMATION_ANCHORS = {
+  // [score at total=15 (all 3s, mid-NCLC 5), score at total=25 (all 5s)]
+  tcf: { writing: [6, 16], speaking: [6, 16] },
+  tef: { writing: [354, 640], speaking: [404, 640] }
+};
+
 function estimateScore(exam, skill, values) {
   const total = values.reduce((a, b) => a + b, 0); // 0\u201325
-  const ratio = total / 25;
+  const [mid, top] = ESTIMATION_ANCHORS[exam][skill];
+  const maxScore = exam === "tcf" ? 20 : 699;
   let score;
-  if (exam === "tcf") {
-    // Map onto /20; strict rounding (floor).
-    score = Math.floor(ratio * 20);
-    score = Math.max(0, Math.min(20, score));
+  if (total <= 15) {
+    score = Math.floor((total / 15) * mid);
   } else {
-    // Map onto 0\u2013699.
-    score = Math.floor(ratio * 699);
-    score = Math.max(0, Math.min(699, score));
+    score = Math.floor(mid + ((total - 15) / 10) * (top - mid));
   }
+  score = Math.max(0, Math.min(maxScore, score));
   // A largely off-task or incomplete answer caps the result below NCLC 5,
   // regardless of language quality (official raters do the same).
   const taskValue = values[0];
