@@ -1,4 +1,4 @@
-/* ============ LearnFrench — TEF/TCF Canada NCLC 5 ============ */
+/* ============ LearnFrench — TEF/TCF Canada CLB 5 ============ */
 "use strict";
 
 /* ---------------------------------------------------------------
@@ -9,7 +9,7 @@
  * ------------------------------------------------------------- */
 const IRCC_TABLES = {
   tef: {
-    label: "TEF Canada (après le 10 décembre 2023)",
+    label: "TEF Canada (after December 10, 2023)",
     scale: "0\u2013699",
     skills: {
       reading:   { 10: [546, 699], 9: [503, 545], 8: [462, 502], 7: [434, 461], 6: [393, 433], 5: [352, 392], 4: [306, 351] },
@@ -20,7 +20,7 @@ const IRCC_TABLES = {
   },
   tcf: {
     label: "TCF Canada",
-    scale: "CE/CO : 331\u2013699 · EE/EO : 0\u201320",
+    scale: "Reading/Listening: 331\u2013699 · Writing/Speaking: 0\u201320",
     skills: {
       reading:   { 10: [549, 699], 9: [524, 548], 8: [499, 523], 7: [453, 498], 6: [406, 452], 5: [375, 405], 4: [342, 374] },
       writing:   { 10: [16, 20], 9: [14, 15], 8: [12, 13], 7: [10, 11], 6: [7, 9], 5: [6, 6], 4: [4, 5] },
@@ -41,147 +41,148 @@ function scoreToNCLC(exam, skill, score) {
 }
 
 /* ---------------------------------------------------------------
- * Practice task bank (production écrite & orale)
+ * Practice task bank (writing & speaking)
+ * Prompts (consignes) are kept in French, as on the real exam.
  * ------------------------------------------------------------- */
 const TASKS = [
   {
     id: "tef-ee-a1", exam: "tef", skill: "writing",
-    title: "TEF — Expression écrite, Section A : fait divers",
+    title: "TEF — Writing, Section A: continue a news story",
     time: 30, words: [80, 120],
     consigne:
       "Vous travaillez pour le journal local. Voici le début d'un article :\n\n« Hier soir, vers 22 h, les habitants de la rue Principale ont entendu un grand bruit. Quand ils sont sortis, ils ont découvert... »\n\nContinuez cet article en racontant la suite des événements (environ 80 à 120 mots). Utilisez le passé composé et l'imparfait.",
     checklist: [
-      "J'ai continué l'histoire de façon logique (pas de rupture avec le début).",
-      "J'ai utilisé le passé composé ET l'imparfait correctement.",
-      "J'ai respecté la longueur demandée (80\u2013120 mots).",
-      "J'ai utilisé des connecteurs : d'abord, ensuite, puis, finalement.",
-      "J'ai écrit au style journalistique (3e personne, ton neutre)."
+      "I continued the story logically (no break with the given opening).",
+      "I used both the passé composé AND the imparfait correctly.",
+      "I respected the required length (80\u2013120 words).",
+      "I used connectors: d'abord, ensuite, puis, finalement.",
+      "I wrote in a journalistic style (3rd person, neutral tone)."
     ]
   },
   {
     id: "tef-ee-b1", exam: "tef", skill: "writing",
-    title: "TEF — Expression écrite, Section B : lettre argumentée",
+    title: "TEF — Writing, Section B: argumentative letter",
     time: 30, words: [180, 220],
     consigne:
       "Vous avez lu cette annonce dans le journal :\n\n« La mairie veut fermer la bibliothèque municipale pour construire un parking. »\n\nVous écrivez une lettre au maire pour donner votre opinion. Vous présentez 2 ou 3 arguments et vous proposez une solution (environ 200 mots).",
     checklist: [
-      "J'ai utilisé la forme de la lettre formelle (Monsieur le Maire, formule de politesse finale).",
-      "J'ai donné clairement mon opinion dès le début.",
-      "J'ai présenté 2\u20133 arguments distincts avec des exemples.",
-      "J'ai proposé une solution concrète.",
-      "J'ai utilisé le vouvoiement partout."
+      "I used the formal letter format (Monsieur le Maire, closing formula).",
+      "I stated my opinion clearly at the start.",
+      "I presented 2\u20133 distinct arguments with examples.",
+      "I proposed a concrete solution.",
+      "I used \u00ab vous \u00bb (formal address) throughout."
     ]
   },
   {
     id: "tef-eo-a1", exam: "tef", skill: "speaking",
-    title: "TEF — Expression orale, Section A : obtenir des renseignements",
+    title: "TEF — Speaking, Section A: asking for information",
     time: 5, words: null,
     consigne:
       "Vous avez vu cette annonce :\n\n« Cours de natation pour adultes — piscine municipale. Inscriptions ouvertes. Tél. : 04 56 78 90 12 »\n\nVous téléphonez pour obtenir des renseignements. Posez environ 10 questions : horaires, prix, niveau, matériel, inscription, professeur, etc. (L'examinateur joue le rôle de l'employé.)",
     checklist: [
-      "J'ai salué et expliqué pourquoi j'appelle.",
-      "J'ai posé au moins 8\u201310 questions variées (est-ce que, quel, combien, où, quand, comment).",
-      "J'ai utilisé le vouvoiement.",
-      "J'ai réagi aux réponses (d'accord, très bien, parfait).",
-      "J'ai remercié et pris congé poliment."
+      "I greeted and explained why I was calling.",
+      "I asked at least 8\u201310 varied questions (est-ce que, quel, combien, où, quand, comment).",
+      "I used \u00ab vous \u00bb (formal address).",
+      "I reacted to the answers (d'accord, très bien, parfait).",
+      "I thanked the person and ended the call politely."
     ]
   },
   {
     id: "tef-eo-b1", exam: "tef", skill: "speaking",
-    title: "TEF — Expression orale, Section B : convaincre",
+    title: "TEF — Speaking, Section B: convincing someone",
     time: 10, words: null,
     consigne:
       "Vous avez vu cette annonce :\n\n« Week-end découverte à la montagne : randonnée, air pur et repas traditionnel. Prix spécial groupe ! »\n\nVous voulez convaincre un ami de participer à ce week-end avec vous. Présentez l'activité et donnez-lui des arguments pour le convaincre. Répondez à ses objections. (L'examinateur joue le rôle de l'ami.)",
     checklist: [
-      "J'ai présenté l'annonce clairement (quoi, où, quand, combien).",
-      "J'ai donné au moins 3 arguments pour convaincre.",
-      "J'ai répondu aux objections (trop cher, pas le temps, fatigué...).",
-      "J'ai utilisé des expressions pour convaincre : tu devrais, je t'assure que, c'est l'occasion de...",
-      "J'ai parlé avec un débit régulier, sans longues pauses."
+      "I presented the ad clearly (what, where, when, how much).",
+      "I gave at least 3 arguments to convince my friend.",
+      "I responded to objections (too expensive, no time, tired...).",
+      "I used convincing expressions: tu devrais, je t'assure que, c'est l'occasion de...",
+      "I spoke at a steady pace, without long pauses."
     ]
   },
   {
     id: "tcf-ee-t1", exam: "tcf", skill: "writing",
-    title: "TCF — Expression écrite, Tâche 1 : message court",
+    title: "TCF — Writing, Task 1: short message",
     time: 10, words: [60, 120],
     consigne:
       "Vous venez de déménager dans une nouvelle ville. Vous écrivez un message à un ami pour lui décrire votre nouveau quartier et l'inviter à vous rendre visite (60 à 120 mots).",
     checklist: [
-      "J'ai répondu aux deux parties : décrire le quartier ET inviter.",
-      "J'ai utilisé le registre amical (tu, salutations informelles).",
-      "J'ai respecté la longueur (60\u2013120 mots).",
-      "J'ai donné des détails concrets (commerces, transports, ambiance).",
-      "J'ai terminé par une formule adaptée (À bientôt, Bises...)."
+      "I addressed both parts: describing the neighbourhood AND inviting.",
+      "I used the informal register (tu, casual greetings).",
+      "I respected the length (60\u2013120 words).",
+      "I gave concrete details (shops, transport, atmosphere).",
+      "I ended with an appropriate formula (À bientôt, Bises...)."
     ]
   },
   {
     id: "tcf-ee-t2", exam: "tcf", skill: "writing",
-    title: "TCF — Expression écrite, Tâche 2 : article / expérience",
+    title: "TCF — Writing, Task 2: article / personal experience",
     time: 20, words: [120, 150],
     consigne:
       "Vous participez à un blog sur la vie quotidienne. Racontez une expérience récente où vous avez aidé quelqu'un (ou quelqu'un vous a aidé). Décrivez la situation, ce qui s'est passé et ce que vous avez ressenti (120 à 150 mots).",
     checklist: [
-      "J'ai raconté au passé (passé composé + imparfait).",
-      "J'ai structuré : situation → événement → sentiment/conclusion.",
-      "J'ai respecté la longueur (120\u2013150 mots).",
-      "J'ai utilisé des connecteurs temporels (un jour, ensuite, à la fin).",
-      "J'ai exprimé un sentiment (j'étais content(e), cela m'a touché(e))."
+      "I narrated in the past (passé composé + imparfait).",
+      "I structured it: situation → event → feeling/conclusion.",
+      "I respected the length (120\u2013150 words).",
+      "I used time connectors (un jour, ensuite, à la fin).",
+      "I expressed a feeling (j'étais content(e), cela m'a touché(e))."
     ]
   },
   {
     id: "tcf-ee-t3", exam: "tcf", skill: "writing",
-    title: "TCF — Expression écrite, Tâche 3 : comparer et donner son opinion",
+    title: "TCF — Writing, Task 3: compare and give your opinion",
     time: 30, words: [120, 180],
     consigne:
       "Document 1 : « Le télétravail améliore la qualité de vie : moins de transport, plus de temps pour la famille. »\nDocument 2 : « Le télétravail isole les employés et rend la collaboration plus difficile. »\n\nDégagez les idées principales des deux documents, puis donnez votre opinion personnelle sur le télétravail (120 à 180 mots).",
     checklist: [
-      "J'ai résumé les DEUX documents (sans les recopier).",
-      "J'ai clairement séparé le résumé et mon opinion.",
-      "J'ai donné mon opinion avec au moins un argument et un exemple.",
-      "J'ai utilisé : selon le premier document..., en revanche..., à mon avis...",
-      "J'ai respecté la longueur (120\u2013180 mots)."
+      "I summarized BOTH documents (without copying them).",
+      "I clearly separated the summary from my opinion.",
+      "I gave my opinion with at least one argument and one example.",
+      "I used: selon le premier document..., en revanche..., à mon avis...",
+      "I respected the length (120\u2013180 words)."
     ]
   },
   {
     id: "tcf-eo-t1", exam: "tcf", skill: "speaking",
-    title: "TCF — Expression orale, Tâche 1 : entretien dirigé",
+    title: "TCF — Speaking, Task 1: guided interview",
     time: 2, words: null,
     consigne:
       "L'examinateur vous pose des questions sur vous : votre travail, vos études, votre famille, vos loisirs, vos projets.\n\nExemples : « Parlez-moi de votre travail. » — « Qu'est-ce que vous aimez faire le week-end ? » — « Quels sont vos projets pour l'avenir ? »\n\nRépondez de façon développée (2\u20133 phrases par question), pas seulement par oui ou non.",
     checklist: [
-      "Je développe chaque réponse (2\u20133 phrases minimum).",
-      "Je donne des exemples personnels concrets.",
-      "J'utilise le présent, le passé composé et le futur proche correctement.",
-      "Je parle sans longues hésitations.",
-      "Je ne réponds jamais par un seul mot."
+      "I develop every answer (at least 2\u20133 sentences).",
+      "I give concrete personal examples.",
+      "I use the present, passé composé and futur proche correctly.",
+      "I speak without long hesitations.",
+      "I never answer with a single word."
     ]
   },
   {
     id: "tcf-eo-t2", exam: "tcf", skill: "speaking",
-    title: "TCF — Expression orale, Tâche 2 : interaction (poser des questions)",
+    title: "TCF — Speaking, Task 2: interaction (asking questions)",
     time: 6, words: null,
     consigne:
       "Situation : Vous voulez vous inscrire à un club de sport. Vous rencontrez le responsable du club. Posez-lui des questions pour obtenir toutes les informations nécessaires : activités, horaires, tarifs, équipement, essai gratuit...\n\n(2 minutes de préparation, puis 3 min 30 d'échange.)",
     checklist: [
-      "J'ai préparé mes questions pendant les 2 minutes de préparation.",
-      "J'ai posé des questions variées et bien formées.",
-      "J'ai utilisé le vouvoiement.",
-      "J'ai réagi aux réponses avant de poser la question suivante.",
-      "J'ai maintenu l'échange pendant tout le temps imparti."
+      "I prepared my questions during the 2-minute preparation time.",
+      "I asked varied, well-formed questions.",
+      "I used \u00ab vous \u00bb (formal address).",
+      "I reacted to each answer before asking the next question.",
+      "I kept the exchange going for the full allotted time."
     ]
   },
   {
     id: "tcf-eo-t3", exam: "tcf", skill: "speaking",
-    title: "TCF — Expression orale, Tâche 3 : point de vue",
+    title: "TCF — Speaking, Task 3: point of view",
     time: 5, words: null,
     consigne:
       "« Certaines personnes pensent qu'il est préférable de vivre en ville, d'autres préfèrent la campagne. Et vous, qu'en pensez-vous ? »\n\nDonnez votre opinion et justifiez-la avec des arguments et des exemples. Parlez sans préparation pendant environ 4 minutes 30.",
     checklist: [
-      "J'ai annoncé mon opinion clairement dès le début.",
-      "J'ai donné 2\u20133 arguments avec des exemples personnels.",
-      "J'ai utilisé des connecteurs : d'abord, de plus, par exemple, en conclusion.",
-      "J'ai parlé assez longtemps (viser 3\u20134 minutes minimum).",
-      "J'ai conclu en résumant mon point de vue."
+      "I stated my opinion clearly at the start.",
+      "I gave 2\u20133 arguments with personal examples.",
+      "I used connectors: d'abord, de plus, par exemple, en conclusion.",
+      "I spoke long enough (aim for at least 3\u20134 minutes).",
+      "I concluded by summarizing my point of view."
     ]
   }
 ];
@@ -191,28 +192,28 @@ const TASKS = [
  * ------------------------------------------------------------- */
 const CRITERIA = {
   writing: [
-    { key: "task", label: "Respect de la consigne", hint: "Sujet traité, longueur, toutes les parties de la tâche" },
-    { key: "coherence", label: "Cohérence et organisation", hint: "Structure, paragraphes, connecteurs logiques" },
-    { key: "lexis", label: "Vocabulaire (étendue et précision)", hint: "Mots adaptés au sujet, peu de répétitions" },
-    { key: "grammar", label: "Grammaire (variété et exactitude)", hint: "Conjugaisons, accords, temps du passé" },
-    { key: "register", label: "Registre et format", hint: "Tu/vous adapté, format lettre/message/article respecté" }
+    { key: "task", label: "Task achievement", hint: "Topic addressed, length respected, every part of the prompt covered" },
+    { key: "coherence", label: "Coherence and organization", hint: "Structure, paragraphs, logical connectors" },
+    { key: "lexis", label: "Vocabulary (range and accuracy)", hint: "Words suited to the topic, few repetitions" },
+    { key: "grammar", label: "Grammar (range and accuracy)", hint: "Conjugations, agreements, past tenses" },
+    { key: "register", label: "Register and format", hint: "Correct tu/vous, letter/message/article format respected" }
   ],
   speaking: [
-    { key: "task", label: "Respect de la consigne", hint: "Tâche accomplie entièrement, rôle respecté" },
-    { key: "coherence", label: "Cohérence et structure", hint: "Idées enchaînées logiquement, connecteurs" },
-    { key: "lexis", label: "Vocabulaire (étendue et précision)", hint: "Mots adaptés à la situation, peu de blocages" },
-    { key: "grammar", label: "Grammaire (variété et exactitude)", hint: "Phrases complètes, temps corrects" },
-    { key: "fluency", label: "Aisance et prononciation", hint: "Débit régulier, liaisons, clarté, peu d'hésitations" }
+    { key: "task", label: "Task achievement", hint: "Task fully completed, role respected" },
+    { key: "coherence", label: "Coherence and structure", hint: "Ideas linked logically, connectors used" },
+    { key: "lexis", label: "Vocabulary (range and accuracy)", hint: "Words suited to the situation, few blocks" },
+    { key: "grammar", label: "Grammar (range and accuracy)", hint: "Complete sentences, correct tenses" },
+    { key: "fluency", label: "Fluency and pronunciation", hint: "Steady pace, liaisons, clarity, few hesitations" }
   ]
 };
 
 const CRITERIA_TIPS = {
-  task: "Relisez la consigne et vérifiez chaque partie demandée (qui, quoi, longueur, format). Une tâche incomplète plafonne la note, même avec un bon français.",
-  coherence: "Structurez avec des connecteurs simples et fiables : d'abord, ensuite, de plus, par exemple, en conclusion. Un paragraphe = une idée.",
-  lexis: "Apprenez 20\u201330 mots par thème fréquent (travail, logement, services, loisirs). Évitez les répétitions en préparant des synonymes simples.",
-  grammar: "Sécurisez le présent, le passé composé/imparfait et le futur proche. Vérifiez systématiquement les accords sujet-verbe et les articles.",
-  register: "Lettre formelle : « Monsieur/Madame », vouvoiement, formule de politesse finale. Message amical : « Salut », tutoiement, « À bientôt ».",
-  fluency: "Entraînez-vous avec un chronomètre : mieux vaut des phrases simples et fluides que des phrases complexes pleines de pauses."
+  task: "Re-read the prompt and check every required part (who, what, length, format). An incomplete task caps the score, even with good French.",
+  coherence: "Structure with simple, reliable connectors: d'abord, ensuite, de plus, par exemple, en conclusion. One paragraph = one idea.",
+  lexis: "Learn 20\u201330 words per high-frequency topic (work, housing, services, leisure). Avoid repetition by preparing simple synonyms.",
+  grammar: "Secure the present, passé composé/imparfait and futur proche. Systematically check subject-verb agreement and articles.",
+  register: "Formal letter: \u00ab Monsieur/Madame \u00bb, vous, closing formula. Friendly message: \u00ab Salut \u00bb, tu, \u00ab À bientôt \u00bb.",
+  fluency: "Practice with a timer: simple, fluent sentences beat complex sentences full of pauses."
 };
 
 /* ---------------------------------------------------------------
@@ -267,7 +268,7 @@ function formatTime(totalSeconds) {
 }
 
 /* ---------------------------------------------------------------
- * Page: Practice (banque de sujets)
+ * Page: Practice (task bank)
  * ------------------------------------------------------------- */
 function initPractice() {
   const list = document.getElementById("task-list");
@@ -282,7 +283,7 @@ function initPractice() {
       (state.skill === "all" || t.skill === state.skill)
     );
     if (!tasks.length) {
-      list.innerHTML = '<p style="color:var(--muted)">Aucune tâche ne correspond à ce filtre.</p>';
+      list.innerHTML = '<p style="color:var(--muted)">No task matches this filter.</p>';
       return;
     }
     tasks.forEach(t => list.appendChild(buildTaskCard(t)));
@@ -293,22 +294,22 @@ function initPractice() {
     card.className = "card task-card";
 
     const examPill = t.exam === "tef" ? '<span class="pill pill-tef">TEF Canada</span>' : '<span class="pill pill-tcf">TCF Canada</span>';
-    const skillPill = t.skill === "writing" ? '<span class="pill pill-ee">Expression écrite</span>' : '<span class="pill pill-eo">Expression orale</span>';
+    const skillPill = t.skill === "writing" ? '<span class="pill pill-ee">Writing</span>' : '<span class="pill pill-eo">Speaking</span>';
     const timePill = `<span class="pill pill-time">\u23F1 ${t.time} min</span>`;
-    const wordsPill = t.words ? `<span class="pill pill-time">${t.words[0]}\u2013${t.words[1]} mots</span>` : "";
+    const wordsPill = t.words ? `<span class="pill pill-time">${t.words[0]}\u2013${t.words[1]} words</span>` : "";
 
     card.innerHTML = `
       <div class="task-head"><h3>${t.title}</h3></div>
       <div class="task-meta">${examPill}${skillPill}${timePill}${wordsPill}</div>
       <div class="task-consigne">${t.consigne}</div>
       <details class="checklist">
-        <summary>Liste de vérification NCLC 5</summary>
+        <summary>CLB 5 self-check list</summary>
         <ul>${t.checklist.map(c => `<li>${c}</li>`).join("")}</ul>
       </details>
       <div class="task-tools">
         <span class="timer-display" data-timer>${formatTime(t.time * 60)}</span>
-        <button class="btn-small" data-timer-btn>Démarrer le chrono</button>
-        <button class="btn-small" data-timer-reset>Réinitialiser</button>
+        <button class="btn-small" data-timer-btn>Start timer</button>
+        <button class="btn-small" data-timer-reset>Reset</button>
       </div>
     `;
 
@@ -316,16 +317,16 @@ function initPractice() {
       const wrap = document.createElement("div");
       wrap.className = "task-writing";
       wrap.innerHTML = `
-        <textarea placeholder="Écrivez votre réponse ici..." spellcheck="false"></textarea>
+        <textarea placeholder="Write your answer here (in French)..." spellcheck="false"></textarea>
         <div class="task-tools">
-          <span class="word-count" data-wc>0 mot</span>
+          <span class="word-count" data-wc>0 words</span>
         </div>`;
       card.appendChild(wrap);
       const ta = wrap.querySelector("textarea");
       const wc = wrap.querySelector("[data-wc]");
       ta.addEventListener("input", () => {
         const n = countWords(ta.value);
-        wc.textContent = n <= 1 ? `${n} mot` : `${n} mots`;
+        wc.textContent = n === 1 ? "1 word" : `${n} words`;
         wc.classList.remove("ok", "warn");
         if (t.words) {
           if (n >= t.words[0] && n <= t.words[1]) wc.classList.add("ok");
@@ -349,7 +350,7 @@ function initPractice() {
       if (interval) {
         clearInterval(interval);
         interval = null;
-        startBtn.textContent = "Reprendre";
+        startBtn.textContent = "Resume";
         return;
       }
       startBtn.textContent = "Pause";
@@ -359,15 +360,15 @@ function initPractice() {
         if (remaining <= 0) {
           clearInterval(interval);
           interval = null;
-          display.textContent = "Temps écoulé !";
-          startBtn.textContent = "Démarrer le chrono";
+          display.textContent = "Time's up!";
+          startBtn.textContent = "Start timer";
         }
       }, 1000);
     });
     resetBtn.addEventListener("click", () => {
       if (interval) { clearInterval(interval); interval = null; }
       remaining = t.time * 60;
-      startBtn.textContent = "Démarrer le chrono";
+      startBtn.textContent = "Start timer";
       update();
     });
 
@@ -393,7 +394,7 @@ function initPractice() {
 }
 
 /* ---------------------------------------------------------------
- * Page: Evaluation (auto-évaluation)
+ * Page: Self-assessment
  * ------------------------------------------------------------- */
 function initEvaluation() {
   const panel = document.getElementById("eval-panel");
@@ -413,7 +414,7 @@ function initEvaluation() {
           <span class="criterion-value" id="crit-val-${i}">3/5</span>
         </div>
         <input type="range" id="crit-${i}" data-key="${c.key}" min="0" max="5" step="1" value="3">
-        <div class="scale-labels"><span>0 — très insuffisant</span><span>3 — NCLC 5 visé</span><span>5 — excellent</span></div>
+        <div class="scale-labels"><span>0 — very weak</span><span>3 — CLB 5 target</span><span>5 — excellent</span></div>
       </div>
     `).join("");
     criteriaWrap.querySelectorAll("input[type=range]").forEach((input, i) => {
@@ -446,7 +447,7 @@ function initEvaluation() {
     const pass = nclc >= 5;
 
     const examLabel = state.exam === "tef" ? "TEF Canada" : "TCF Canada";
-    const skillLabel = state.skill === "writing" ? "Expression écrite" : "Expression orale";
+    const skillLabel = state.skill === "writing" ? "Writing" : "Speaking";
     const scaleLabel = state.exam === "tcf" ? "/20" : "/699";
 
     // Weakest criteria → targeted advice
@@ -459,26 +460,26 @@ function initEvaluation() {
 
     let feedback = "";
     if (capped) {
-      feedback += "<li><strong>Consigne non respectée :</strong> une réponse hors sujet ou très incomplète plafonne la note sous le NCLC 5, quelle que soit la qualité de la langue. C'est la priorité absolue.</li>";
+      feedback += "<li><strong>Task not achieved:</strong> an off-topic or very incomplete answer caps the score below CLB 5, whatever the language quality. This is the absolute priority.</li>";
     }
     if (weakest.length) {
-      feedback += weakest.map(x => `<li><strong>${x.c.label} (${x.v}/5) :</strong> ${CRITERIA_TIPS[x.c.key]}</li>`).join("");
+      feedback += weakest.map(x => `<li><strong>${x.c.label} (${x.v}/5):</strong> ${CRITERIA_TIPS[x.c.key]}</li>`).join("");
     }
     if (!feedback) {
-      feedback = "<li>Aucun point faible majeur détecté. Consolidez en refaisant des tâches chronométrées et en variant les sujets.</li>";
+      feedback = "<li>No major weakness detected. Consolidate by repeating timed tasks and varying the topics.</li>";
     }
 
     resultBox.className = `result-box ${pass ? "pass" : "fail"}`;
     resultBox.innerHTML = `
-      <div class="result-verdict">${pass ? "\u2713 Objectif NCLC 5 atteint" : "\u2717 NCLC 5 non atteint"}</div>
-      <p style="font-size:0.9rem;color:var(--muted)">${examLabel} — ${skillLabel} · Estimation basée sur votre auto-évaluation (volontairement stricte).</p>
+      <div class="result-verdict">${pass ? "\u2713 CLB 5 target reached" : "\u2717 CLB 5 not reached"}</div>
+      <p style="font-size:0.9rem;color:var(--muted)">${examLabel} — ${skillLabel} · Estimate based on your self-rating (deliberately strict).</p>
       <div class="result-details">
-        <div class="result-stat"><div class="stat-label">Score estimé</div><div class="stat-value">${score}<span style="font-size:0.9rem;color:var(--muted)"> ${scaleLabel}</span></div></div>
-        <div class="result-stat"><div class="stat-label">Niveau NCLC</div><div class="stat-value">NCLC ${nclc}</div></div>
-        <div class="result-stat"><div class="stat-label">Seuil NCLC 5</div><div class="stat-value">${thresholdLabel(state.exam, state.skill)}</div></div>
+        <div class="result-stat"><div class="stat-label">Estimated score</div><div class="stat-value">${score}<span style="font-size:0.9rem;color:var(--muted)"> ${scaleLabel}</span></div></div>
+        <div class="result-stat"><div class="stat-label">CLB / NCLC level</div><div class="stat-value">NCLC ${nclc}</div></div>
+        <div class="result-stat"><div class="stat-label">CLB 5 threshold</div><div class="stat-value">${thresholdLabel(state.exam, state.skill)}</div></div>
       </div>
       <div class="result-feedback">
-        <strong>${pass ? "Pour sécuriser (et dépasser) le niveau :" : "Priorités pour atteindre le NCLC 5 :"}</strong>
+        <strong>${pass ? "To secure (and exceed) the level:" : "Priorities to reach CLB 5:"}</strong>
         <ul>${feedback}</ul>
       </div>
     `;
@@ -495,17 +496,17 @@ function initEvaluation() {
 }
 
 /* ---------------------------------------------------------------
- * Page: Tables (tableaux de conversion)
+ * Page: IRCC conversion tables
  * ------------------------------------------------------------- */
 function initTables() {
   const wrap = document.getElementById("tables-root");
   if (!wrap) return;
 
   const skillNames = {
-    reading: "Compréhension de l'écrit",
-    writing: "Expression écrite",
-    listening: "Compréhension de l'oral",
-    speaking: "Expression orale"
+    reading: "Reading",
+    writing: "Writing",
+    listening: "Listening",
+    speaking: "Speaking"
   };
 
   function buildTable(examKey) {
@@ -523,7 +524,7 @@ function initTables() {
         <table class="score-table">
           <thead>
             <tr>
-              <th>Niveau</th>
+              <th>Level</th>
               <th>${skillNames.reading}</th>
               <th>${skillNames.writing}</th>
               <th>${skillNames.listening}</th>
