@@ -30,6 +30,53 @@ const IRCC_TABLES = {
   }
 };
 
+/* ---------------------------------------------------------------
+ * Exam updates feed. Newest entries are shown first automatically;
+ * entries less than ~12 months old get a "NEW" badge. To publish
+ * an update, add an object here — no other change needed.
+ * ------------------------------------------------------------- */
+const EXAM_UPDATES = [
+  {
+    date: "2023-12-11",
+    exam: "TEF Canada",
+    title: "New scoring scale in force",
+    text: "Tests taken after December 10, 2023 use a new 0\u2013699 scale with skill-specific NCLC thresholds (CLB 5: writing 330, speaking 387, reading/listening 352). Older results keep the previous scale."
+  },
+  {
+    date: "2023-04-01",
+    exam: "TCF Canada",
+    title: "Current test structure",
+    text: "Four mandatory skills, 2 h 47 total: listening 39 MCQs / 35 min, reading 39 MCQs / 60 min, writing 3 tasks / 60 min, speaking 3 tasks / 12 min face-to-face. Progressive difficulty in the MCQ sections."
+  },
+  {
+    date: "2019-10-01",
+    exam: "TEF Canada",
+    title: "Current test structure",
+    text: "Four mandatory skills, about 2 h 55 total: listening 60 MCQs / 40 min, reading 50 MCQs / 60 min, writing 2 sections / 60 min, speaking 2 sections / 15 min face-to-face. All four skills must be taken in the same session."
+  }
+];
+
+function initExamUpdates() {
+  const root = document.getElementById("exam-updates");
+  if (!root) return;
+  const now = Date.now();
+  const items = [...EXAM_UPDATES].sort((a, b) => b.date.localeCompare(a.date));
+  root.innerHTML = items.map(u => {
+    const isNew = now - new Date(u.date).getTime() < 365 * 24 * 3600 * 1000;
+    const d = new Date(u.date).toLocaleDateString("en-CA", { year: "numeric", month: "long" });
+    return `
+      <div class="card">
+        <div class="task-meta" style="margin-bottom:10px">
+          <span class="pill ${u.exam.includes("TEF") ? "pill-tef" : "pill-tcf"}">${u.exam}</span>
+          <span class="pill pill-time">${d}</span>
+          ${isNew ? '<span class="pill pill-ee">NEW</span>' : ""}
+        </div>
+        <h3>${u.title}</h3>
+        <p>${u.text}</p>
+      </div>`;
+  }).join("");
+}
+
 function scoreToNCLC(exam, skill, score) {
   const table = IRCC_TABLES[exam].skills[skill];
   for (const level of [10, 9, 8, 7, 6, 5, 4]) {
@@ -552,6 +599,7 @@ function initNav() {
 
 document.addEventListener("DOMContentLoaded", () => {
   initNav();
+  initExamUpdates();
   initPractice();
   initEvaluation();
   initTables();

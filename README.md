@@ -8,8 +8,9 @@ The site interface is in English; the exam task prompts and model formulas are i
 
 | Page | File | Content |
 | --- | --- | --- |
-| Home | `index.html` | Method overview and TEF vs TCF comparison |
+| Home | `index.html` | Method overview, latest exam updates (data-driven, newest first), and TEF vs TCF comparison |
 | Practice | `practice.html` | Bank of official-format tasks (writing + speaking) with a timer, word counter, and CLB 5 self-check lists |
+| Mock Tests | `mock-tests.html` | Auto-graded listening and reading mini-mocks (official MCQ format, French TTS audio played max twice), raw score converted to an estimated NCLC level, plus links to free official mock tests |
 | Self-Assessment | `evaluation.html` | Rating on the 5 official scoring dimensions, estimated score converted to NCLC, "CLB 5 reached / not reached" verdict, and targeted advice |
 | IRCC Tables | `tables.html` | Official score → NCLC equivalences (TEF post-December 2023 and TCF Canada), CLB 5 threshold highlighted |
 | Strategy | `strategy.html` | Winning structures, ready-made French formulas, eliminatory mistakes, and a preparation plan |
