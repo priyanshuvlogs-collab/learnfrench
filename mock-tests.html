@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Tests — TEF Canada &amp; TCF Canada Listening and Reading | LearnFrench</title>
+  <meta name="description" content="Auto-graded TEF Canada and TCF Canada listening and reading mock tests with French audio, instant NCLC estimation, and links to the official practice tests.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="leaf">&#127809;</span>LearnFrench <small>CLB&nbsp;5</small></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="practice.html">Practice</a>
+      <a href="mock-tests.html">Mock Tests</a>
+      <a href="evaluation.html">Self-Assessment</a>
+      <a href="tables.html">IRCC Tables</a>
+      <a href="strategy.html">Strategy</a>
+    </div>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">Listening &amp; Reading</div>
+      <h2>Mock tests with instant CLB / NCLC estimation</h2>
+      <p>
+        Auto-graded mini-mocks in the official MCQ format (4 options, one correct answer, progressive
+        difficulty). Listening audio is generated in French by your browser and each recording can be
+        played <strong>at most twice</strong>, as on the real exams. Your raw score is converted to an
+        estimated scaled score and NCLC level.
+      </p>
+      <p class="table-note">
+        Questions and answer options are in French, exactly as on exam day. For best listening audio,
+        use Chrome or Edge (they include a French voice).
+      </p>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" data-mock-exam="all">All exams</button>
+      <button class="filter-btn" data-mock-exam="tef">TEF Canada</button>
+      <button class="filter-btn" data-mock-exam="tcf">TCF Canada</button>
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" data-mock-skill="all">All skills</button>
+      <button class="filter-btn" data-mock-skill="listening">Listening</button>
+      <button class="filter-btn" data-mock-skill="reading">Reading</button>
+    </div>
+
+    <div id="mock-list"></div>
+
+    <div class="section-head" style="margin-top:48px">
+      <div class="kicker">Full-length practice</div>
+      <h2>Official mock tests available for free</h2>
+      <p>
+        Once you pass the mini-mocks consistently, do at least one full-length official practice test
+        per skill before exam day. These are the free ones published or endorsed by the exam providers.
+      </p>
+    </div>
+    <div class="grid grid-2">
+      <div class="card">
+        <h3><span class="pill pill-tef">TEF Canada</span>&nbsp; Official resources</h3>
+        <div class="tip-block">
+          <ul>
+            <li><a href="https://www.lefrancaisdesaffaires.fr/tests-diplomes/se-preparer-aux-tests-et-diplomes/exemples-epreuves/" target="_blank" rel="noopener">Le français des affaires — sample test papers</a>: official example items for all four TEF skills, from the exam provider (CCI Paris Île-de-France).</li>
+            <li><a href="https://www.lefrancaisdesaffaires.fr/tests-diplomes/test-evaluation-francais-tef/tef-canada/" target="_blank" rel="noopener">TEF Canada official page</a>: current exam structure (listening 60 questions/40 min, reading 50 questions/60 min) and test-day rules.</li>
+            <li><a href="https://savoirs.rfi.fr/" target="_blank" rel="noopener">RFI Savoirs</a>: free graded French listening exercises based on real radio — ideal daily training for the listening section.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <h3><span class="pill pill-tcf">TCF Canada</span>&nbsp; Official resources</h3>
+        <div class="tip-block">
+          <ul>
+            <li><a href="https://www.france-education-international.fr/test/tcf-canada" target="_blank" rel="noopener">France Éducation international — TCF Canada</a>: the exam provider's official page, with the candidate handbook and sample tasks (listening and reading: 39 MCQs each).</li>
+            <li><a href="https://apprendre.tv5monde.com/" target="_blank" rel="noopener">TV5Monde — Apprendre le français</a>: free "TCF practice" section with timed listening and reading question series by level.</li>
+            <li><a href="https://savoirs.rfi.fr/" target="_blank" rel="noopener">RFI Savoirs</a>: authentic French audio with comprehension quizzes, close to the TCF listening item style.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>How to use mock tests efficiently:</strong> take a mock, review every wrong answer
+      (for listening, re-read the transcript and find the exact sentence you missed), wait a few hours,
+      then retake it. Move to a full official mock only when you score at least 75% twice in a row here.
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div>
+      <strong style="color:#fff">LearnFrench</strong> — CLB 5 preparation<br>
+      TEF Canada · TCF Canada
+    </div>
+    <div class="disclaimer">
+      Original mock questions in the format of the official exams. Estimated scores are educational
+      approximations; only the official raw-to-scaled conversion used by the exam providers is authoritative.
+    </div>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script src="assets/mocks.js"></script>
+</body>
+</html>

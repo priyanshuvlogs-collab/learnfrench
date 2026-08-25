@@ -1,35 +1,38 @@
 # learnfrench
 
-Site d'entraînement ciblé pour atteindre le **NCLC 5 (CLB 5)** au **TEF Canada** et au **TCF Canada**, dans une optique d'immigration francophone au Canada.
+Targeted practice site for reaching **CLB 5 (NCLC 5)** on **TEF Canada** and **TCF Canada**, aimed at francophone immigration to Canada.
+
+The site interface is in English; the exam task prompts and model formulas are in French, exactly as on the real exams.
 
 ## Pages
 
-| Page | Fichier | Contenu |
+| Page | File | Content |
 | --- | --- | --- |
-| Accueil | `index.html` | Présentation de la méthode et comparaison TEF / TCF |
-| Entraînement | `entrainement.html` | Banque de sujets au format officiel (écrit + oral) avec chronomètre, compteur de mots et listes de vérification NCLC 5 |
-| Auto-évaluation | `evaluation.html` | Notation sur les 5 dimensions officielles, score estimé converti en NCLC, verdict « NCLC 5 atteint / non atteint » et conseils ciblés |
-| Tableaux IRCC | `tableaux.html` | Équivalences officielles score → NCLC (TEF post-décembre 2023 et TCF Canada), seuil NCLC 5 surligné |
-| Stratégie | `conseils.html` | Structures gagnantes, formules prêtes à l'emploi, erreurs éliminatoires et plan de préparation |
+| Home | `index.html` | Method overview, latest exam updates (data-driven, newest first), and TEF vs TCF comparison |
+| Practice | `practice.html` | Bank of official-format tasks (writing + speaking) with a timer, word counter, and CLB 5 self-check lists |
+| Mock Tests | `mock-tests.html` | Auto-graded listening and reading mini-mocks (official MCQ format, French TTS audio played max twice), raw score converted to an estimated NCLC level, plus links to free official mock tests |
+| Self-Assessment | `evaluation.html` | Rating on the 5 official scoring dimensions, estimated score converted to NCLC, "CLB 5 reached / not reached" verdict, and targeted advice |
+| IRCC Tables | `tables.html` | Official score → NCLC equivalences (TEF post-December 2023 and TCF Canada), CLB 5 threshold highlighted |
+| Strategy | `strategy.html` | Winning structures, ready-made French formulas, eliminatory mistakes, and a preparation plan |
 
-## Lancer le site
+## Running the site
 
-Site 100 % statique, sans dépendance ni étape de build. Ouvrez `index.html` dans un navigateur, ou servez le dossier :
+100% static, no dependencies, no build step. Open `index.html` in a browser, or serve the folder:
 
 ```bash
 python3 -m http.server 8000
-# puis ouvrir http://localhost:8000
+# then open http://localhost:8000
 ```
 
-## Données officielles
+## Official data
 
-Les tableaux de conversion score → NCLC proviennent des tableaux publiés par IRCC sur [canada.ca](https://www.canada.ca/fr/immigration-refugies-citoyennete/services/immigrer-canada/pilotes-rurale-franco/immigration-franco/admissibilite/evaluation-linguistique.html) :
+The score → NCLC conversion tables come from the tables published by IRCC on [canada.ca](https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/rural-franco-pilots/franco-immigration/eligibility/language-test.html):
 
-- **TEF Canada** : barème applicable aux tests passés après le 10 décembre 2023 (NCLC 5 : écrit ≥ 330, oral ≥ 387, sur 699).
-- **TCF Canada** : barème en vigueur (NCLC 5 : 6/20 en expression écrite et orale ; 375 en compréhension écrite, 369 en compréhension orale).
+- **TEF Canada**: scale applicable to tests taken after December 10, 2023 (NCLC 5: writing ≥ 330, speaking ≥ 387, out of 699).
+- **TCF Canada**: current scale (NCLC 5: 6/20 in writing and speaking; 375 in reading, 369 in listening).
 
-Les scores produits par l'outil d'auto-évaluation sont des **estimations pédagogiques**, volontairement strictes, et ne remplacent pas un résultat officiel.
+Scores produced by the self-assessment tool are **educational estimates**, deliberately strict, and do not replace an official result.
 
-## Avertissement
+## Disclaimer
 
-Site indépendant, sans affiliation avec IRCC, France Éducation international ou Le français des affaires. En cas de divergence, les pages officielles de canada.ca font foi.
+Independent site, not affiliated with IRCC, France Éducation international, or Le français des affaires. In case of any discrepancy, the official canada.ca pages prevail.
