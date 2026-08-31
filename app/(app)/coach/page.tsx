@@ -7,9 +7,13 @@ import { Skill, SKILLS } from "@/lib/types";
 import { estimateSkill } from "@/lib/nclc";
 import { coachReply, CoachContext } from "@/lib/coach";
 import { nowMs } from "@/lib/dates";
+import { L, useLang } from "@/lib/i18n";
 import { Btn } from "@/components/ui";
 
-const CHIPS = ["Mon plan de la semaine", "Je panique pour mon visa", "Par quoi je commence ce soir ?", "Garantis-moi CLB 7 en 30 jours"];
+const CHIPS = {
+  fr: ["Mon plan de la semaine", "Je panique pour mon visa", "Par quoi je commence ce soir ?", "Garantis-moi CLB 7 en 30 jours"],
+  en: ["My plan for the week", "I'm panicking about my visa", "What should I start with tonight?", "Guarantee me CLB 7 in 30 days"],
+} as const;
 
 export default function CoachPage() {
   const profile = useApp((s) => s.profile)!;
@@ -20,6 +24,7 @@ export default function CoachPage() {
   const coachMemory = useApp((s) => s.coachMemory);
   const addCoachMessage = useApp((s) => s.addCoachMessage);
   const addMemory = useApp((s) => s.addMemory);
+  const lang = useLang();
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -66,8 +71,15 @@ export default function CoachPage() {
       <header className="pb-3">
         <h1 className="font-display text-2xl font-semibold">Camille</h1>
         <p className="text-xs text-ink-3">
-          Coach d&apos;examen · connaît vos 14 derniers jours ({coachMemory.length} note{coachMemory.length > 1 ? "s" : ""}) · ne donne aucun conseil juridique
+          {L(lang,
+            `Coach d'examen · connaît vos 14 derniers jours (${coachMemory.length} note${coachMemory.length > 1 ? "s" : ""}) · ne donne aucun conseil juridique`,
+            `Exam coach · knows your last 14 days (${coachMemory.length} note${coachMemory.length === 1 ? "" : "s"}) · gives no legal advice`)}
         </p>
+        {lang === "en" && (
+          <p className="mt-0.5 text-xs text-ink-3">
+            Camille coaches in French on purpose — write to her in English and she&apos;ll answer briefly in English, then give you one French sentence to repeat.
+          </p>
+        )}
       </header>
 
       <div className="flex-1 space-y-3 overflow-y-auto rounded-xl border border-line bg-white p-4">
@@ -94,7 +106,7 @@ export default function CoachPage() {
       </div>
 
       <div className="mt-3 flex flex-wrap gap-2">
-        {CHIPS.map((c) => (
+        {CHIPS[lang].map((c) => (
           <button
             key={c}
             onClick={() => send(c)}
@@ -115,11 +127,11 @@ export default function CoachPage() {
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Écrivez à Camille — en français de préférence…"
+          placeholder={L(lang, "Écrivez à Camille — en français de préférence…", "Write to Camille — in French if you can, English works too…")}
           className="flex-1 rounded-lg border border-line bg-white px-3.5 py-2.5 text-sm focus:border-accent"
-          aria-label="Message au coach"
+          aria-label={L(lang, "Message au coach", "Message to the coach")}
         />
-        <Btn type="submit" onClick={() => send(input)}>Envoyer</Btn>
+        <Btn type="submit" onClick={() => send(input)}>{L(lang, "Envoyer", "Send")}</Btn>
       </form>
     </div>
   );

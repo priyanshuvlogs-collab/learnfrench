@@ -126,7 +126,21 @@ export function Badge({ children, tone = "accent" }: { children: ReactNode; tone
   return <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${styles}`}>{children}</span>;
 }
 
-export function Disclaimer({ compact = false }: { compact?: boolean }) {
+export function Disclaimer({ compact = false, lang = "fr" }: { compact?: boolean; lang?: "fr" | "en" }) {
+  if (lang === "en") {
+    return (
+      <p className={`text-ink-3 ${compact ? "text-[11px]" : "text-xs"} leading-relaxed`}>
+        Lumen Français is an independent training tool, not affiliated with IRCC, Le français des
+        affaires (CCI Paris Île-de-France) or France Éducation international. Displayed scores are{" "}
+        <strong>pedagogical estimates</strong>, not official results, and nothing here is
+        immigration advice. If tables differ,{" "}
+        <a href="https://www.canada.ca" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">
+          canada.ca
+        </a>{" "}
+        is the source of truth.
+      </p>
+    );
+  }
   return (
     <p className={`text-ink-3 ${compact ? "text-[11px]" : "text-xs"} leading-relaxed`}>
       Lumen Français est un outil d&apos;entraînement indépendant, sans affiliation avec IRCC, Le

@@ -6,11 +6,18 @@ import { Skill, SKILL_LABELS, SKILLS } from "@/lib/types";
 import { estimateSkill, formatNCLCRange, readiness } from "@/lib/nclc";
 import { lastNDays, todayKey } from "@/lib/dates";
 import { weeklyLetter } from "@/lib/coach";
+import { L, useLang } from "@/lib/i18n";
 import { Badge, Card } from "@/components/ui";
 
-function Spark({ values }: { values: number[] }) {
+function Spark({ values, lang }: { values: number[]; lang: "fr" | "en" }) {
   if (values.length < 2) {
-    return <span className="text-xs text-ink-3">Encore peu de données — {values.length} tâche{values.length === 1 ? "" : "s"} notée{values.length === 1 ? "" : "s"}.</span>;
+    return (
+      <span className="text-xs text-ink-3">
+        {L(lang,
+          `Encore peu de données — ${values.length} tâche${values.length === 1 ? "" : "s"} notée${values.length === 1 ? "" : "s"}.`,
+          `Not much data yet — ${values.length} scored task${values.length === 1 ? "" : "s"}.`)}
+      </span>
+    );
   }
   const w = 160, h = 36;
   const min = Math.min(...values), max = Math.max(...values);
@@ -30,6 +37,7 @@ export default function ProgressPage() {
   const sessions = useApp((s) => s.sessions);
   const streak = useApp((s) => s.streak);
   const coachMemory = useApp((s) => s.coachMemory);
+  const lang = useLang();
 
   const estimates = useMemo(
     () => Object.fromEntries(SKILLS.map((s) => [s, estimateSkill(skills[s])])) as Record<Skill, ReturnType<typeof estimateSkill>>,
@@ -72,13 +80,19 @@ export default function ProgressPage() {
   return (
     <div className="space-y-5">
       <header>
-        <h1 className="font-display text-2xl font-semibold">Progrès</h1>
-        <p className="mt-1 text-sm text-ink-2">Trois couches : le jour, les compétences, la préparation. Jamais de moyenne unique.</p>
+        <h1 className="font-display text-2xl font-semibold">{L(lang, "Progrès", "Progress")}</h1>
+        <p className="mt-1 text-sm text-ink-2">
+          {L(lang,
+            "Trois couches : le jour, les compétences, la préparation. Jamais de moyenne unique.",
+            "Three layers: today, the skills, the readiness. Never a single averaged score.")}
+        </p>
       </header>
 
       {/* 14-day heatmap */}
       <Card>
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">14 derniers jours — minutes de travail réel</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">
+          {L(lang, "14 derniers jours — minutes de travail réel", "Last 14 days — real time-on-task minutes")}
+        </h2>
         <div className="mt-3 grid grid-cols-7 gap-1.5">
           {days14.map((d) => {
             const m = minutesByDay[d] ?? 0;
@@ -95,18 +109,18 @@ export default function ProgressPage() {
 
       {/* Skill trajectories */}
       <Card>
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">Trajectoires par compétence</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">{L(lang, "Trajectoires par compétence", "Skill trajectories")}</h2>
         <div className="mt-3 space-y-4">
           {SKILLS.map((s) => (
             <div key={s} className="flex items-center justify-between gap-3 border-b border-line pb-3 last:border-0 last:pb-0">
               <div>
                 <div className="text-sm font-semibold">
-                  {SKILL_LABELS[s].fr}
-                  {s === weakest && <Badge tone="warn">Limite le profil</Badge>}
+                  {L(lang, SKILL_LABELS[s].fr, SKILL_LABELS[s].en)}
+                  {s === weakest && <Badge tone="warn">{L(lang, "Limite le profil", "Caps the profile")}</Badge>}
                 </div>
                 <div className="font-display text-lg font-semibold">{formatNCLCRange(estimates[s])}</div>
               </div>
-              <Spark values={skills[s].scores.map((x) => x.score)} />
+              <Spark values={skills[s].scores.map((x) => x.score)} lang={lang} />
             </div>
           ))}
         </div>
@@ -115,8 +129,10 @@ export default function ProgressPage() {
       {/* Streak calendar */}
       <Card>
         <div className="flex items-baseline justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">Calendrier de chaîne — 28 jours</h2>
-          <span className="text-xs text-ink-3">Record : <span className="font-display font-semibold text-ink">{streak.longest}</span> · Gels restants : {streak.freezesLeft}/2</span>
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">{L(lang, "Calendrier de chaîne — 28 jours", "Streak calendar — 28 days")}</h2>
+          <span className="text-xs text-ink-3">
+            {L(lang, "Record :", "Longest:")} <span className="font-display font-semibold text-ink">{streak.longest}</span> · {L(lang, "Gels restants :", "Freezes left:")} {streak.freezesLeft}/2
+          </span>
         </div>
         <div className="mt-3 grid grid-cols-7 gap-1.5">
           {days28.map((d) => {
@@ -139,24 +155,40 @@ export default function ProgressPage() {
 
       {/* Days to target */}
       <Card>
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">Distance à la cible — modèle honnête</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">{L(lang, "Distance à la cible — modèle honnête", "Distance to target — honest model")}</h2>
         {totalGap <= 0 ? (
           <p className="mt-2 text-sm text-ink-2">
-            Vos quatre estimations atteignent NCLC {profile.targetNCLC}. Maintenant : consolider avec des blancs chronométrés — un profil se défend le jour J.
+            {L(lang,
+              `Vos quatre estimations atteignent NCLC ${profile.targetNCLC}. Maintenant : consolider avec des blancs chronométrés — un profil se défend le jour J.`,
+              `All four estimates reach NCLC ${profile.targetNCLC}. Now: consolidate with timed mocks — a profile has to hold up on exam day.`)}
           </p>
         ) : (
           <p className="mt-2 text-sm leading-relaxed text-ink-2">
-            Écart cumulé estimé : <strong className="font-display">{totalGap.toFixed(1)} niveau(x) NCLC</strong>, concentré sur{" "}
-            {SKILL_LABELS[weakest].fr.toLowerCase()}. Au rythme de {profile.dailyMinutes} min/jour, comptez{" "}
-            <strong className="font-display">{daysLow}–{daysHigh} jours</strong> de travail régulier ({hoursLow}–{hoursHigh} h focalisées).
-            C&apos;est une fourchette, pas une promesse — la régularité pèse plus que le total.
+            {lang === "fr" ? (
+              <>
+                Écart cumulé estimé : <strong className="font-display">{totalGap.toFixed(1)} niveau(x) NCLC</strong>, concentré sur{" "}
+                {SKILL_LABELS[weakest].fr.toLowerCase()}. Au rythme de {profile.dailyMinutes} min/jour, comptez{" "}
+                <strong className="font-display">{daysLow}–{daysHigh} jours</strong> de travail régulier ({hoursLow}–{hoursHigh} h focalisées).
+                C&apos;est une fourchette, pas une promesse — la régularité pèse plus que le total.
+              </>
+            ) : (
+              <>
+                Estimated cumulative gap: <strong className="font-display">{totalGap.toFixed(1)} NCLC level(s)</strong>, concentrated in{" "}
+                {SKILL_LABELS[weakest].en.toLowerCase()}. At {profile.dailyMinutes} min/day, expect{" "}
+                <strong className="font-display">{daysLow}–{daysHigh} days</strong> of steady work ({hoursLow}–{hoursHigh} focused hours).
+                It&apos;s a range, not a promise — consistency matters more than the total.
+              </>
+            )}
           </p>
         )}
       </Card>
 
       {/* Weekly letter */}
       <Card className="border-gold/30">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-gold">La lettre de la semaine — Camille</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-gold">{L(lang, "La lettre de la semaine — Camille", "The weekly letter — Camille")}</h2>
+        {lang === "en" && (
+          <p className="mt-1 text-xs text-ink-3">Camille writes in French on purpose — it&apos;s a short, real text at your level. Read it slowly; you already know every number in it.</p>
+        )}
         <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-ink-2">{letter}</p>
       </Card>
     </div>

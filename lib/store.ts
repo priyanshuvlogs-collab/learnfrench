@@ -92,7 +92,7 @@ export const useApp = create<AppState>()(
                 targetNCLC: 7,
                 dailyMinutes: 20,
                 motivation: "",
-                uiLang: "fr",
+                uiLang: "en",
                 createdAt: new Date().toISOString(),
                 intention: { time: "Ce soir après le dîner", minutes: 20, skill: "auto" },
                 notificationsOptIn: false,

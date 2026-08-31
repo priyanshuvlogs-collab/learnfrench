@@ -7,6 +7,8 @@ import { LISTENING_ITEMS, ListeningItem } from "@/content/listening";
 import { READING_ITEMS, ReadingItem } from "@/content/reading";
 import { scoreToNCLC } from "@/lib/nclc";
 import { nowMs, todayKey } from "@/lib/dates";
+import { L, useLang } from "@/lib/i18n";
+import { EN } from "@/content/translations";
 import { Badge, Btn, Card } from "@/components/ui";
 
 type Stage = "breathe" | "run" | "review";
@@ -43,6 +45,7 @@ function MockRun() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const lang = useLang();
   const [stage, setStage] = useState<Stage>("breathe");
   const [breatheLeft, setBreatheLeft] = useState(30);
   const [idx, setIdx] = useState(0);
@@ -124,11 +127,13 @@ function MockRun() {
 
   if (stage === "breathe") {
     const phase = Math.floor(((30 - breatheLeft) % 16) / 4); // 4-4-4-4 box
-    const phaseLabel = ["Inspirez", "Retenez", "Expirez", "Retenez"][phase];
+    const phaseLabel = lang === "fr"
+      ? ["Inspirez", "Retenez", "Expirez", "Retenez"][phase]
+      : ["Breathe in", "Hold", "Breathe out", "Hold"][phase];
     return (
       <div className="mx-auto max-w-md space-y-6 py-10 text-center">
-        <Badge tone="accent">Protocole d&apos;avant-épreuve</Badge>
-        <h1 className="font-display text-2xl font-semibold">30 secondes de respiration en carré</h1>
+        <Badge tone="accent">{L(lang, "Protocole d'avant-épreuve", "Pre-exam protocol")}</Badge>
+        <h1 className="font-display text-2xl font-semibold">{L(lang, "30 secondes de respiration en carré", "30 seconds of box breathing")}</h1>
         <div className="mx-auto flex h-40 w-40 items-center justify-center rounded-2xl border-4 border-accent bg-accent-soft">
           <div className="text-center">
             <div className="font-display text-3xl font-semibold">{breatheLeft}</div>
@@ -137,12 +142,18 @@ function MockRun() {
         </div>
         {listening && (
           <p className="text-sm font-semibold text-ink">
-            « L&apos;audio passe une fois. C&apos;est la règle. On entraîne cette règle. »
+            {L(lang,
+              "« L'audio passe une fois. C'est la règle. On entraîne cette règle. »",
+              "“The audio plays once. That is the rule. We train that rule.”")}
           </p>
         )}
-        <p className="text-sm text-ink-2">Chrono strict : {min} minutes pour {items.length} questions. Une réponse engagée vaut mieux qu&apos;une hésitation parfaite.</p>
+        <p className="text-sm text-ink-2">
+          {L(lang,
+            `Chrono strict : ${min} minutes pour ${items.length} questions. Une réponse engagée vaut mieux qu'une hésitation parfaite.`,
+            `Strict clock: ${min} minutes for ${items.length} questions. A committed answer beats a perfect hesitation.`)}
+        </p>
         <Btn onClick={() => { setStage("run"); qStartRef.current = nowMs(); }} disabled={breatheLeft > 0}>
-          {breatheLeft > 0 ? `Respirez… (${breatheLeft})` : "Commencer l'épreuve"}
+          {breatheLeft > 0 ? L(lang, `Respirez… (${breatheLeft})`, `Breathe… (${breatheLeft})`) : L(lang, "Commencer l'épreuve", "Start the section")}
         </Btn>
       </div>
     );
@@ -154,10 +165,16 @@ function MockRun() {
     return (
       <div className="mx-auto max-w-2xl space-y-5">
         <header className="text-center">
-          <Badge tone="accent">Revue du blanc</Badge>
+          <Badge tone="accent">{L(lang, "Revue du blanc", "Mock review")}</Badge>
           <h1 className="mt-2 font-display text-3xl font-semibold">{correct} / {items.length}</h1>
-          <p className="text-sm text-ink-2">~NCLC {Math.floor(scoreToNCLC(pct))} sur cette section (estimation pédagogique).</p>
-          <p className="mt-2 text-sm font-semibold text-accent">Ceci est une donnée pour le prochain bloc — pas un verdict sur vous.</p>
+          <p className="text-sm text-ink-2">
+            {L(lang,
+              `~NCLC ${Math.floor(scoreToNCLC(pct))} sur cette section (estimation pédagogique).`,
+              `~NCLC ${Math.floor(scoreToNCLC(pct))} on this section (pedagogical estimate).`)}
+          </p>
+          <p className="mt-2 text-sm font-semibold text-accent">
+            {L(lang, "Ceci est une donnée pour le prochain bloc — pas un verdict sur vous.", "This is data for the next block — not a verdict on you.")}
+          </p>
         </header>
         <div className="space-y-3">
           {items.map((it, i) => {
@@ -169,15 +186,16 @@ function MockRun() {
                   <p className="text-sm font-semibold">{i + 1}. {it.question}</p>
                   <span className="shrink-0 text-xs text-ink-3">{a ? `${a.seconds}s` : "—"}</span>
                 </div>
-                {"passage" in it && <p className="mt-2 rounded bg-paper p-3 text-xs leading-relaxed text-ink-2">{(it as ReadingItem).passage}</p>}
-                {"transcript" in it && <p className="mt-2 rounded bg-paper p-3 text-xs leading-relaxed text-ink-2">🎧 {(it as ListeningItem).transcript}</p>}
+                {"passage" in it && <p className="mt-2 rounded bg-paper p-3 text-xs leading-relaxed text-ink-2">🇫🇷 {(it as ReadingItem).passage}</p>}
+                {"transcript" in it && <p className="mt-2 rounded bg-paper p-3 text-xs leading-relaxed text-ink-2">🎧 🇫🇷 {(it as ListeningItem).transcript}</p>}
+                {EN[it.id] && <p className="mt-1.5 rounded bg-paper p-3 text-xs italic leading-relaxed text-ink-3">🇬🇧 {EN[it.id]}</p>}
                 <div className="mt-2 space-y-1 text-sm">
                   <p className={ok ? "text-ok" : "text-warn"}>
-                    Votre réponse : {a ? it.options[a.picked] : "aucune"} {ok ? "✓" : "✗"}
+                    {L(lang, "Votre réponse :", "Your answer:")} {a ? it.options[a.picked] : L(lang, "aucune", "none")} {ok ? "✓" : "✗"}
                   </p>
-                  {!ok && <p className="text-ok">Bonne réponse : {it.options[it.answer]}</p>}
+                  {!ok && <p className="text-ok">{L(lang, "Bonne réponse :", "Correct answer:")} {it.options[it.answer]}</p>}
                   <p className="text-xs text-ink-2">
-                    <strong>Pourquoi les autres tombent :</strong> {"trap" in it ? (it as ListeningItem).trap : (it as ReadingItem).explanation}
+                    <strong>{L(lang, "Pourquoi les autres tombent :", "Why others fall for it:")}</strong> {"trap" in it ? (it as ListeningItem).trap : (it as ReadingItem).explanation}
                   </p>
                 </div>
               </Card>
@@ -185,8 +203,8 @@ function MockRun() {
           })}
         </div>
         <div className="flex justify-center gap-3 pb-6">
-          <Btn href="/mocks">Autres blancs</Btn>
-          <Btn href="/today" variant="ghost">Retour à l&apos;accueil</Btn>
+          <Btn href="/mocks">{L(lang, "Autres blancs", "More mocks")}</Btn>
+          <Btn href="/today" variant="ghost">{L(lang, "Retour à l'accueil", "Back to Today")}</Btn>
         </div>
       </div>
     );
@@ -198,7 +216,7 @@ function MockRun() {
   return (
     <div className="mx-auto max-w-xl space-y-5">
       <header className="flex items-center justify-between">
-        <span className="font-display text-sm text-ink-3">Question {idx + 1} / {items.length}</span>
+        <span className="font-display text-sm text-ink-3">{L(lang, "Question", "Question")} {idx + 1} / {items.length}</span>
         <div className={`rounded-lg border px-3 py-1.5 font-display text-lg font-semibold tabular-nums ${secondsLeft < 60 ? "border-warn bg-warn-soft text-warn" : "border-line bg-white"}`}>
           {mm}:{ss}
         </div>
@@ -212,7 +230,7 @@ function MockRun() {
             disabled={played}
             className={`mt-3 rounded-lg px-5 py-2.5 text-sm font-semibold ${played ? "bg-paper-2 text-ink-3" : "bg-accent text-white hover:bg-accent-2"}`}
           >
-            {played ? "Audio joué — une seule écoute" : "▶ Jouer l'audio (une fois)"}
+            {played ? L(lang, "Audio joué — une seule écoute", "Audio played — one listen only") : L(lang, "▶ Jouer l'audio (une fois)", "▶ Play the audio (once)")}
           </button>
         </Card>
       ) : (
@@ -235,7 +253,7 @@ function MockRun() {
           </button>
         ))}
       </div>
-      <p className="text-center text-xs text-ink-3">Pas de retour en arrière — comme à l&apos;examen.</p>
+      <p className="text-center text-xs text-ink-3">{L(lang, "Pas de retour en arrière — comme à l'examen.", "No going back — just like the exam.")}</p>
     </div>
   );
 }

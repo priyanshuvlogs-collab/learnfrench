@@ -7,14 +7,16 @@ import { SPEAKING_PROMPTS } from "@/content/speaking-prompts";
 import { useApp } from "@/lib/store";
 import { scoreSpeaking, SpeakingResult } from "@/lib/scoring";
 import { nowMs, todayKey } from "@/lib/dates";
+import { L, useLang } from "@/lib/i18n";
+import { EN } from "@/content/translations";
 import { Badge, Btn, Card } from "@/components/ui";
 
-const RUBRIC_LABELS: [keyof SpeakingResult["rubric"], string][] = [
-  ["task", "Respect de la consigne"],
-  ["coherence", "Cohérence / structure"],
-  ["lexicon", "Étendue du vocabulaire"],
-  ["grammar", "Contrôle grammatical"],
-  ["register", "Aisance / intelligibilité"],
+const RUBRIC_LABELS: [keyof SpeakingResult["rubric"], { fr: string; en: string }][] = [
+  ["task", { fr: "Respect de la consigne", en: "Task completion" }],
+  ["coherence", { fr: "Cohérence / structure", en: "Coherence / structure" }],
+  ["lexicon", { fr: "Étendue du vocabulaire", en: "Range of vocabulary" }],
+  ["grammar", { fr: "Contrôle grammatical", en: "Grammatical control" }],
+  ["register", { fr: "Aisance / intelligibilité", en: "Fluency / intelligibility" }],
 ];
 
 type Stage = "brief" | "prep" | "record" | "transcript" | "result";
@@ -28,6 +30,7 @@ export default function SpeakingLabPage({ params }: { params: Promise<{ id: stri
 
 function Lab({ promptId }: { promptId: string }) {
   const prompt = SPEAKING_PROMPTS.find((p) => p.id === promptId)!;
+  const lang = useLang();
   const addSpeaking = useApp((s) => s.addSpeaking);
   const recordSession = useApp((s) => s.recordSession);
   const addSkillScore = useApp((s) => s.addSkillScore);
@@ -191,7 +194,7 @@ function Lab({ promptId }: { promptId: string }) {
   return (
     <div className="mx-auto max-w-xl space-y-5">
       <header>
-        <Link href="/speaking" className="text-xs text-ink-3 hover:text-accent">← Atelier oral</Link>
+        <Link href="/speaking" className="text-xs text-ink-3 hover:text-accent">← {L(lang, "Atelier oral", "Speaking lab")}</Link>
         <div className="mt-1 flex items-center justify-between gap-2">
           <h1 className="font-display text-xl font-semibold">{prompt.title}</h1>
           <Badge tone={prompt.exam === "TEF" ? "accent" : "gold"}>{prompt.exam} {prompt.task}</Badge>
@@ -199,9 +202,17 @@ function Lab({ promptId }: { promptId: string }) {
       </header>
 
       <Card>
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-ink-3">Consigne</h2>
-        <p className="mt-2 text-sm leading-relaxed">{prompt.prompt}</p>
-        <h3 className="mt-4 text-xs font-semibold uppercase tracking-wider text-ink-3">Structure attendue</h3>
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-ink-3">{L(lang, "Consigne", "Prompt (in French — you'll answer in French)")}</h2>
+        <p className="mt-2 text-sm leading-relaxed">🇫🇷 {prompt.prompt}</p>
+        {EN[prompt.id] && (
+          <details className="mt-2" open={lang === "en"}>
+            <summary className="cursor-pointer text-xs font-semibold text-ink-3 hover:text-accent">
+              {L(lang, "Traduction anglaise de la consigne", "English translation of the prompt")}
+            </summary>
+            <p className="mt-1.5 text-sm italic leading-relaxed text-ink-2">🇬🇧 {EN[prompt.id]}</p>
+          </details>
+        )}
+        <h3 className="mt-4 text-xs font-semibold uppercase tracking-wider text-ink-3">{L(lang, "Structure attendue", "Expected structure (French — say it in French)")}</h3>
         <ol className="mt-1.5 space-y-1 text-sm text-ink-2">
           {prompt.structure.map((st, i) => (
             <li key={st}><span className="font-display font-semibold text-accent">{i + 1}.</span> {st}</li>
@@ -212,24 +223,32 @@ function Lab({ promptId }: { promptId: string }) {
       {stage === "brief" && (
         <div className="space-y-3 text-center">
           {take > 1 && (
-            <p className="text-sm text-gold">Prise n° {take} — « redites-le, en mieux ». Battez votre dernier essai.</p>
+            <p className="text-sm text-gold">
+              {L(lang, `Prise n° ${take} — « redites-le, en mieux ». Battez votre dernier essai.`, `Take #${take} — “say it again, better”. Beat your last attempt.`)}
+            </p>
           )}
           <p className="text-sm text-ink-2">
             {prompt.prepSeconds > 0
-              ? `${prompt.prepSeconds} secondes de préparation, puis ${prompt.speakSeconds} secondes de parole.`
-              : `Sans préparation, comme à l'examen : ${prompt.speakSeconds} secondes de parole.`}
+              ? L(lang,
+                  `${prompt.prepSeconds} secondes de préparation, puis ${prompt.speakSeconds} secondes de parole.`,
+                  `${prompt.prepSeconds} seconds of prep, then ${prompt.speakSeconds} seconds of speaking — in French.`)
+              : L(lang,
+                  `Sans préparation, comme à l'examen : ${prompt.speakSeconds} secondes de parole.`,
+                  `No prep, just like the exam: ${prompt.speakSeconds} seconds of speaking — in French.`)}
           </p>
           <Btn onClick={() => (prompt.prepSeconds > 0 && take === 1 ? (setPrepLeft(prompt.prepSeconds), setStage("prep")) : startRecording())}>
-            {prompt.prepSeconds > 0 && take === 1 ? "Lancer la préparation" : "Enregistrer"}
+            {prompt.prepSeconds > 0 && take === 1 ? L(lang, "Lancer la préparation", "Start prep") : L(lang, "Enregistrer", "Record")}
           </Btn>
         </div>
       )}
 
       {stage === "prep" && (
         <Card className="text-center">
-          <div className="text-xs font-semibold uppercase tracking-wider text-ink-3">Préparation — notez 3 mots-clés, pas des phrases</div>
+          <div className="text-xs font-semibold uppercase tracking-wider text-ink-3">
+            {L(lang, "Préparation — notez 3 mots-clés, pas des phrases", "Prep — jot 3 keywords, not sentences")}
+          </div>
           <div className="font-display mt-2 text-5xl font-semibold tabular-nums">{prepLeft}</div>
-          <Btn onClick={startRecording} variant="ghost" className="mt-4">Prêt avant la fin → enregistrer</Btn>
+          <Btn onClick={startRecording} variant="ghost" className="mt-4">{L(lang, "Prêt avant la fin → enregistrer", "Ready early → record")}</Btn>
         </Card>
       )}
 
@@ -238,7 +257,7 @@ function Lab({ promptId }: { promptId: string }) {
           {micError ? (
             <>
               <p className="text-sm text-warn">{micError}</p>
-              <Btn onClick={() => setStage("transcript")} className="mt-3">Continuer sans micro</Btn>
+              <Btn onClick={() => setStage("transcript")} className="mt-3">{L(lang, "Continuer sans micro", "Continue without a mic")}</Btn>
             </>
           ) : (
             <>
@@ -260,9 +279,11 @@ function Lab({ promptId }: { promptId: string }) {
                 ))}
               </div>
               <p className="mt-3 text-xs text-ink-3">
-                {overTime ? "Temps atteint — concluez proprement (« En un mot… »)." : "Silence qui s'installe ? « Alors… en fait… ce que je veux dire, c'est que… »"}
+                {overTime
+                  ? L(lang, "Temps atteint — concluez proprement (« En un mot… »).", "Time reached — close cleanly (“En un mot…”).")
+                  : L(lang, "Silence qui s'installe ? « Alors… en fait… ce que je veux dire, c'est que… »", "Silence creeping in? Use French fillers: “Alors… en fait… ce que je veux dire, c'est que…”")}
               </p>
-              <Btn onClick={stopRecording} className="mt-4" disabled={elapsed < 3}>■ Terminer l&apos;enregistrement</Btn>
+              <Btn onClick={stopRecording} className="mt-4" disabled={elapsed < 3}>■ {L(lang, "Terminer l'enregistrement", "Stop recording")}</Btn>
             </>
           )}
         </Card>
@@ -270,21 +291,25 @@ function Lab({ promptId }: { promptId: string }) {
 
       {stage === "transcript" && (
         <Card>
-          <h2 className="text-sm font-semibold">Transcription</h2>
-          {audioUrl && <audio controls src={audioUrl} className="mt-2 w-full" aria-label="Votre enregistrement" />}
+          <h2 className="text-sm font-semibold">{L(lang, "Transcription", "Transcript")}</h2>
+          {audioUrl && <audio controls src={audioUrl} className="mt-2 w-full" aria-label={L(lang, "Votre enregistrement", "Your recording")} />}
           <p className="mt-2 text-xs text-ink-3">
             {srAvailable
-              ? "Transcription automatique (navigateur) — corrigez-la si besoin, elle sert à la notation."
-              : "Reconnaissance vocale indisponible dans ce navigateur : réécoutez et tapez fidèlement ce que vous avez dit (en production : Whisper côté serveur)."}
+              ? L(lang,
+                  "Transcription automatique (navigateur) — corrigez-la si besoin, elle sert à la notation.",
+                  "Automatic transcript (browser) — correct it if needed; it is what gets scored.")
+              : L(lang,
+                  "Reconnaissance vocale indisponible dans ce navigateur : réécoutez et tapez fidèlement ce que vous avez dit (en production : Whisper côté serveur).",
+                  "Speech recognition is unavailable in this browser: listen back and type faithfully what you said (in production: server-side Whisper).")}
           </p>
           <textarea
             value={transcript}
             onChange={(e) => setTranscript(e.target.value)}
             className="mt-3 h-36 w-full rounded-lg border border-line bg-white p-3 text-sm"
-            placeholder="Ce que vous avez dit, mot pour mot…"
+            placeholder={L(lang, "Ce que vous avez dit, mot pour mot…", "What you said, word for word (in French)…")}
           />
           <Btn onClick={submit} disabled={transcript.trim().split(/\s+/).length < 5} className="mt-3 w-full">
-            Noter sur les 5 dimensions
+            {L(lang, "Noter sur les 5 dimensions", "Score on the 5 dimensions")}
           </Btn>
         </Card>
       )}
@@ -292,21 +317,23 @@ function Lab({ promptId }: { promptId: string }) {
       {stage === "result" && result && (
         <div className="space-y-4">
           <header className="text-center">
-            <Badge tone="ok">Prise {take} évaluée</Badge>
+            <Badge tone="ok">{L(lang, `Prise ${take} évaluée`, `Take ${take} scored`)}</Badge>
             <h2 className="mt-2 font-display text-3xl font-semibold">~NCLC {result.estNCLC}</h2>
             {bestBefore !== null && take > 1 && (
               <p className="text-sm text-ink-2">
-                {result.score > bestBefore ? "Meilleure que la prise précédente — c'est exactement l'exercice." : "Pas encore au-dessus de la précédente. Une phrase d'ouverture plus rapide, et ça passe."}
+                {result.score > bestBefore
+                  ? L(lang, "Meilleure que la prise précédente — c'est exactement l'exercice.", "Better than the previous take — that is exactly the exercise.")
+                  : L(lang, "Pas encore au-dessus de la précédente. Une phrase d'ouverture plus rapide, et ça passe.", "Not above the previous one yet. A faster opening sentence and you're there.")}
               </p>
             )}
-            <p className="text-xs text-ink-3">Estimation pédagogique.</p>
+            <p className="text-xs text-ink-3">{L(lang, "Estimation pédagogique.", "Pedagogical estimate.")}</p>
           </header>
           <Card>
             <div className="space-y-2.5">
               {RUBRIC_LABELS.map(([k, label]) => (
                 <div key={k}>
                   <div className="flex justify-between text-sm">
-                    <span>{label}</span>
+                    <span>{label[lang]}</span>
                     <span className="font-display font-semibold">{result.rubric[k].toFixed(1)} / 5</span>
                   </div>
                   <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-paper-2">
@@ -326,12 +353,12 @@ function Lab({ promptId }: { promptId: string }) {
             </Card>
           )}
           <Card className="border-gold/30 bg-gold-soft/40">
-            <div className="text-xs font-semibold uppercase tracking-wider text-gold">Votre victoire</div>
+            <div className="text-xs font-semibold uppercase tracking-wider text-gold">{L(lang, "Votre victoire", "Your win")}</div>
             <p className="mt-1 text-sm text-ink-2">{result.win}</p>
           </Card>
           <div className="flex justify-center gap-3">
-            <Btn onClick={secondTake}>Redites-le, en mieux</Btn>
-            <Btn href="/today" variant="ghost">Terminer</Btn>
+            <Btn onClick={secondTake}>{L(lang, "Redites-le, en mieux", "Say it again, better")}</Btn>
+            <Btn href="/today" variant="ghost">{L(lang, "Terminer", "Finish")}</Btn>
           </div>
         </div>
       )}
