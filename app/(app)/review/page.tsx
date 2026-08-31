@@ -28,14 +28,19 @@ const GRADES: { g: 0 | 1 | 2 | 3; fr: string; en: string; tone: string }[] = [
 export default function ReviewPage() {
   return (
     <Suspense fallback={null}>
-      <Review />
+      <ReviewGate />
     </Suspense>
   );
 }
 
-function Review() {
+function ReviewGate() {
   const params = useSearchParams();
   const rescue = params.get("rescue") === "1";
+  // key resets the session when toggling between normal review and rescue mode
+  return <Review key={String(rescue)} rescue={rescue} />;
+}
+
+function Review({ rescue }: { rescue: boolean }) {
   const srs = useApp((s) => s.srs);
   const skills = useApp((s) => s.skills);
   const lang = useLang();

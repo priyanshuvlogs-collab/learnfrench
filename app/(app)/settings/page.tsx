@@ -6,6 +6,7 @@ import { useApp } from "@/lib/store";
 import { Exam, TargetNCLC } from "@/lib/types";
 import { L, useLang } from "@/lib/i18n";
 import { LangToggle } from "@/components/lang-toggle";
+import { enableNotifications } from "@/lib/notify";
 import { Btn, Card } from "@/components/ui";
 
 export default function SettingsPage() {
@@ -98,7 +99,14 @@ export default function SettingsPage() {
           <input
             type="checkbox"
             checked={profile.notificationsOptIn}
-            onChange={(e) => updateProfile({ notificationsOptIn: e.target.checked })}
+            onChange={async (e) => {
+              if (e.target.checked) {
+                const granted = await enableNotifications();
+                updateProfile({ notificationsOptIn: granted });
+              } else {
+                updateProfile({ notificationsOptIn: false });
+              }
+            }}
             className="h-4 w-4"
           />
           <span>

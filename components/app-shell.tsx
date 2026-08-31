@@ -15,8 +15,11 @@ const NAV: { href: string; fr: string; en: string; icon: string }[] = [
   { href: "/skills", fr: "Compétences", en: "Skills", icon: "▤" },
   { href: "/writing", fr: "Écriture", en: "Writing", icon: "¶" },
   { href: "/speaking", fr: "Oral", en: "Speaking", icon: "◍" },
+  { href: "/grammar", fr: "Grammaire", en: "Grammar", icon: "ê" },
   { href: "/review", fr: "Révision", en: "Review", icon: "⟳" },
   { href: "/mocks", fr: "Examens blancs", en: "Mock exams", icon: "▦" },
+  { href: "/resources", fr: "Ressources", en: "Resources", icon: "▷" },
+  { href: "/syllabus", fr: "Syllabus", en: "Syllabus", icon: "☰" },
   { href: "/progress", fr: "Progrès", en: "Progress", icon: "∿" },
   { href: "/settings", fr: "Réglages", en: "Settings", icon: "⚙" },
 ];

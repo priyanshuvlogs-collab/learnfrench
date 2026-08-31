@@ -109,6 +109,30 @@ export default function SkillsPage() {
           );
         })}
       </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Card>
+          <h2 className="font-display text-lg font-semibold">{L(lang, "Grammaire de base", "Basic grammar")}</h2>
+          <p className="mt-1 text-sm text-ink-2">
+            {L(lang,
+              "Être, avoir, aller, faire — tableaux et drills du carburant d'examen. Toujours réutilisé aussitôt en production.",
+              "Être, avoir, aller, faire — tables and drills of the exam's fuel. Always reused immediately in production.")}
+          </p>
+          <Link href="/grammar" className="mt-3 inline-block rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent-2">
+            {L(lang, "Ouvrir la grammaire", "Open grammar")}
+          </Link>
+        </Card>
+        <Card>
+          <h2 className="font-display text-lg font-semibold">{L(lang, "Ressources générales", "General resources")}</h2>
+          <p className="mt-1 text-sm text-ink-2">
+            {L(lang,
+              "Chaînes YouTube, balados et sites gratuits par compétence, avec la méthode pour en faire de l'entraînement.",
+              "Free YouTube channels, podcasts and sites per skill, with the method to turn them into training.")}
+          </p>
+          <Link href="/resources" className="mt-3 inline-block rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent-2">
+            {L(lang, "Voir les ressources", "Browse resources")}
+          </Link>
+        </Card>
+      </div>
       <p className="text-xs text-ink-3">
         {L(lang,
           `Cible : NCLC ${profile.targetNCLC} dans chacune des quatre compétences. Estimation pédagogique.`,

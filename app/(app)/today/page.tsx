@@ -11,6 +11,7 @@ import { daysUntil, todayKey } from "@/lib/dates";
 import { L, useLang } from "@/lib/i18n";
 import { Badge, Btn, Card, Ring } from "@/components/ui";
 import { ReadinessMeter, SkillBars } from "@/components/skill-panel";
+import { GoalTracker } from "@/components/goal-tracker";
 
 export default function TodayPage() {
   const profile = useApp((s) => s.profile)!;
@@ -176,6 +177,9 @@ export default function TodayPage() {
           ))}
         </ol>
       </Card>
+
+      {/* Weekly goal tracker */}
+      <GoalTracker />
 
       {/* Skill bars + readiness */}
       <div className="grid gap-5 sm:grid-cols-2">

@@ -30,7 +30,8 @@ function pickItems(all: AnyItem[], offset: number): AnyItem[] {
 export default function DrillPage({ params }: { params: Promise<{ skill: string }> }) {
   const { skill } = use(params);
   if (skill !== "listening" && skill !== "reading") notFound();
-  return <Drill skill={skill as "listening" | "reading"} />;
+  // key ensures a full state reset when switching between the two drills
+  return <Drill key={skill} skill={skill as "listening" | "reading"} />;
 }
 
 function Drill({ skill }: { skill: "listening" | "reading" }) {

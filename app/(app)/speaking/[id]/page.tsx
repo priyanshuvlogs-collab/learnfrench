@@ -47,6 +47,9 @@ function Lab({ promptId }: { promptId: string }) {
   const [result, setResult] = useState<SpeakingResult | null>(null);
   const [micError, setMicError] = useState("");
   const [take, setTake] = useState(1);
+  // best score BEFORE the current take — snapshotted at submit time,
+  // because prevBest recomputes to include the new submission
+  const [bestBefore, setBestBefore] = useState<number | null>(null);
 
   const mediaRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -150,6 +153,7 @@ function Lab({ promptId }: { promptId: string }) {
   }
 
   function submit() {
+    setBestBefore(prevBest.length ? Math.max(...prevBest.map((s) => s.score)) : null);
     const seconds = Math.max(secondsRef.current, 1);
     const r = scoreSpeaking(transcript, seconds, prompt.speakSeconds);
     setResult(r);
@@ -189,7 +193,6 @@ function Lab({ promptId }: { promptId: string }) {
   }
 
   const overTime = elapsed >= prompt.speakSeconds;
-  const bestBefore = prevBest.length ? Math.max(...prevBest.map((s) => s.score)) : null;
 
   return (
     <div className="mx-auto max-w-xl space-y-5">
