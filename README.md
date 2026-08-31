@@ -61,6 +61,17 @@ npm run build    # production
 npm run lint
 ```
 
+### Coach IA (OpenAI)
+
+Camille répond via l'API OpenAI quand `OPENAI_API_KEY` est défini côté serveur (copiez
+`.env.example` vers `.env.local`, ou ajoutez le secret dans Cursor Dashboard → Cloud Agents →
+Secrets). La route `/api/coach` impose une sortie JSON structurée (`texte + une seule action`)
+et injecte tout l'état du candidat (examen, cible, compétence faible, chaîne, minutes, date)
+ainsi que le contrat comportemental de Camille (refus des garanties, gestion de la panique
+visa, correction douce du français, jamais de score « officiel »). Modèle par défaut :
+`gpt-4o-mini` (surchargeable via `OPENAI_MODEL`). **Sans clé, rien ne casse** : le moteur
+local déterministe répond, et un badge dans le chat indique le mode actif.
+
 ## Architecture
 
 - **Next.js (App Router) + TypeScript + Tailwind CSS 4** ; polices Inter + Fraunces (chiffres).
