@@ -56,10 +56,31 @@ Aucune annale officielle n'est reproduite.
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run build    # production
+npx prisma db push       # crée la base SQLite (prisma/dev.db)
+node prisma/seed.mjs     # crée le compte admin
+npm run dev              # http://localhost:3000
+npm run build            # production
 npm run lint
 ```
+
+## Comptes, base de données & freemium
+
+- **Base de données** : Prisma + SQLite (`prisma/dev.db`, zéro infrastructure). Pour la
+  production, remplacez la datasource par Postgres sans toucher aux modèles. Tables : `User`
+  (rôle STUDENT/ADMIN, plan FREE/PREMIUM, accès actif/désactivé) et `ProgressSnapshot`
+  (chaîne, minutes, compétence faible, estimations — synchronisé depuis l'appareil de
+  l'étudiant après chaque session).
+- **Auth réelle** : inscription/connexion par courriel + mot de passe (bcrypt), sessions JWT
+  en cookie httpOnly (`AUTH_SECRET` en prod). La progression d'apprentissage reste sur
+  l'appareil ; le serveur ne garde que le compte et l'instantané de progression.
+- **Panneau admin** (`/admin`, compte seedé : `admin@lumen.local` / `admin1234`, configurable
+  via `ADMIN_EMAIL`/`ADMIN_PASSWORD`) : statistiques (inscrits, actifs, premium, actifs de la
+  semaine), création de comptes étudiants, bascule Free ↔ Premium, activation/révocation
+  d'accès, suppression, et vue de la progression de chaque étudiant.
+- **Freemium** : Gratuit = boucle quotidienne complète (bloc, exercices CO/CE, grammaire,
+  SRS, mini-blancs) + 1 production écrite et 1 orale notées par jour. Premium (accordé par
+  l'admin) = productions illimitées, blancs de section longs, coach IA OpenAI. Les limites
+  sont appliquées côté client ET côté serveur (le coach IA vérifie la session).
 
 ### Coach IA (OpenAI)
 

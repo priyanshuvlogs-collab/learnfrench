@@ -7,7 +7,8 @@ import { Exam, TargetNCLC } from "@/lib/types";
 import { L, useLang } from "@/lib/i18n";
 import { LangToggle } from "@/components/lang-toggle";
 import { enableNotifications } from "@/lib/notify";
-import { Btn, Card } from "@/components/ui";
+import { logoutAuth, useAuth } from "@/lib/use-auth";
+import { Badge, Btn, Card } from "@/components/ui";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function SettingsPage() {
   const resetAll = useApp((s) => s.resetAll);
   const streak = useApp((s) => s.streak);
   const lang = useLang();
+  const { user } = useAuth();
   const [confirmReset, setConfirmReset] = useState(false);
 
   return (
@@ -24,6 +26,31 @@ export default function SettingsPage() {
         <h1 className="font-display text-2xl font-semibold">{L(lang, "Réglages", "Settings")}</h1>
         <p className="mt-1 text-sm text-ink-2">{profile.name} · {profile.email}</p>
       </header>
+
+      <Card className="space-y-3">
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">{L(lang, "Compte", "Account")}</h2>
+        <div className="flex flex-wrap items-center gap-3">
+          <Badge tone={user?.plan === "PREMIUM" ? "gold" : "ink"}>
+            {user?.plan === "PREMIUM" ? "Premium" : L(lang, "Gratuit", "Free")}
+          </Badge>
+          <span className="text-sm text-ink-2">
+            {user?.plan === "PREMIUM"
+              ? L(lang, "Productions notées illimitées, blancs longs, coach IA.", "Unlimited scored tasks, long mocks, AI coach.")
+              : L(lang,
+                  "1 production écrite + 1 orale notées par jour. L'administrateur peut activer Premium.",
+                  "1 scored writing + 1 speaking task per day. The admin can enable Premium.")}
+          </span>
+        </div>
+        <Btn
+          onClick={async () => {
+            await logoutAuth();
+            router.push("/signin");
+          }}
+          variant="ghost"
+        >
+          {L(lang, "Se déconnecter", "Log out")}
+        </Btn>
+      </Card>
 
       <Card className="space-y-3">
         <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">{L(lang, "Langue de l'interface", "Interface language")}</h2>

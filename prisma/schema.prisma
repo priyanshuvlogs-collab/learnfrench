@@ -1,0 +1,44 @@
+// Lumen Français — accounts, plans and progress snapshots.
+// SQLite for zero-infra dev/demo; swap the datasource to Postgres in
+// production without touching the models.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("STUDENT") // STUDENT | ADMIN
+  plan         String   @default("FREE") // FREE | PREMIUM
+  active       Boolean  @default(true) // admin can revoke access
+  createdAt    DateTime @default(now())
+  lastLoginAt  DateTime?
+
+  snapshot ProgressSnapshot?
+}
+
+/// One row per student, upserted from the client after each session:
+/// enough for the admin dashboard without moving all learning data
+/// server-side.
+model ProgressSnapshot {
+  userId        String   @id
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  updatedAt     DateTime @updatedAt
+  streakCurrent Int      @default(0)
+  streakLongest Int      @default(0)
+  minutesTotal  Int      @default(0)
+  sessionsCount Int      @default(0)
+  weakestSkill  String   @default("")
+  exam          String   @default("")
+  targetNCLC    Int      @default(7)
+  estimatesJson String   @default("{}") // {listening,reading,writing,speaking: nclc}
+  lastActive    String   @default("") // yyyy-mm-dd
+}

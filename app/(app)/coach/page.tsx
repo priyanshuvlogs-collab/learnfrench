@@ -28,6 +28,7 @@ export default function CoachPage() {
   const [input, setInput] = useState("");
   const [thinking, setThinking] = useState(false);
   const [aiConfigured, setAiConfigured] = useState<boolean | null>(null);
+  const [premium, setPremium] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const ctx: CoachContext = useMemo(
@@ -50,7 +51,10 @@ export default function CoachPage() {
   useEffect(() => {
     fetch("/api/coach")
       .then((r) => r.json())
-      .then((d) => setAiConfigured(Boolean(d.configured)))
+      .then((d) => {
+        setAiConfigured(Boolean(d.configured));
+        setPremium(Boolean(d.premium));
+      })
       .catch(() => setAiConfigured(false));
   }, []);
 
@@ -66,6 +70,7 @@ export default function CoachPage() {
   /** Ask the OpenAI-backed API; return null to use the local fallback. */
   const askApi = useCallback(
     async (message: string): Promise<CoachReply | null> => {
+      if (!premium) return null; // freemium: free plan uses the local engine
       try {
         const { weakest } = readiness(ctx.estimates);
         const res = await fetch("/api/coach", {
@@ -103,7 +108,7 @@ export default function CoachPage() {
         return null;
       }
     },
-    [ctx, lang, coachLog, profile, streak]
+    [ctx, lang, coachLog, profile, streak, premium]
   );
 
   async function send(text: string) {
@@ -125,8 +130,8 @@ export default function CoachPage() {
         <div className="flex items-center gap-2">
           <h1 className="font-display text-2xl font-semibold">Camille</h1>
           {aiConfigured !== null && (
-            <Badge tone={aiConfigured ? "ok" : "ink"}>
-              {aiConfigured ? L(lang, "IA · OpenAI", "AI · OpenAI") : L(lang, "moteur local", "local engine")}
+            <Badge tone={aiConfigured && premium ? "ok" : "ink"}>
+              {aiConfigured && premium ? L(lang, "IA · OpenAI", "AI · OpenAI") : L(lang, "moteur local", "local engine")}
             </Badge>
           )}
         </div>
@@ -140,6 +145,13 @@ export default function CoachPage() {
             {L(lang,
               "Ajoutez OPENAI_API_KEY côté serveur pour activer les réponses IA — en attendant, le moteur local règles+état répond.",
               "Add OPENAI_API_KEY on the server to enable AI replies — meanwhile the local rules+state engine answers.")}
+          </p>
+        )}
+        {aiConfigured === true && !premium && (
+          <p className="mt-0.5 text-xs text-gold">
+            {L(lang,
+              "Le coach IA (OpenAI) est une fonction Premium — l'administrateur peut vous l'activer. Le moteur local, gratuit, connaît déjà tout votre état.",
+              "The AI coach (OpenAI) is a Premium feature — the admin can enable it for you. The free local engine already knows your full state.")}
           </p>
         )}
         {lang === "en" && (

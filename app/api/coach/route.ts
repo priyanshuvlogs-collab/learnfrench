@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getSessionUser } from "@/lib/auth";
 
 /**
  * Camille via the OpenAI API. The client sends the learner's state and
@@ -80,12 +81,23 @@ Action routes you may use: ${ALLOWED_HREFS.join(", ")}. Pick "/review?rescue=1" 
 }
 
 export async function GET() {
-  return NextResponse.json({ configured: Boolean(process.env.OPENAI_API_KEY), model: MODEL });
+  const user = await getSessionUser();
+  return NextResponse.json({
+    configured: Boolean(process.env.OPENAI_API_KEY),
+    model: MODEL,
+    premium: user?.plan === "PREMIUM",
+  });
 }
 
 export async function POST(req: NextRequest) {
   const key = process.env.OPENAI_API_KEY;
   if (!key) return NextResponse.json({ ok: false, reason: "no-key" });
+
+  // Freemium: the OpenAI coach is a Premium feature; free accounts get
+  // the local engine (the client falls back on ok:false).
+  const sessionUser = await getSessionUser();
+  if (!sessionUser) return NextResponse.json({ ok: false, reason: "unauthenticated" });
+  if (sessionUser.plan !== "PREMIUM") return NextResponse.json({ ok: false, reason: "premium-required" });
 
   let body: CoachRequest;
   try {

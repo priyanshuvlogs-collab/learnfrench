@@ -3,6 +3,7 @@
 import { useApp } from "@/lib/store";
 import { milestones } from "@/lib/streak";
 import { L, useLang } from "@/lib/i18n";
+import { useAuth } from "@/lib/use-auth";
 import { Badge, Btn, Card } from "@/components/ui";
 
 export default function MocksPage() {
@@ -11,6 +12,8 @@ export default function MocksPage() {
   const profile = useApp((s) => s.profile)!;
   const lang = useLang();
   const ms = milestones(streak);
+  const { user } = useAuth();
+  const isPremium = user?.plan === "PREMIUM";
 
   const options = [
     {
@@ -30,16 +33,18 @@ export default function MocksPage() {
     {
       title: L(lang, "Blanc de section CO — format long", "CO section mock — long format"),
       desc: L(lang,
-        "20 questions, 20 minutes, sans pause. Se débloque après une chaîne de 7 jours.",
-        "20 questions, 20 minutes, no pause. Unlocks after a 7-day streak."),
+        "20 questions, 20 minutes, sans pause. Premium + chaîne de 7 jours.",
+        "20 questions, 20 minutes, no pause. Premium + 7-day streak."),
       href: "/mocks/run?skill=listening&n=20&min=20",
-      locked: !ms.sectionMockUnlocked,
+      locked: !ms.sectionMockUnlocked || !isPremium,
+      premiumLocked: !isPremium,
     },
     {
       title: L(lang, "Blanc de section CE — format long", "CE section mock — long format"),
-      desc: L(lang, "20 questions, 30 minutes. Endurance et gestion du temps.", "20 questions, 30 minutes. Stamina and time management."),
+      desc: L(lang, "20 questions, 30 minutes. Endurance et gestion du temps. Premium + chaîne de 7 jours.", "20 questions, 30 minutes. Stamina and time management. Premium + 7-day streak."),
       href: "/mocks/run?skill=reading&n=20&min=30",
-      locked: !ms.sectionMockUnlocked,
+      locked: !ms.sectionMockUnlocked || !isPremium,
+      premiumLocked: !isPremium,
     },
   ];
 
@@ -59,7 +64,12 @@ export default function MocksPage() {
           <Card key={o.title} className={o.locked ? "opacity-70" : ""}>
             <div className="flex items-start justify-between gap-2">
               <h2 className="font-semibold">{o.title}</h2>
-              {o.locked && <Badge tone="ink">🔒 {L(lang, "chaîne 7 j", "7-day streak")}</Badge>}
+              {o.locked &&
+                (("premiumLocked" in o && o.premiumLocked) ? (
+                  <Badge tone="gold">🔒 Premium</Badge>
+                ) : (
+                  <Badge tone="ink">🔒 {L(lang, "chaîne 7 j", "7-day streak")}</Badge>
+                ))}
             </div>
             <p className="mt-1.5 text-sm text-ink-2">{o.desc}</p>
             <Btn href={o.href} disabled={o.locked} className="mt-4">

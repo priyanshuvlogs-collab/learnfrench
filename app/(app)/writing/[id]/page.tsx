@@ -9,6 +9,8 @@ import { countWords, scoreWriting, WritingResult } from "@/lib/scoring";
 import { nowMs, todayKey } from "@/lib/dates";
 import { L, useLang } from "@/lib/i18n";
 import { EN } from "@/content/translations";
+import { useAuth } from "@/lib/use-auth";
+import { canSubmitWriting, FREE_LIMITS } from "@/lib/plan";
 import { Badge, Btn, Card } from "@/components/ui";
 
 const RUBRIC_LABELS: [keyof WritingResult["rubric"], { fr: string; en: string }][] = [
@@ -50,6 +52,9 @@ function Lab({ promptId }: { promptId: string }) {
 
   const words = countWords(text);
   const histLd = useMemo(() => historyLexicalDensity(writingSubs), [writingSubs]);
+  const { user } = useAuth();
+  const plan = user?.plan ?? "FREE";
+  const allowed = canSubmitWriting(plan, writingSubs);
 
   function submit() {
     const minutes = startRef.current ? Math.max(1, Math.round((nowMs() - startRef.current) / 60000)) : 1;
@@ -83,6 +88,27 @@ function Lab({ promptId }: { promptId: string }) {
 
   const mm = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
   const ss = String(secondsLeft % 60).padStart(2, "0");
+
+  // Freemium: 1 scored writing task per day on the free plan
+  if (!allowed && !result) {
+    return (
+      <div className="mx-auto max-w-md space-y-5 py-12 text-center">
+        <Badge tone="gold">{L(lang, "Limite quotidienne du plan gratuit", "Free plan daily limit")}</Badge>
+        <h1 className="font-display text-2xl font-semibold">
+          {L(lang, "Votre production notée du jour est faite.", "Today's scored writing task is done.")}
+        </h1>
+        <p className="text-sm text-ink-2">
+          {L(lang,
+            `Le plan gratuit inclut ${FREE_LIMITS.writingPerDay} production écrite notée par jour — la régularité compte plus que le volume. Premium (activé par l'administrateur) débloque les productions illimitées, les blancs de section longs et le coach IA.`,
+            `The free plan includes ${FREE_LIMITS.writingPerDay} scored writing task per day — consistency beats volume. Premium (enabled by the admin) unlocks unlimited scored tasks, long section mocks and the AI coach.`)}
+        </p>
+        <div className="flex justify-center gap-3">
+          <Btn href="/review">{L(lang, "Continuer avec les cartes", "Continue with cards")}</Btn>
+          <Btn href="/pricing" variant="gold">{L(lang, "Voir Premium", "See Premium")}</Btn>
+        </div>
+      </div>
+    );
+  }
 
   if (result) {
     return (

@@ -21,6 +21,7 @@ import { addDays, todayKey } from "./dates";
 import { DEFAULT_GOALS, Goals, goalsJustReached, weeklyProgress } from "./goals";
 import { notify } from "./notify";
 import { SKILL_LABELS } from "./types";
+import { syncProgress } from "./sync";
 
 function emptySkill(): SkillState {
   return { scores: [], weakPatterns: [] };
@@ -157,6 +158,9 @@ export const useApp = create<AppState>()(
             notify(lang === "fr" ? "Objectif hebdo atteint" : "Weekly goal reached", label);
           }
         }
+
+        // keep the admin dashboard snapshot fresh (best-effort)
+        syncProgress(get());
         return full;
       },
 

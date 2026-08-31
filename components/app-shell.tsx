@@ -5,9 +5,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import { useApp } from "@/lib/store";
 import { useHydrated } from "@/lib/use-hydrated";
+import { useAuth, logoutAuth } from "@/lib/use-auth";
+import { syncProgress } from "@/lib/sync";
 import { L, useLang } from "@/lib/i18n";
 import { LangToggle } from "./lang-toggle";
-import { Disclaimer } from "./ui";
+import { Badge, Disclaimer } from "./ui";
 
 const NAV: { href: string; fr: string; en: string; icon: string }[] = [
   { href: "/today", fr: "Aujourd'hui", en: "Today", icon: "◉" },
@@ -32,17 +34,74 @@ export function AppShell({ children }: { children: ReactNode }) {
   const profile = useApp((s) => s.profile);
   const onboarded = useApp((s) => s.onboarded);
   const reconcileStreak = useApp((s) => s.reconcileStreak);
+  const signIn = useApp((s) => s.signIn);
+  const resetAll = useApp((s) => s.resetAll);
   const lang = useLang();
   const hydrated = useHydrated();
+  const { user, loaded } = useAuth();
 
   useEffect(() => {
-    if (!hydrated) return;
-    if (!profile) router.replace("/signin");
-    else if (!onboarded) router.replace("/onboarding");
-    else reconcileStreak();
-  }, [hydrated, profile, onboarded, router, reconcileStreak]);
+    if (!hydrated || !loaded) return;
+    // server session is the source of truth
+    if (!user) {
+      router.replace("/signin");
+      return;
+    }
+    if (user.role === "ADMIN") {
+      router.replace("/admin");
+      return;
+    }
+    if (!user.active) return; // blocked screen rendered below
+    // local learning profile follows the signed-in account
+    if (profile && profile.email !== user.email) {
+      resetAll();
+      return;
+    }
+    if (!profile) {
+      signIn(user.name, user.email);
+      return;
+    }
+    if (!onboarded) {
+      router.replace("/onboarding");
+      return;
+    }
+    reconcileStreak();
+  }, [hydrated, loaded, user, profile, onboarded, router, reconcileStreak, signIn, resetAll]);
 
-  if (!hydrated || !profile || !onboarded) {
+  // snapshot sync for the admin dashboard, once per app load
+  const sessions = useApp((s) => s.sessions);
+  const skills = useApp((s) => s.skills);
+  const streak = useApp((s) => s.streak);
+  useEffect(() => {
+    if (hydrated && loaded && user?.role === "STUDENT" && profile && onboarded) {
+      syncProgress({ profile, skills, sessions, streak });
+    }
+    // once per load, when everything is ready
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated, loaded, Boolean(user), Boolean(profile), onboarded]);
+
+  if (loaded && user && !user.active) {
+    return (
+      <div className="flex min-h-screen items-center justify-center px-6 text-center">
+        <div className="max-w-sm space-y-4">
+          <div className="font-display text-xl font-semibold text-accent">Lumen Français</div>
+          <p className="text-sm text-ink-2">
+            {L(lang,
+              "Votre accès a été désactivé par l'administrateur. Contactez-le pour le réactiver.",
+              "Your access has been disabled by the admin. Contact them to restore it.")}
+          </p>
+          <button
+            onClick={async () => { await logoutAuth(); router.replace("/signin"); }}
+            className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white"
+          >
+            {L(lang, "Se déconnecter", "Log out")}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!hydrated || !loaded || !user || user.role === "ADMIN" || !profile || !onboarded) {
     return (
       <div className="flex min-h-screen items-center justify-center text-ink-3">
         <div className="text-center">
@@ -62,8 +121,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             Lumen Français
           </Link>
         </div>
-        <div className="mt-3 px-2">
+        <div className="mt-3 flex items-center gap-2 px-2">
           <LangToggle />
+          <Badge tone={user.plan === "PREMIUM" ? "gold" : "ink"}>{user.plan === "PREMIUM" ? "Premium" : "Free"}</Badge>
         </div>
         <nav className="mt-6 flex flex-1 flex-col gap-1">
           {NAV.map((n) => {
@@ -82,8 +142,16 @@ export function AppShell({ children }: { children: ReactNode }) {
             );
           })}
         </nav>
-        <div className="px-2 pt-4 text-[11px] leading-relaxed text-ink-3">
-          {L(lang, "Estimations pédagogiques — pas des résultats officiels.", "Pedagogical estimates — not official results.")}
+        <div className="space-y-2 px-2 pt-4">
+          <button
+            onClick={async () => { await logoutAuth(); router.replace("/signin"); }}
+            className="text-xs font-semibold text-ink-3 hover:text-warn"
+          >
+            {L(lang, "Se déconnecter", "Log out")} ({user.name})
+          </button>
+          <div className="text-[11px] leading-relaxed text-ink-3">
+            {L(lang, "Estimations pédagogiques — pas des résultats officiels.", "Pedagogical estimates — not official results.")}
+          </div>
         </div>
       </aside>
 

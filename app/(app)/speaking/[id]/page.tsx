@@ -9,6 +9,8 @@ import { scoreSpeaking, SpeakingResult } from "@/lib/scoring";
 import { nowMs, todayKey } from "@/lib/dates";
 import { L, useLang } from "@/lib/i18n";
 import { EN } from "@/content/translations";
+import { useAuth } from "@/lib/use-auth";
+import { canSubmitSpeaking, FREE_LIMITS } from "@/lib/plan";
 import { Badge, Btn, Card } from "@/components/ui";
 
 const RUBRIC_LABELS: [keyof SpeakingResult["rubric"], { fr: string; en: string }][] = [
@@ -36,6 +38,9 @@ function Lab({ promptId }: { promptId: string }) {
   const addSkillScore = useApp((s) => s.addSkillScore);
   const addMemory = useApp((s) => s.addMemory);
   const prevBest = useApp((s) => s.speakingSubs.filter((x) => x.promptId === promptId));
+  const allSubs = useApp((s) => s.speakingSubs);
+  const { user } = useAuth();
+  const allowed = canSubmitSpeaking(user?.plan ?? "FREE", allSubs);
 
   const [stage, setStage] = useState<Stage>("brief");
   const [prepLeft, setPrepLeft] = useState(prompt.prepSeconds);
@@ -193,6 +198,27 @@ function Lab({ promptId }: { promptId: string }) {
   }
 
   const overTime = elapsed >= prompt.speakSeconds;
+
+  // Freemium: 1 scored speaking task per day on the free plan
+  if (!allowed && stage === "brief") {
+    return (
+      <div className="mx-auto max-w-md space-y-5 py-12 text-center">
+        <Badge tone="gold">{L(lang, "Limite quotidienne du plan gratuit", "Free plan daily limit")}</Badge>
+        <h1 className="font-display text-2xl font-semibold">
+          {L(lang, "Votre prise notée du jour est faite.", "Today's scored speaking take is done.")}
+        </h1>
+        <p className="text-sm text-ink-2">
+          {L(lang,
+            `Le plan gratuit inclut ${FREE_LIMITS.speakingPerDay} production orale notée par jour. Premium (activé par l'administrateur) débloque les prises illimitées — y compris « redites-le, en mieux » à volonté.`,
+            `The free plan includes ${FREE_LIMITS.speakingPerDay} scored speaking take per day. Premium (enabled by the admin) unlocks unlimited takes — including “say it again, better” at will.`)}
+        </p>
+        <div className="flex justify-center gap-3">
+          <Btn href="/skills/listening">{L(lang, "Travailler l'écoute", "Work on listening")}</Btn>
+          <Btn href="/pricing" variant="gold">{L(lang, "Voir Premium", "See Premium")}</Btn>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-xl space-y-5">
