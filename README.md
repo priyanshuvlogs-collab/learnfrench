@@ -23,6 +23,16 @@ message du coach existe pour faire monter l'une des quatre compétences vers la 
   résultats officiels. Site indépendant, sans affiliation avec IRCC, Le français des
   affaires ou France Éducation international. Aucun conseil en immigration.
 
+## Interface bilingue (anglais principal)
+
+L'interface est en **anglais par défaut** : on apprend le français en lisant les deux langues
+côte à côte. Un commutateur EN/FR (barre latérale, réglages, onboarding) bascule toute
+l'interface en français quand on est prêt. Le contenu d'apprentissage reste en français —
+c'est l'entraînement — mais chaque élément a sa traduction anglaise, révélée au bon moment
+pédagogique : transcriptions et textes **après** la réponse, consignes des ateliers en
+vis-à-vis, glose anglaise sous chaque carte SRS. Camille, elle, coache en français à dessein
+(et répond brièvement en anglais si on lui écrit en anglais).
+
 ## Fonctionnalités (V1 complète de bout en bout)
 
 | Écran | Contenu |
