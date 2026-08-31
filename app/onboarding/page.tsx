@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/lib/store";
 import { useHydrated } from "@/lib/use-hydrated";
@@ -23,6 +23,7 @@ export default function OnboardingPage() {
   const completeOnboarding = useApp((s) => s.completeOnboarding);
   const hydrated = useHydrated();
   const [step, setStep] = useState(0);
+  const finishingRef = useRef(false);
 
   const [exam, setExam] = useState<Exam>("TEF");
   const [target, setTarget] = useState<TargetNCLC>(7);
@@ -35,7 +36,8 @@ export default function OnboardingPage() {
   useEffect(() => {
     if (!hydrated) return;
     if (!profile) router.replace("/signin");
-    else if (onboarded) router.replace("/today");
+    // don't override the push to the first session triggered by finish()
+    else if (onboarded && !finishingRef.current) router.replace("/today");
   }, [hydrated, profile, onboarded, router]);
 
   const weakest = useMemo(
@@ -46,6 +48,7 @@ export default function OnboardingPage() {
   if (!hydrated || !profile || onboarded) return null;
 
   function finish() {
+    finishingRef.current = true;
     const p = profile as Profile;
     const full: Profile = {
       ...p,

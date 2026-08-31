@@ -70,7 +70,9 @@ function Review() {
           minutes: Math.min(elapsedMin, 15),
           type: rescue ? "rescue" : "srs",
           items: queue.length,
-          qualifying: true,
+          // rescue protocol always protects the chain; a normal review
+          // qualifies only via the standard rule (≥5 min, ≥5 items)
+          qualifying: rescue ? true : undefined,
         });
         addMemory(rescue ? "Session de secours 5 min — chaîne protégée." : `Rappel espacé : ${queue.length} cartes.`);
       }
