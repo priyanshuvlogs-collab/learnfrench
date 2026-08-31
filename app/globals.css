@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #faf9f5;
+  --color-paper-2: #f2f0e9;
+  --color-ink: #1c1b1a;
+  --color-ink-2: #55524c;
+  --color-ink-3: #8a867e;
+  --color-line: #e3e0d8;
+  --color-accent: #1b365d;
+  --color-accent-2: #2c4d7e;
+  --color-accent-soft: #e8edf5;
+  --color-gold: #a87e2f;
+  --color-gold-soft: #f6efdf;
+  --color-ok: #2f6b4f;
+  --color-ok-soft: #e6f0ea;
+  --color-warn: #8c4a2f;
+  --color-warn-soft: #f7ebe4;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* Quiet, functional motion only */
+.bar-ease {
+  transition: width 600ms cubic-bezier(0.22, 1, 0.36, 1), stroke-dashoffset 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-ease {
+    transition: none;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
