@@ -175,7 +175,7 @@ export function genNumberItem(rand: () => number = Math.random): NumberItem {
         : `Ça coûte ${numberToFrench(euros)} dollars ${numberToFrench(cents)}.`;
     const display = cents === 0 ? `${euros} $` : `${euros},${String(cents).padStart(2, "0")} $`;
     const digits = cents === 0 ? String(euros) : `${euros}${String(cents).padStart(2, "0")}`;
-    return { kind, kindLabel: "Prix", spoken, display, digits, hint: cents === 0 ? "Ex. : 45" : "Ex. : 45,50" };
+    return { kind, kindLabel: "Price", spoken, display, digits, hint: cents === 0 ? "e.g. 45" : "e.g. 45,50" };
   }
   if (kind === "time") {
     const h = ri(rand, 6, 23);
@@ -186,17 +186,17 @@ export function genNumberItem(rand: () => number = Math.random): NumberItem {
         : `Le rendez-vous est à ${numberToFrench(h)} heures ${numberToFrench(m)}.`;
     const display = m === 0 ? `${h} h` : `${h} h ${String(m).padStart(2, "0")}`;
     const digits = m === 0 ? String(h) : `${h}${String(m).padStart(2, "0")}`;
-    return { kind, kindLabel: "Heure", spoken, display, digits, hint: m === 0 ? "Ex. : 9" : "Ex. : 9h30" };
+    return { kind, kindLabel: "Time", spoken, display, digits, hint: m === 0 ? "e.g. 9" : "e.g. 9h30" };
   }
   if (kind === "year") {
     const y = ri(rand, 1860, 2032);
     return {
       kind,
-      kindLabel: "Année",
+      kindLabel: "Year",
       spoken: `C'est arrivé en ${numberToFrench(y)}.`,
       display: String(y),
       digits: String(y),
-      hint: "Ex. : 1998",
+      hint: "e.g. 1998",
     };
   }
   // phone — Canadian 10 digits, read in natural groups (3-3-2-2)
@@ -207,7 +207,7 @@ export function genNumberItem(rand: () => number = Math.random): NumberItem {
   const spoken = `Notez le numéro : ${numberToFrench(area)}, ${numberToFrench(p1)}, ${numberToFrench(p2)}, ${numberToFrench(p3)}.`;
   const digits = `${area}${p1}${p2}${p3}`;
   const display = `${area} ${p1}-${p2}${p3}`;
-  return { kind, kindLabel: "Téléphone", spoken, display, digits, hint: "Ex. : 514 555-1234" };
+  return { kind, kindLabel: "Phone", spoken, display, digits, hint: "e.g. 514 555-1234" };
 }
 
 // ── Conjugation checking ───────────────────────────────────────────────

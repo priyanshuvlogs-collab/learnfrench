@@ -41,39 +41,39 @@ export default function TodayPage() {
       {/* Identity header */}
       <header>
         <p className="text-sm text-ink-2">
-          {profile.name}, vous préparez le{" "}
-          <strong>{profile.exam === "UNDECIDED" ? "TEF ou TCF Canada" : `${profile.exam} Canada`}</strong> pour{" "}
+          {profile.name}, you are preparing{" "}
+          <strong>{profile.exam === "UNDECIDED" ? "TEF or TCF Canada" : `${profile.exam} Canada`}</strong> for{" "}
           <strong>NCLC {profile.targetNCLC}</strong>
           {days !== null && days > 0 && (
             <>
-              {" "}— examen dans <strong>{days} jour{days > 1 ? "s" : ""}</strong>
+              {" "}— exam in <strong>{days} day{days > 1 ? "s" : ""}</strong>
             </>
           )}
           .
         </p>
         <p className="mt-0.5 text-xs text-ink-3">
-          Phase : {PHASE_MIX[ph].fr}
+          Phase: {PHASE_MIX[ph].en}
         </p>
       </header>
 
       {/* Weakest-skill banner */}
       <div className="rounded-xl border border-warn/25 bg-warn-soft p-4 text-sm leading-relaxed text-warn">
-        Votre profil estimé est <strong className="font-display">{profileStr}</strong> (CO/CE/EE/EO). Le NCLC
-        officiel est <strong>le plus bas des quatre</strong>. Aujourd&apos;hui, on fait monter{" "}
-        <strong>{SKILL_LABELS[weakest].fr.toLowerCase()}</strong> ({formatNCLCRange(estimates[weakest])}).
+        Your estimated profile is <strong className="font-display">{profileStr}</strong> (CO/CE/EE/EO). Official NCLC
+        is <strong>the lowest of the four</strong>. Today we raise{" "}
+        <strong>{SKILL_LABELS[weakest].en.toLowerCase()}</strong> ({formatNCLCRange(estimates[weakest])}).
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
         {/* Today ring */}
         <Card className="flex flex-col items-center justify-center gap-3 text-center">
-          <Ring value={mins} max={profile.dailyMinutes} label={`${mins} min`} sub={`sur ${profile.dailyMinutes} prévues`} />
+          <Ring value={mins} max={profile.dailyMinutes} label={`${mins} min`} sub={`of ${profile.dailyMinutes} planned`} />
           {done ? (
             <p className="text-sm text-ok">
-              Bloc du jour terminé. Un rappel de plus ? Optionnel — la chaîne est déjà à l&apos;abri.
+              Today&apos;s block is done. Another review? Optional — the streak is already safe.
             </p>
           ) : (
             <p className="text-sm text-ink-2">
-              « {profile.intention.time} », {profile.dailyMinutes} minutes. C&apos;est le plan que vous avez choisi.
+              “{profile.intention.time}”, {profile.dailyMinutes} minutes. That is the plan you chose.
             </p>
           )}
         </Card>
@@ -82,29 +82,29 @@ export default function TodayPage() {
         <Card className="flex flex-col justify-between gap-3">
           <div className="flex items-start justify-between">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-wider text-ink-3">Chaîne</div>
-              <div className="font-display text-4xl font-semibold">{streak.current} <span className="text-lg text-ink-3">jour{streak.current > 1 ? "s" : ""}</span></div>
+              <div className="text-xs font-semibold uppercase tracking-wider text-ink-3">Streak</div>
+              <div className="font-display text-4xl font-semibold">{streak.current} <span className="text-lg text-ink-3">day{streak.current !== 1 ? "s" : ""}</span></div>
             </div>
             <div className="space-y-1 text-right text-xs text-ink-3">
-              <div>Record : <span className="font-display font-semibold text-ink">{streak.longest}</span></div>
-              <div>Gels : <span className="font-display font-semibold text-ink">{streak.freezesLeft}</span> / 2 ce mois</div>
+              <div>Best: <span className="font-display font-semibold text-ink">{streak.longest}</span></div>
+              <div>Freezes: <span className="font-display font-semibold text-ink">{streak.freezesLeft}</span> / 2 this month</div>
             </div>
           </div>
           {broken ? (
             <div className="rounded-lg bg-paper-2 p-3">
-              <p className="text-sm text-ink-2">La chaîne s&apos;est arrêtée. Aucun drame — le record de {streak.longest} jours reste à vous.</p>
-              <Btn href={drillHref} className="mt-2 w-full">Reprendre — 8 minutes, sans leçon</Btn>
+              <p className="text-sm text-ink-2">The streak stopped. No drama — the {streak.longest}-day record is still yours.</p>
+              <Btn href={drillHref} className="mt-2 w-full">Resume — 8 minutes, no lecture</Btn>
             </div>
           ) : qualified ? (
-            <p className="text-sm text-ok">Session qualifiante faite aujourd&apos;hui — la chaîne continuera à minuit. ✓</p>
+            <p className="text-sm text-ok">Qualifying session done today — the streak continues at midnight. ✓</p>
           ) : (
             <p className="text-sm text-ink-2">
-              5 minutes concentrées suffisent pour aujourd&apos;hui. Les gels s&apos;utilisent seuls si vous manquez un jour après une chaîne de 7+.
+              5 focused minutes are enough for today. Freezes apply themselves if you miss one day after a 7+ streak.
             </p>
           )}
           <div className="flex flex-wrap gap-1.5">
-            <Badge tone={ms.sectionMockUnlocked ? "gold" : "ink"}>{ms.sectionMockUnlocked ? "✓" : "7 j →"} Examen blanc de section</Badge>
-            <Badge tone={ms.examinerModeUnlocked ? "gold" : "ink"}>{ms.examinerModeUnlocked ? "✓" : "21 j →"} Mode examinateur</Badge>
+            <Badge tone={ms.sectionMockUnlocked ? "gold" : "ink"}>{ms.sectionMockUnlocked ? "✓" : "7 d →"} Section mock</Badge>
+            <Badge tone={ms.examinerModeUnlocked ? "gold" : "ink"}>{ms.examinerModeUnlocked ? "✓" : "21 d →"} Examiner mode</Badge>
           </div>
         </Card>
       </div>
@@ -113,12 +113,12 @@ export default function TodayPage() {
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="font-display text-lg font-semibold">Le bloc du jour — {SKILL_LABELS[todaySkill].fr}</h2>
-            <p className="text-sm text-ink-2">Un bloc d&apos;examen de {profile.dailyMinutes} minutes, en quatre temps.</p>
+            <h2 className="font-display text-lg font-semibold">Today&apos;s block — {SKILL_LABELS[todaySkill].en}</h2>
+            <p className="text-sm text-ink-2">A {profile.dailyMinutes}-minute exam block, in four beats.</p>
           </div>
           <div className="flex gap-2">
-            <Btn href={drillHref}>Commencer le bloc</Btn>
-            {!qualified && <Btn href="/review?rescue=1" variant="ghost">Secours 5 min</Btn>}
+            <Btn href={drillHref}>Start the block</Btn>
+            {!qualified && <Btn href="/review?rescue=1" variant="ghost">5-min rescue</Btn>}
           </div>
         </div>
         <ol className="mt-5 space-y-2">
@@ -126,7 +126,7 @@ export default function TodayPage() {
             <li key={seg.id}>
               <Link href={seg.href} className="flex items-center gap-3 rounded-lg border border-line bg-paper px-3 py-2.5 text-sm hover:border-accent">
                 <span className="font-display w-6 text-center font-semibold text-ink-3">{i + 1}</span>
-                <span className="flex-1">{seg.label.fr}</span>
+                <span className="flex-1">{seg.label.en}</span>
                 <span className="font-display text-xs text-ink-3">{seg.minutes} min</span>
               </Link>
             </li>
@@ -137,7 +137,7 @@ export default function TodayPage() {
       {/* Skill bars + readiness */}
       <div className="grid gap-5 sm:grid-cols-2">
         <Card>
-          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-ink-2">Quatre compétences, quatre NCLC</h2>
+          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-ink-2">Four skills, four NCLC scores</h2>
           <SkillBars estimates={estimates} target={profile.targetNCLC} linked />
         </Card>
         <Card>
@@ -145,7 +145,7 @@ export default function TodayPage() {
         </Card>
       </div>
 
-      <p className="text-center text-xs text-ink-3">{todayKey()} · Estimations pédagogiques — l&apos;examen officiel reste le seul juge.</p>
+      <p className="text-center text-xs text-ink-3">{todayKey()} · Pedagogical estimates — the official exam is the only judge.</p>
     </div>
   );
 }

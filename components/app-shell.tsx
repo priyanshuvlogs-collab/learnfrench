@@ -7,18 +7,18 @@ import { useApp } from "@/lib/store";
 import { useHydrated } from "@/lib/use-hydrated";
 import { Disclaimer } from "./ui";
 
-const NAV: { href: string; fr: string; icon: string }[] = [
-  { href: "/today", fr: "Aujourd'hui", icon: "◉" },
-  { href: "/coach", fr: "Coach", icon: "✎" },
-  { href: "/skills", fr: "Compétences", icon: "▤" },
-  { href: "/writing", fr: "Écriture", icon: "¶" },
-  { href: "/speaking", fr: "Oral", icon: "◍" },
-  { href: "/review", fr: "Révision", icon: "⟳" },
-  { href: "/lab", fr: "Labo", icon: "⚗" },
-  { href: "/notebook", fr: "Carnet", icon: "✦" },
-  { href: "/mocks", fr: "Examens blancs", icon: "▦" },
-  { href: "/progress", fr: "Progrès", icon: "∿" },
-  { href: "/settings", fr: "Réglages", icon: "⚙" },
+const NAV: { href: string; label: string; icon: string }[] = [
+  { href: "/today", label: "Today", icon: "◉" },
+  { href: "/coach", label: "Coach", icon: "✎" },
+  { href: "/skills", label: "Skills", icon: "▤" },
+  { href: "/writing", label: "Writing", icon: "¶" },
+  { href: "/speaking", label: "Speaking", icon: "◍" },
+  { href: "/review", label: "Review", icon: "⟳" },
+  { href: "/lab", label: "Lab", icon: "⚗" },
+  { href: "/notebook", label: "Notebook", icon: "✦" },
+  { href: "/mocks", label: "Mocks", icon: "▦" },
+  { href: "/progress", label: "Progress", icon: "∿" },
+  { href: "/settings", label: "Settings", icon: "⚙" },
 ];
 
 const MOBILE_NAV = NAV.filter((n) => ["/today", "/coach", "/skills", "/lab", "/review", "/progress"].includes(n.href));
@@ -43,7 +43,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="flex min-h-screen items-center justify-center text-ink-3">
         <div className="text-center">
           <div className="font-display text-xl font-semibold text-accent">Lumen Français</div>
-          <div className="mt-2 text-sm">Chargement…</div>
+          <div className="mt-2 text-sm">Loading…</div>
         </div>
       </div>
     );
@@ -68,13 +68,13 @@ export function AppShell({ children }: { children: ReactNode }) {
                 }`}
               >
                 <span aria-hidden className="w-4 text-center">{n.icon}</span>
-                {n.fr}
+                {n.label}
               </Link>
             );
           })}
         </nav>
         <div className="px-2 pt-4 text-[11px] leading-relaxed text-ink-3">
-          Estimations pédagogiques — pas des résultats officiels.
+          Pedagogical estimates — not official results.
         </div>
       </aside>
 
@@ -87,7 +87,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       </div>
 
       {/* Mobile bottom nav */}
-      <nav className="fixed inset-x-0 bottom-0 z-20 flex border-t border-line bg-white md:hidden" aria-label="Navigation principale">
+      <nav className="fixed inset-x-0 bottom-0 z-20 flex border-t border-line bg-white md:hidden" aria-label="Main navigation">
         {MOBILE_NAV.map((n) => {
           const active = pathname === n.href || (n.href !== "/today" && pathname.startsWith(n.href));
           return (
@@ -99,7 +99,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               }`}
             >
               <span aria-hidden className="text-base leading-none">{n.icon}</span>
-              {n.fr}
+              {n.label}
             </Link>
           );
         })}

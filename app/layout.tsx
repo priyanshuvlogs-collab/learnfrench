@@ -14,14 +14,14 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Lumen Français — coach IA pour le TEF Canada et le TCF Canada",
+  title: "Lumen Français — English-interface French coach for TEF / TCF Canada",
   description:
-    "Un coach IA qui vous amène au NCLC dont vous avez réellement besoin. Préparation TEF Canada / TCF Canada : quatre compétences, estimations pédagogiques, méthode d'examinateur.",
+    "An English-language exam coach that trains you in real French. TEF Canada / TCF Canada prep: four skills, pedagogical estimates, examiner method.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fr" className={`${inter.variable} ${fraunces.variable} h-full antialiased`}>
+    <html lang="en" className={`${inter.variable} ${fraunces.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

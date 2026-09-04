@@ -67,7 +67,7 @@ export default function ConjugationPage() {
     const v = checkConjugation(item.answer, typed, item.accept);
     setVerdict(v);
     setPoints((p) => p + (v === "ok" ? 1 : v === "accent" ? 0.5 : 0));
-    if (v === "wrong") addWeakPattern("writing", `conjugaison : ${item.tense.toLowerCase()}`);
+    if (v === "wrong") addWeakPattern("writing", `conjugation: ${item.tense.toLowerCase()}`);
   }
 
   function next() {
@@ -78,7 +78,7 @@ export default function ConjugationPage() {
         const minutes = Math.max(1, Math.round((nowMs() - startRef.current) / 60000));
         recordSession({ skill: "writing", minutes: Math.min(minutes, 20), type: "conjugation", score: pct, items: items.length });
         addSkillScore("writing", pct);
-        addMemory(`Sprint de conjugaison : ${pct} %.`);
+        addMemory(`Conjugation sprint: ${pct}%.`);
       }
       setFinished(true);
     } else {
@@ -93,23 +93,23 @@ export default function ConjugationPage() {
     const pct = Math.round((points / items.length) * 100);
     return (
       <div className="mx-auto max-w-lg space-y-5 py-8 text-center">
-        <Badge tone={pct >= 70 ? "ok" : "accent"}>Sprint terminé</Badge>
+        <Badge tone={pct >= 70 ? "ok" : "accent"}>Sprint complete</Badge>
         <h1 className="font-display text-3xl font-semibold">{pct} %</h1>
         <p className="text-sm text-ink-2">
-          Forme exacte = 1 point, bon mot sans les accents = ½. La conjugaison sûre libère l&apos;attention
-          pour les idées — à l&apos;écrit comme à l&apos;oral.
+          Exact form = 1 point, right word without accents = ½. Secure conjugation frees attention
+          for ideas — in writing and speaking.
         </p>
         <Card className="text-left">
-          <div className="text-xs font-semibold uppercase tracking-wider text-gold">Votre victoire du jour</div>
+          <div className="text-xs font-semibold uppercase tracking-wider text-gold">Today&apos;s win</div>
           <p className="mt-1 text-sm text-ink-2">
             {pct >= 80
-              ? "Dix formes verbales sans filet, mélange de six temps — c'est le niveau d'automatisme qu'exige la lettre formelle."
-              : "Chaque forme ratée est repartie avec sa règle. Dix items par jour suffisent : la conjugaison est une affaire de fréquence, pas de volume."}
+              ? "Ten verb forms with no net, six tenses mixed — the automaticity a formal letter demands."
+              : "Every miss left with its rule. Ten items a day is enough: conjugation is frequency, not volume."}
           </p>
         </Card>
         <div className="flex justify-center gap-3">
-          <Btn href="/lab">Retour au labo</Btn>
-          <Btn href="/review" variant="ghost">Rappel espacé</Btn>
+          <Btn href="/lab">Back to the lab</Btn>
+          <Btn href="/review" variant="ghost">Spaced review</Btn>
         </div>
       </div>
     );
@@ -119,8 +119,8 @@ export default function ConjugationPage() {
     <div className="mx-auto max-w-xl space-y-5">
       <header className="flex items-center justify-between">
         <div>
-          <Link href="/lab" className="text-xs text-ink-3 hover:text-accent">← Labo</Link>
-          <h1 className="font-display text-xl font-semibold">Sprint de conjugaison</h1>
+          <Link href="/lab" className="text-xs text-ink-3 hover:text-accent">← Lab</Link>
+          <h1 className="font-display text-xl font-semibold">Conjugation sprint</h1>
         </div>
         <span className="font-display text-sm text-ink-3">{idx + 1} / {items.length}</span>
       </header>
@@ -149,7 +149,7 @@ export default function ConjugationPage() {
             value={typed}
             onChange={(e) => setTyped(e.target.value)}
             disabled={verdict !== null}
-            placeholder="Tapez la forme conjuguée…"
+            placeholder="Type the conjugated form…"
             className="flex-1 rounded-lg border border-line bg-white px-3 py-2.5 text-sm disabled:bg-paper"
             spellCheck={false}
             autoCorrect="off"
@@ -157,7 +157,7 @@ export default function ConjugationPage() {
             autoComplete="off"
             autoFocus
           />
-          {verdict === null && <Btn type="submit" disabled={!typed.trim()}>Vérifier</Btn>}
+          {verdict === null && <Btn type="submit" disabled={!typed.trim()}>Check</Btn>}
         </div>
         {verdict === null && <AccentBar targetRef={inputRef} onInsert={setTyped} />}
       </form>
@@ -169,18 +169,18 @@ export default function ConjugationPage() {
               verdict === "ok" ? "text-ok" : verdict === "accent" ? "text-gold" : "text-warn"
             }`}
           >
-            {verdict === "ok" ? "Exact" : verdict === "accent" ? "Bon mot — accents à revoir (½ point)" : "Pas cette forme"}
+            {verdict === "ok" ? "Exact" : verdict === "accent" ? "Right word — accents to fix (½ point)" : "Not that form"}
           </div>
           <p className="mt-1 text-sm text-ink-2">
             {item.subject}{item.subject.endsWith("'") ? "" : " "}<strong>{item.answer}</strong>
-            {verdict !== "ok" && <> — vous avez écrit « {typed.trim()} »</>}
+            {verdict !== "ok" && <> — you wrote “{typed.trim()}”</>}
           </p>
           <div className="mt-3 border-t border-line pt-3">
-            <div className="text-xs font-semibold uppercase tracking-wider text-ink-3">La règle</div>
+            <div className="text-xs font-semibold uppercase tracking-wider text-ink-3">The rule</div>
             <p className="mt-1 text-sm text-ink-2">{item.note}</p>
           </div>
           <Btn onClick={next} className="mt-4 w-full">
-            {idx + 1 >= items.length ? "Terminer le sprint" : "Forme suivante →"}
+            {idx + 1 >= items.length ? "Finish the sprint" : "Next form →"}
           </Btn>
         </Card>
       )}

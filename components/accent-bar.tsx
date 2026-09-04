@@ -29,7 +29,7 @@ export function AccentBar({
   }
 
   return (
-    <div className="flex flex-wrap gap-1.5" role="toolbar" aria-label="Insérer un caractère accentué">
+    <div className="flex flex-wrap gap-1.5" role="toolbar" aria-label="Insert an accented character">
       {CHARS.map((ch) => (
         <button
           key={ch}

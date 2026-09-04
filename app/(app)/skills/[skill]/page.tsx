@@ -95,7 +95,7 @@ function Drill({ skill }: { skill: "listening" | "reading" }) {
         const pct = Math.round((correctCount / items.length) * 100);
         recordSession({ skill, minutes: Math.min(minutes, 30), type: "drill", score: pct, items: items.length });
         addSkillScore(skill, pct);
-        addMemory(`${SKILL_LABELS[skill].short} : ${correctCount}/${items.length} (${pct} %).`);
+        addMemory(`${SKILL_LABELS[skill].en}: ${correctCount}/${items.length} (${pct}%).`);
       }
       setFinished(true);
     } else {
@@ -110,26 +110,26 @@ function Drill({ skill }: { skill: "listening" | "reading" }) {
     const pct = Math.round((correctCount / items.length) * 100);
     return (
       <div className="mx-auto max-w-lg space-y-5 py-8 text-center">
-        <Badge tone={pct >= 70 ? "ok" : "accent"}>Session terminée</Badge>
+        <Badge tone={pct >= 70 ? "ok" : "accent"}>Session complete</Badge>
         <h1 className="font-display text-3xl font-semibold">{correctCount} / {items.length}</h1>
         <p className="text-sm text-ink-2">
-          Estimation de cette session : ~NCLC {Math.floor(scoreToNCLC(pct))} en {SKILL_LABELS[skill].fr.toLowerCase()} (estimation pédagogique).
+          This session: ~NCLC {Math.floor(scoreToNCLC(pct))} in {SKILL_LABELS[skill].en.toLowerCase()} (pedagogical estimate).
         </p>
         <Card className="text-left">
-          <div className="text-xs font-semibold uppercase tracking-wider text-gold">Votre victoire du jour</div>
+          <div className="text-xs font-semibold uppercase tracking-wider text-gold">Today&apos;s win</div>
           <p className="mt-1 text-sm text-ink-2">
             {correctCount > 0
-              ? `Vous avez éliminé les pièges sur ${correctCount} question${correctCount > 1 ? "s" : ""} — dont celles où l'option qui répète les mots du texte était fausse.`
-              : "Vous avez tenu la règle de l'écoute unique du début à la fin. C'est la compétence d'examen la plus dure à installer."}
+              ? `You beat the traps on ${correctCount} question${correctCount > 1 ? "s" : ""} — including ones where the option that repeats words from the text was false.`
+              : "You held the single-listen rule from start to finish. That is the hardest exam skill to install."}
           </p>
-          <div className="mt-3 text-xs font-semibold uppercase tracking-wider text-ink-3">Prochain micro-objectif</div>
+          <div className="mt-3 text-xs font-semibold uppercase tracking-wider text-ink-3">Next micro-goal</div>
           <p className="mt-1 text-sm text-ink-2">
-            {pct >= 80 ? "Même exercice, mais notez l'heure ou le chiffre clé pendant l'écoute." : "Avant chaque audio : lisez la question et prédisez qui parle et pourquoi."}
+            {pct >= 80 ? "Same drill, but jot the time or key figure while you listen." : "Before each audio: read the question and predict who is speaking and why."}
           </p>
         </Card>
         <div className="flex justify-center gap-3">
-          <Btn href="/today">Retour à l&apos;accueil</Btn>
-          <Btn href="/review" variant="ghost">Rappel espacé (5 min)</Btn>
+          <Btn href="/today">Back to Today</Btn>
+          <Btn href="/review" variant="ghost">Spaced review (5 min)</Btn>
         </div>
       </div>
     );
@@ -139,8 +139,8 @@ function Drill({ skill }: { skill: "listening" | "reading" }) {
     <div className="mx-auto max-w-xl space-y-5">
       <header className="flex items-center justify-between">
         <div>
-          <Link href="/skills" className="text-xs text-ink-3 hover:text-accent">← Compétences</Link>
-          <h1 className="font-display text-xl font-semibold">{SKILL_LABELS[skill].fr}</h1>
+          <Link href="/skills" className="text-xs text-ink-3 hover:text-accent">← Skills</Link>
+          <h1 className="font-display text-xl font-semibold">{SKILL_LABELS[skill].en}</h1>
         </div>
         <span className="font-display text-sm text-ink-3">{idx + 1} / {items.length}</span>
       </header>
@@ -151,19 +151,19 @@ function Drill({ skill }: { skill: "listening" | "reading" }) {
             <div>
               <Badge tone="ink">{(item as ListeningItem).kind}</Badge>
               <p className="mt-2 text-sm font-semibold">{item.question}</p>
-              <p className="mt-1 text-xs text-ink-3">Prédisez : qui parle, pourquoi ? Puis écoutez — une seule fois, c&apos;est la règle. On l&apos;entraîne.</p>
+              <p className="mt-1 text-xs text-ink-3">Predict: who is speaking, why? Then listen once — that is the rule. We train it.</p>
             </div>
             <button
               onClick={speak}
               disabled={played}
               className={`shrink-0 rounded-full px-5 py-5 font-semibold ${played ? "bg-paper-2 text-ink-3" : "bg-accent text-white hover:bg-accent-2"}`}
-              aria-label={played ? "Audio déjà joué" : "Jouer l'audio (une seule fois)"}
+              aria-label={played ? "Audio already played" : "Play the audio (once)"}
             >
               {playing ? "…" : played ? "✓" : "▶"}
             </button>
           </div>
           {played && !playing && picked === null && (
-            <p className="mt-3 text-xs text-ink-3">L&apos;audio ne rejouera pas. Éliminez, puis engagez une réponse.</p>
+            <p className="mt-3 text-xs text-ink-3">The audio will not replay. Eliminate, then commit an answer.</p>
           )}
         </Card>
       ) : (
@@ -199,17 +199,17 @@ function Drill({ skill }: { skill: "listening" | "reading" }) {
       {picked !== null && (
         <Card className="border-accent/30">
           <div className="text-xs font-semibold uppercase tracking-wider text-accent">
-            {picked === item.answer ? "Correct — pourquoi les autres tombent" : "Le piège, expliqué"}
+            {picked === item.answer ? "Correct — why the others fall" : "The trap, explained"}
           </div>
           <p className="mt-1 text-sm text-ink-2">{listening ? (item as ListeningItem).trap : (item as ReadingItem).explanation}</p>
           {listening && (
             <details className="mt-3">
-              <summary className="cursor-pointer text-xs font-semibold text-ink-3 hover:text-accent">Transcription (accessibilité / relecture)</summary>
+              <summary className="cursor-pointer text-xs font-semibold text-ink-3 hover:text-accent">Transcript (accessibility / review)</summary>
               <p className="mt-2 rounded-lg bg-paper p-3 text-sm leading-relaxed text-ink-2">{(item as ListeningItem).transcript}</p>
             </details>
           )}
           <Btn onClick={next} className="mt-4 w-full">
-            {idx + 1 >= items.length ? "Terminer la session" : "Question suivante →"}
+            {idx + 1 >= items.length ? "Finish the session" : "Next question →"}
           </Btn>
         </Card>
       )}

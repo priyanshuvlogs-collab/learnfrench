@@ -10,7 +10,7 @@ import { Badge, Card } from "@/components/ui";
 
 function Spark({ values }: { values: number[] }) {
   if (values.length < 2) {
-    return <span className="text-xs text-ink-3">Encore peu de données — {values.length} tâche{values.length === 1 ? "" : "s"} notée{values.length === 1 ? "" : "s"}.</span>;
+    return <span className="text-xs text-ink-3">Not enough data yet — {values.length} scored task{values.length === 1 ? "" : "s"}.</span>;
   }
   const w = 160, h = 36;
   const min = Math.min(...values), max = Math.max(...values);
@@ -72,13 +72,13 @@ export default function ProgressPage() {
   return (
     <div className="space-y-5">
       <header>
-        <h1 className="font-display text-2xl font-semibold">Progrès</h1>
-        <p className="mt-1 text-sm text-ink-2">Trois couches : le jour, les compétences, la préparation. Jamais de moyenne unique.</p>
+        <h1 className="font-display text-2xl font-semibold">Progress</h1>
+        <p className="mt-1 text-sm text-ink-2">Three layers: the day, the skills, readiness. Never a single average.</p>
       </header>
 
       {/* 14-day heatmap */}
       <Card>
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">14 derniers jours — minutes de travail réel</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">Last 14 days — real work minutes</h2>
         <div className="mt-3 grid grid-cols-7 gap-1.5">
           {days14.map((d) => {
             const m = minutesByDay[d] ?? 0;
@@ -95,14 +95,14 @@ export default function ProgressPage() {
 
       {/* Skill trajectories */}
       <Card>
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">Trajectoires par compétence</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">Trajectories by skill</h2>
         <div className="mt-3 space-y-4">
           {SKILLS.map((s) => (
             <div key={s} className="flex items-center justify-between gap-3 border-b border-line pb-3 last:border-0 last:pb-0">
               <div>
                 <div className="text-sm font-semibold">
-                  {SKILL_LABELS[s].fr}
-                  {s === weakest && <Badge tone="warn">Limite le profil</Badge>}
+                  {SKILL_LABELS[s].en}
+                  {s === weakest && <Badge tone="warn">Caps the profile</Badge>}
                 </div>
                 <div className="font-display text-lg font-semibold">{formatNCLCRange(estimates[s])}</div>
               </div>
@@ -115,8 +115,8 @@ export default function ProgressPage() {
       {/* Streak calendar */}
       <Card>
         <div className="flex items-baseline justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">Calendrier de chaîne — 28 jours</h2>
-          <span className="text-xs text-ink-3">Record : <span className="font-display font-semibold text-ink">{streak.longest}</span> · Gels restants : {streak.freezesLeft}/2</span>
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">Streak calendar — 28 days</h2>
+          <span className="text-xs text-ink-3">Best: <span className="font-display font-semibold text-ink">{streak.longest}</span> · Freezes left: {streak.freezesLeft}/2</span>
         </div>
         <div className="mt-3 grid grid-cols-7 gap-1.5">
           {days28.map((d) => {
@@ -125,7 +125,7 @@ export default function ProgressPage() {
             return (
               <div
                 key={d}
-                title={`${d}${q ? " — session qualifiante" : f ? " — gel utilisé" : ""}`}
+                title={`${d}${q ? " — qualifying session" : f ? " — freeze used" : ""}`}
                 className={`flex h-8 items-center justify-center rounded-md text-[9px] font-semibold ${
                   q ? "bg-ok-soft text-ok" : f ? "bg-gold-soft text-gold" : "bg-paper-2 text-ink-3"
                 }`}
@@ -139,24 +139,24 @@ export default function ProgressPage() {
 
       {/* Days to target */}
       <Card>
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">Distance à la cible — modèle honnête</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">Distance to target — honest model</h2>
         {totalGap <= 0 ? (
           <p className="mt-2 text-sm text-ink-2">
-            Vos quatre estimations atteignent NCLC {profile.targetNCLC}. Maintenant : consolider avec des blancs chronométrés — un profil se défend le jour J.
+            All four estimates reach NCLC {profile.targetNCLC}. Now: lock it in with timed mocks — a profile is defended on exam day.
           </p>
         ) : (
           <p className="mt-2 text-sm leading-relaxed text-ink-2">
-            Écart cumulé estimé : <strong className="font-display">{totalGap.toFixed(1)} niveau(x) NCLC</strong>, concentré sur{" "}
-            {SKILL_LABELS[weakest].fr.toLowerCase()}. Au rythme de {profile.dailyMinutes} min/jour, comptez{" "}
-            <strong className="font-display">{daysLow}–{daysHigh} jours</strong> de travail régulier ({hoursLow}–{hoursHigh} h focalisées).
-            C&apos;est une fourchette, pas une promesse — la régularité pèse plus que le total.
+            Estimated cumulative gap: <strong className="font-display">{totalGap.toFixed(1)} NCLC level(s)</strong>, concentrated on{" "}
+            {SKILL_LABELS[weakest].en.toLowerCase()}. At {profile.dailyMinutes} min/day, count on{" "}
+            <strong className="font-display">{daysLow}–{daysHigh} days</strong> of regular work ({hoursLow}–{hoursHigh} focused hours).
+            That is a range, not a promise — consistency weighs more than the total.
           </p>
         )}
       </Card>
 
       {/* Weekly letter */}
       <Card className="border-gold/30">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-gold">La lettre de la semaine — Camille</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-gold">This week&apos;s letter — Camille</h2>
         <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-ink-2">{letter}</p>
       </Card>
     </div>

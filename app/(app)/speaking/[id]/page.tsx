@@ -10,11 +10,11 @@ import { nowMs, todayKey } from "@/lib/dates";
 import { Badge, Btn, Card } from "@/components/ui";
 
 const RUBRIC_LABELS: [keyof SpeakingResult["rubric"], string][] = [
-  ["task", "Respect de la consigne"],
-  ["coherence", "Cohérence / structure"],
-  ["lexicon", "Étendue du vocabulaire"],
-  ["grammar", "Contrôle grammatical"],
-  ["register", "Aisance / intelligibilité"],
+  ["task", "Task fulfilment"],
+  ["coherence", "Coherence / structure"],
+  ["lexicon", "Lexical range"],
+  ["grammar", "Grammatical control"],
+  ["register", "Fluency / intelligibility"],
 ];
 
 type Stage = "brief" | "prep" | "record" | "transcript" | "result";
@@ -133,7 +133,7 @@ function Lab({ promptId }: { promptId: string }) {
       secondsRef.current = 0;
       setStage("record");
     } catch {
-      setMicError("Micro inaccessible. Autorisez le micro, ou continuez : vous pourrez taper ce que vous avez dit.");
+      setMicError("Microphone unavailable. Allow access, or continue — you can type what you said.");
       setStage("record");
     }
   }
@@ -171,7 +171,7 @@ function Lab({ promptId }: { promptId: string }) {
       qualifying: seconds >= 30,
     });
     addSkillScore("speaking", r.score);
-    addMemory(`EO ${prompt.exam} ${prompt.task} : ${seconds} s, ~NCLC ${r.estNCLC} (prise ${take}).`);
+    addMemory(`Speaking ${prompt.exam} ${prompt.task}: ${seconds}s, ~NCLC ${r.estNCLC} (take ${take}).`);
     setStage("result");
   }
 
@@ -191,7 +191,7 @@ function Lab({ promptId }: { promptId: string }) {
   return (
     <div className="mx-auto max-w-xl space-y-5">
       <header>
-        <Link href="/speaking" className="text-xs text-ink-3 hover:text-accent">← Atelier oral</Link>
+        <Link href="/speaking" className="text-xs text-ink-3 hover:text-accent">← Speaking studio</Link>
         <div className="mt-1 flex items-center justify-between gap-2">
           <h1 className="font-display text-xl font-semibold">{prompt.title}</h1>
           <Badge tone={prompt.exam === "TEF" ? "accent" : "gold"}>{prompt.exam} {prompt.task}</Badge>
@@ -199,9 +199,9 @@ function Lab({ promptId }: { promptId: string }) {
       </header>
 
       <Card>
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-ink-3">Consigne</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-ink-3">Brief (French)</h2>
         <p className="mt-2 text-sm leading-relaxed">{prompt.prompt}</p>
-        <h3 className="mt-4 text-xs font-semibold uppercase tracking-wider text-ink-3">Structure attendue</h3>
+        <h3 className="mt-4 text-xs font-semibold uppercase tracking-wider text-ink-3">Expected structure</h3>
         <ol className="mt-1.5 space-y-1 text-sm text-ink-2">
           {prompt.structure.map((st, i) => (
             <li key={st}><span className="font-display font-semibold text-accent">{i + 1}.</span> {st}</li>
@@ -212,24 +212,24 @@ function Lab({ promptId }: { promptId: string }) {
       {stage === "brief" && (
         <div className="space-y-3 text-center">
           {take > 1 && (
-            <p className="text-sm text-gold">Prise n° {take} — « redites-le, en mieux ». Battez votre dernier essai.</p>
+            <p className="text-sm text-gold">Take {take} — “say it again, better”. Beat your last try.</p>
           )}
           <p className="text-sm text-ink-2">
             {prompt.prepSeconds > 0
-              ? `${prompt.prepSeconds} secondes de préparation, puis ${prompt.speakSeconds} secondes de parole.`
-              : `Sans préparation, comme à l'examen : ${prompt.speakSeconds} secondes de parole.`}
+              ? `${prompt.prepSeconds} seconds of prep, then ${prompt.speakSeconds} seconds of speech.`
+              : `No prep, as in the exam: ${prompt.speakSeconds} seconds of speech.`}
           </p>
           <Btn onClick={() => (prompt.prepSeconds > 0 && take === 1 ? (setPrepLeft(prompt.prepSeconds), setStage("prep")) : startRecording())}>
-            {prompt.prepSeconds > 0 && take === 1 ? "Lancer la préparation" : "Enregistrer"}
+            {prompt.prepSeconds > 0 && take === 1 ? "Start prep" : "Record"}
           </Btn>
         </div>
       )}
 
       {stage === "prep" && (
         <Card className="text-center">
-          <div className="text-xs font-semibold uppercase tracking-wider text-ink-3">Préparation — notez 3 mots-clés, pas des phrases</div>
+          <div className="text-xs font-semibold uppercase tracking-wider text-ink-3">Prep — jot 3 keywords, not sentences</div>
           <div className="font-display mt-2 text-5xl font-semibold tabular-nums">{prepLeft}</div>
-          <Btn onClick={startRecording} variant="ghost" className="mt-4">Prêt avant la fin → enregistrer</Btn>
+          <Btn onClick={startRecording} variant="ghost" className="mt-4">Ready early → record</Btn>
         </Card>
       )}
 
@@ -238,7 +238,7 @@ function Lab({ promptId }: { promptId: string }) {
           {micError ? (
             <>
               <p className="text-sm text-warn">{micError}</p>
-              <Btn onClick={() => setStage("transcript")} className="mt-3">Continuer sans micro</Btn>
+              <Btn onClick={() => setStage("transcript")} className="mt-3">Continue without mic</Btn>
             </>
           ) : (
             <>
@@ -260,9 +260,9 @@ function Lab({ promptId }: { promptId: string }) {
                 ))}
               </div>
               <p className="mt-3 text-xs text-ink-3">
-                {overTime ? "Temps atteint — concluez proprement (« En un mot… »)." : "Silence qui s'installe ? « Alors… en fait… ce que je veux dire, c'est que… »"}
+                {overTime ? "Time’s up — close cleanly (« En un mot… »)." : "Silence creeping in? « Alors… en fait… ce que je veux dire, c'est que… »"}
               </p>
-              <Btn onClick={stopRecording} className="mt-4" disabled={elapsed < 3}>■ Terminer l&apos;enregistrement</Btn>
+              <Btn onClick={stopRecording} className="mt-4" disabled={elapsed < 3}>■ Stop recording</Btn>
             </>
           )}
         </Card>
@@ -270,21 +270,21 @@ function Lab({ promptId }: { promptId: string }) {
 
       {stage === "transcript" && (
         <Card>
-          <h2 className="text-sm font-semibold">Transcription</h2>
-          {audioUrl && <audio controls src={audioUrl} className="mt-2 w-full" aria-label="Votre enregistrement" />}
+          <h2 className="text-sm font-semibold">Transcript</h2>
+          {audioUrl && <audio controls src={audioUrl} className="mt-2 w-full" aria-label="Your recording" />}
           <p className="mt-2 text-xs text-ink-3">
             {srAvailable
-              ? "Transcription automatique (navigateur) — corrigez-la si besoin, elle sert à la notation."
-              : "Reconnaissance vocale indisponible dans ce navigateur : réécoutez et tapez fidèlement ce que vous avez dit (en production : Whisper côté serveur)."}
+              ? "Automatic transcript (browser) — correct it if needed; it is used for scoring."
+              : "Speech recognition unavailable in this browser: replay and type faithfully what you said (in production: Whisper on the server)."}
           </p>
           <textarea
             value={transcript}
             onChange={(e) => setTranscript(e.target.value)}
             className="mt-3 h-36 w-full rounded-lg border border-line bg-white p-3 text-sm"
-            placeholder="Ce que vous avez dit, mot pour mot…"
+            placeholder="What you said, word for word…"
           />
           <Btn onClick={submit} disabled={transcript.trim().split(/\s+/).length < 5} className="mt-3 w-full">
-            Noter sur les 5 dimensions
+            Score on the 5 dimensions
           </Btn>
         </Card>
       )}
@@ -292,14 +292,14 @@ function Lab({ promptId }: { promptId: string }) {
       {stage === "result" && result && (
         <div className="space-y-4">
           <header className="text-center">
-            <Badge tone="ok">Prise {take} évaluée</Badge>
+            <Badge tone="ok">Take {take} scored</Badge>
             <h2 className="mt-2 font-display text-3xl font-semibold">~NCLC {result.estNCLC}</h2>
             {bestBefore !== null && take > 1 && (
               <p className="text-sm text-ink-2">
-                {result.score > bestBefore ? "Meilleure que la prise précédente — c'est exactement l'exercice." : "Pas encore au-dessus de la précédente. Une phrase d'ouverture plus rapide, et ça passe."}
+                {result.score > bestBefore ? "Better than the previous take — that is the exercise." : "Not above the previous one yet. A faster opening sentence, and it lands."}
               </p>
             )}
-            <p className="text-xs text-ink-3">Estimation pédagogique.</p>
+            <p className="text-xs text-ink-3">Pedagogical estimate.</p>
           </header>
           <Card>
             <div className="space-y-2.5">
@@ -326,12 +326,12 @@ function Lab({ promptId }: { promptId: string }) {
             </Card>
           )}
           <Card className="border-gold/30 bg-gold-soft/40">
-            <div className="text-xs font-semibold uppercase tracking-wider text-gold">Votre victoire</div>
+            <div className="text-xs font-semibold uppercase tracking-wider text-gold">Your win</div>
             <p className="mt-1 text-sm text-ink-2">{result.win}</p>
           </Card>
           <div className="flex justify-center gap-3">
-            <Btn onClick={secondTake}>Redites-le, en mieux</Btn>
-            <Btn href="/today" variant="ghost">Terminer</Btn>
+            <Btn onClick={secondTake}>Say it again, better</Btn>
+            <Btn href="/today" variant="ghost">Done</Btn>
           </div>
         </div>
       )}

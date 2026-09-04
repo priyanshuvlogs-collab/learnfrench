@@ -6,11 +6,11 @@ import { SPEAKING_PROMPTS } from "@/content/speaking-prompts";
 import { Badge, Card } from "@/components/ui";
 
 const TASK_LABEL: Record<string, string> = {
-  A: "TEF · A — obtenir des renseignements",
-  B: "TEF · B — convaincre",
-  T1: "TCF · T1 — entretien dirigé (sans préparation)",
-  T2: "TCF · T2 — interaction (avec préparation)",
-  T3: "TCF · T3 — point de vue (sans préparation)",
+  A: "TEF · A — gather information",
+  B: "TEF · B — persuade",
+  T1: "TCF · T1 — guided interview (no prep)",
+  T2: "TCF · T2 — interaction (with prep)",
+  T3: "TCF · T3 — point of view (no prep)",
 };
 
 export default function SpeakingListPage() {
@@ -24,11 +24,11 @@ export default function SpeakingListPage() {
   return (
     <div className="space-y-5">
       <header>
-        <h1 className="font-display text-2xl font-semibold">Atelier d&apos;expression orale</h1>
+        <h1 className="font-display text-2xl font-semibold">Speaking studio</h1>
         <p className="mt-1 text-sm text-ink-2">
-          Chronos d&apos;examen à l&apos;écran. Enregistrez, obtenez la transcription et une note en 5
-          dimensions — puis « redites-le, en mieux ». La structure est forcée : opinion → raison →
-          exemple → clôture.
+          Official timers on screen. Prompts are in French — you speak French. Record, get a
+          transcript and a 5-dimension score, then “say it again, better”. Structure is forced:
+          opinion → reason → example → close.
         </p>
       </header>
       <div className="space-y-3">
@@ -42,14 +42,14 @@ export default function SpeakingListPage() {
                   <div>
                     <div className="flex items-center gap-2">
                       <Badge tone={p.exam === "TEF" ? "accent" : "gold"}>{p.exam} {p.task}</Badge>
-                      {best !== null && <Badge tone="ok">Meilleur essai : ~NCLC {best}</Badge>}
+                      {best !== null && <Badge tone="ok">Best try: ~NCLC {best}</Badge>}
                     </div>
                     <h2 className="mt-1.5 font-semibold">{p.title}</h2>
                     <p className="text-xs text-ink-3">{TASK_LABEL[p.task]}</p>
                   </div>
                   <span className="font-display text-sm text-ink-3">
-                    {p.prepSeconds > 0 ? `${p.prepSeconds} s prép · ` : "sans prép · "}
-                    {p.speakSeconds} s parole
+                    {p.prepSeconds > 0 ? `${p.prepSeconds} s prep · ` : "no prep · "}
+                    {p.speakSeconds} s speaking
                   </span>
                 </div>
               </Card>

@@ -33,42 +33,42 @@ export default function NotebookPage() {
   return (
     <div className="space-y-5">
       <header>
-        <Kicker>Mon carnet</Kicker>
-        <h1 className="mt-1 font-display text-2xl font-semibold">Vos mots, dans la machine à mémoire</h1>
+        <Kicker>My notebook</Kicker>
+        <h1 className="mt-1 font-display text-2xl font-semibold">Your French words, in the memory machine</h1>
         <p className="mt-1 text-sm text-ink-2">
-          Un mot croisé dans un exercice, un courriel, une conversation ? Notez-le ici : il devient une
-          carte de rappel espacé, mélangée aux 120 cartes du programme.
+          A word from a drill, an email, a conversation? Add it here: it becomes a spaced-repetition
+          card, mixed with the 120 programme cards. Keep the French on the front.
           {vocab.length > 0 && (
             <span className="text-ink-3">
-              {" "}· {vocab.length} entrée{vocab.length > 1 ? "s" : ""}{dueCount > 0 && <>, {dueCount} due{dueCount > 1 ? "s" : ""} aujourd&apos;hui</>}
+              {" "}· {vocab.length} entr{vocab.length > 1 ? "ies" : "y"}{dueCount > 0 && <>, {dueCount} due today</>}
             </span>
           )}
         </p>
       </header>
 
       <Card className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">Ajouter une entrée</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">Add an entry</h2>
         <label className="block text-sm">
-          <span className="font-semibold">Mot ou expression</span>
+          <span className="font-semibold">French word or expression</span>
           <input
             ref={frontRef}
             value={front}
             onChange={(e) => setFront(e.target.value)}
             onFocus={() => setLastFocused("front")}
-            placeholder="Ex. : « faire la navette »"
+            placeholder='e.g. “faire la navette”'
             className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2.5"
             spellCheck={false}
           />
         </label>
         <label className="block text-sm">
-          <span className="font-semibold">Sens, exemple, remarque</span>
+          <span className="font-semibold">Meaning, example, note</span>
           <textarea
             ref={backRef}
             value={back}
             onChange={(e) => setBack(e.target.value)}
             onFocus={() => setLastFocused("back")}
             rows={2}
-            placeholder="Ex. : faire l'aller-retour domicile-travail — « Je fais la navette entre Laval et Montréal. »"
+            placeholder="e.g. to commute — “Je fais la navette entre Laval et Montréal.”"
             className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2.5"
           />
         </label>
@@ -78,15 +78,15 @@ export default function NotebookPage() {
           ) : (
             <AccentBar targetRef={backRef} onInsert={setBack} />
           )}
-          <Btn onClick={add} disabled={!front.trim() || !back.trim()}>Ajouter au carnet</Btn>
+          <Btn onClick={add} disabled={!front.trim() || !back.trim()}>Add to notebook</Btn>
         </div>
       </Card>
 
       {vocab.length === 0 ? (
         <Card className="bg-paper text-center">
           <p className="text-sm text-ink-2">
-            Le carnet est vide. Commencez par trois expressions que vous voulez utiliser dans votre
-            prochaine lettre formelle — c&apos;est le meilleur retour sur investissement.
+            The notebook is empty. Start with three expressions you want in your next formal letter —
+            that is the best return on investment.
           </p>
         </Card>
       ) : (
@@ -100,21 +100,21 @@ export default function NotebookPage() {
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="font-semibold">{v.front}</span>
-                      {due ? <Badge tone="accent">à revoir</Badge> : <Badge tone="ink">revue le {state?.due}</Badge>}
+                      {due ? <Badge tone="accent">due</Badge> : <Badge tone="ink">next {state?.due}</Badge>}
                     </div>
                     <p className="mt-1 text-sm leading-relaxed text-ink-2">{v.back}</p>
-                    <p className="mt-1 text-[11px] text-ink-3">Ajouté le {v.addedAt}{state ? ` · ${state.reps} rappel${state.reps > 1 ? "s" : ""}` : ""}</p>
+                    <p className="mt-1 text-[11px] text-ink-3">Added {v.addedAt}{state ? ` · ${state.reps} review${state.reps !== 1 ? "s" : ""}` : ""}</p>
                   </div>
                   {confirmDelete === v.id ? (
                     <div className="flex shrink-0 items-center gap-2">
-                      <button onClick={() => removeVocabEntry(v.id)} className="text-xs font-semibold text-warn hover:underline">Supprimer</button>
-                      <button onClick={() => setConfirmDelete(null)} className="text-xs text-ink-3 hover:underline">Annuler</button>
+                      <button onClick={() => removeVocabEntry(v.id)} className="text-xs font-semibold text-warn hover:underline">Delete</button>
+                      <button onClick={() => setConfirmDelete(null)} className="text-xs text-ink-3 hover:underline">Cancel</button>
                     </div>
                   ) : (
                     <button
                       onClick={() => setConfirmDelete(v.id)}
                       className="shrink-0 text-xs text-ink-3 hover:text-warn"
-                      aria-label={`Supprimer « ${v.front} »`}
+                      aria-label={`Delete “${v.front}”`}
                     >
                       ✕
                     </button>
@@ -127,7 +127,7 @@ export default function NotebookPage() {
       )}
 
       <div className="flex justify-center">
-        <Btn href="/review" variant="ghost">Lancer le rappel espacé →</Btn>
+        <Btn href="/review" variant="ghost">Start spaced review →</Btn>
       </div>
     </div>
   );

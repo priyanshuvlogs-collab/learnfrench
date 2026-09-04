@@ -12,7 +12,7 @@ import { Badge, Btn, Card } from "@/components/ui";
 const PER_SESSION = 5;
 const MAX_PLAYS = 2;
 
-const LEVEL_LABEL = { A: "Niveau A · NCLC 4-5", B: "Niveau B · NCLC 6-7", C: "Niveau C · NCLC 8-9" } as const;
+const LEVEL_LABEL = { A: "Level A · NCLC 4-5", B: "Level B · NCLC 6-7", C: "Level C · NCLC 8-9" } as const;
 
 function pickItems(level: "A" | "B" | "C", offset: number): DictationItem[] {
   const pool = DICTATION_ITEMS.filter((d) => d.level === level);
@@ -29,11 +29,11 @@ export default function DictationPage() {
     return (
       <div className="mx-auto max-w-lg space-y-5">
         <header>
-          <Link href="/lab" className="text-xs text-ink-3 hover:text-accent">← Labo</Link>
-          <h1 className="font-display text-2xl font-semibold">Dictée</h1>
+          <Link href="/lab" className="text-xs text-ink-3 hover:text-accent">← Lab</Link>
+          <h1 className="font-display text-2xl font-semibold">Dictation</h1>
           <p className="mt-1 text-sm text-ink-2">
-            Cinq phrases. Deux écoutes chacune — la seconde, plus lente. Vous écrivez, la correction
-            fait le tri entre vrai mot faux et simple accent oublié.
+            Five French sentences. Two listens each — the second slower. You write; the correction
+            separates a real wrong word from a missing accent.
           </p>
         </header>
         <div className="space-y-2">
@@ -46,7 +46,7 @@ export default function DictationPage() {
               }`}
             >
               {LEVEL_LABEL[l]}
-              {l === defaultLevel && <span className="ml-2 text-xs font-normal text-accent">recommandé pour votre cible</span>}
+              {l === defaultLevel && <span className="ml-2 text-xs font-normal text-accent">recommended for your target</span>}
             </button>
           ))}
         </div>
@@ -112,7 +112,7 @@ function Dictation({ level }: { level: "A" | "B" | "C" }) {
     const r = scoreDictation(item.text, typed);
     setResult(r);
     setScores((s) => [...s, r.score]);
-    if (r.score < 70) addWeakPattern("listening", "dictée : orthographe sous dictée");
+    if (r.score < 70) addWeakPattern("listening", "dictation: spelling under dictation");
   }
 
   function next() {
@@ -124,7 +124,7 @@ function Dictation({ level }: { level: "A" | "B" | "C" }) {
         const minutes = Math.max(1, Math.round((nowMs() - startRef.current) / 60000));
         recordSession({ skill: "listening", minutes: Math.min(minutes, 25), type: "dictation", score: avg, items: items.length });
         addSkillScore("listening", avg);
-        addMemory(`Dictée niveau ${level} : ${avg} % sur ${items.length} phrases.`);
+        addMemory(`Dictation level ${level}: ${avg}% on ${items.length} sentences.`);
       }
       setFinished(true);
     } else {
@@ -139,22 +139,22 @@ function Dictation({ level }: { level: "A" | "B" | "C" }) {
     const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
     return (
       <div className="mx-auto max-w-lg space-y-5 py-8 text-center">
-        <Badge tone={avg >= 70 ? "ok" : "accent"}>Dictée terminée</Badge>
+        <Badge tone={avg >= 70 ? "ok" : "accent"}>Dictation complete</Badge>
         <h1 className="font-display text-3xl font-semibold">{avg} %</h1>
         <p className="text-sm text-ink-2">
-          Moyenne sur {scores.length} phrases de niveau {level} — les accents comptent pour moitié, comme dans la vraie correction.
+          Average on {scores.length} level-{level} sentences — accents count as half, as in a real dictation.
         </p>
         <Card className="text-left">
-          <div className="text-xs font-semibold uppercase tracking-wider text-gold">Votre victoire du jour</div>
+          <div className="text-xs font-semibold uppercase tracking-wider text-gold">Today&apos;s win</div>
           <p className="mt-1 text-sm text-ink-2">
             {avg >= 70
-              ? "Vous transcrivez de l'oral en orthographe juste — c'est exactement le pont CO → EE que l'examen ne teste jamais directement mais récompense partout."
-              : "Chaque phrase vous a montré son piège. La dictée est l'exercice qui progresse le plus vite : refaites ce niveau dans deux jours."}
+              ? "You turn spoken French into accurate spelling — the listening → writing bridge the exam never tests directly but rewards everywhere."
+              : "Each sentence showed you its trap. Dictation is the drill that improves fastest: redo this level in two days."}
           </p>
         </Card>
         <div className="flex justify-center gap-3">
-          <Btn href="/lab">Retour au labo</Btn>
-          <Btn href="/today" variant="ghost">Accueil</Btn>
+          <Btn href="/lab">Back to the lab</Btn>
+          <Btn href="/today" variant="ghost">Today</Btn>
         </div>
       </div>
     );
@@ -164,8 +164,8 @@ function Dictation({ level }: { level: "A" | "B" | "C" }) {
     <div className="mx-auto max-w-xl space-y-5">
       <header className="flex items-center justify-between">
         <div>
-          <Link href="/lab" className="text-xs text-ink-3 hover:text-accent">← Labo</Link>
-          <h1 className="font-display text-xl font-semibold">Dictée · {LEVEL_LABEL[level]}</h1>
+          <Link href="/lab" className="text-xs text-ink-3 hover:text-accent">← Lab</Link>
+          <h1 className="font-display text-xl font-semibold">Dictation · {LEVEL_LABEL[level]}</h1>
         </div>
         <span className="font-display text-sm text-ink-3">{idx + 1} / {items.length}</span>
       </header>
@@ -173,13 +173,13 @@ function Dictation({ level }: { level: "A" | "B" | "C" }) {
       <Card>
         <div className="flex items-center justify-between gap-3">
           <div>
-            <p className="text-sm font-semibold">Écoutez, puis écrivez la phrase exactement.</p>
+            <p className="text-sm font-semibold">Listen, then write the French sentence exactly.</p>
             <p className="mt-1 text-xs text-ink-3">
               {plays === 0
-                ? "Première écoute à vitesse normale ; la seconde sera plus lente."
+                ? "First listen at normal speed; the second will be slower."
                 : plays < MAX_PLAYS
-                  ? "Il vous reste une écoute, au ralenti."
-                  : "Plus d'écoute — engagez votre version."}
+                  ? "One listen left, at reduced speed."
+                  : "No more listens — commit your version."}
             </p>
           </div>
           <button
@@ -188,7 +188,7 @@ function Dictation({ level }: { level: "A" | "B" | "C" }) {
             className={`shrink-0 rounded-full px-5 py-5 font-semibold ${
               plays >= MAX_PLAYS || result !== null ? "bg-paper-2 text-ink-3" : "bg-accent text-white hover:bg-accent-2"
             }`}
-            aria-label={plays >= MAX_PLAYS ? "Écoutes épuisées" : "Écouter la phrase"}
+            aria-label={plays >= MAX_PLAYS ? "Listens used up" : "Play the sentence"}
           >
             {playing ? "…" : plays >= MAX_PLAYS ? "✓" : "▶"}
           </button>
@@ -202,7 +202,7 @@ function Dictation({ level }: { level: "A" | "B" | "C" }) {
           onChange={(e) => setTyped(e.target.value)}
           disabled={result !== null}
           rows={3}
-          placeholder={plays === 0 ? "Écoutez d'abord…" : "Écrivez la phrase entendue, ponctuation comprise."}
+          placeholder={plays === 0 ? "Listen first…" : "Write the sentence you heard, including punctuation."}
           className="w-full rounded-lg border border-line bg-white px-3 py-2.5 text-sm leading-relaxed disabled:bg-paper"
           spellCheck={false}
           autoCorrect="off"
@@ -212,7 +212,7 @@ function Dictation({ level }: { level: "A" | "B" | "C" }) {
 
       {result === null ? (
         <Btn onClick={check} disabled={plays === 0 || typed.trim().length === 0} className="w-full">
-          Corriger ma phrase
+          Check my sentence
         </Btn>
       ) : (
         <Card className="border-accent/30 space-y-4">
@@ -234,25 +234,25 @@ function Dictation({ level }: { level: "A" | "B" | "C" }) {
                           ? "bg-warn-soft text-warn line-through decoration-warn/50"
                           : "bg-warn-soft italic text-warn"
                   }`}
-                  title={t.status === "accent" ? `Vous avez écrit « ${t.typed} »` : t.status === "wrong" ? `Vous avez écrit « ${t.typed} »` : t.status === "missing" ? "Mot manquant" : undefined}
+                  title={t.status === "accent" ? `You wrote “${t.typed}”` : t.status === "wrong" ? `You wrote “${t.typed}”` : t.status === "missing" ? "Missing word" : undefined}
                 >
                   {t.expected}
                 </span>
               ))}
             </p>
             <p className="mt-2 text-[11px] text-ink-3">
-              {result.correct} mot{result.correct > 1 ? "s" : ""} juste{result.correct > 1 ? "s" : ""}
-              {result.accentSlips > 0 && <> · {result.accentSlips} faute{result.accentSlips > 1 ? "s" : ""} d&apos;accent (½ point)</>}
-              {result.extras.length > 0 && <> · {result.extras.length} mot{result.extras.length > 1 ? "s" : ""} en trop</>}
-              {" "}· jaune = accent, barré = mot faux, italique = manquant
+              {result.correct} correct word{result.correct !== 1 ? "s" : ""}
+              {result.accentSlips > 0 && <> · {result.accentSlips} accent slip{result.accentSlips > 1 ? "s" : ""} (½ point)</>}
+              {result.extras.length > 0 && <> · {result.extras.length} extra word{result.extras.length > 1 ? "s" : ""}</>}
+              {" "}· yellow = accent, strikethrough = wrong word, italics = missing
             </p>
           </div>
           <div className="border-t border-line pt-3">
-            <div className="text-xs font-semibold uppercase tracking-wider text-ink-3">Le piège de cette phrase</div>
+            <div className="text-xs font-semibold uppercase tracking-wider text-ink-3">The trap in this sentence</div>
             <p className="mt-1 text-sm text-ink-2">{item.trap}</p>
           </div>
           <Btn onClick={next} className="w-full">
-            {idx + 1 >= items.length ? "Terminer la dictée" : "Phrase suivante →"}
+            {idx + 1 >= items.length ? "Finish the dictation" : "Next sentence →"}
           </Btn>
         </Card>
       )}

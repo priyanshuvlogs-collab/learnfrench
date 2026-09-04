@@ -9,7 +9,7 @@ import { coachReply, CoachContext } from "@/lib/coach";
 import { nowMs } from "@/lib/dates";
 import { Btn } from "@/components/ui";
 
-const CHIPS = ["Mon plan de la semaine", "Je panique pour mon visa", "Par quoi je commence ce soir ?", "Garantis-moi CLB 7 en 30 jours"];
+const CHIPS = ["My weekly plan", "I am panicking about my visa", "What do I start with tonight?", "Guarantee me CLB 7 in 30 days"];
 
 export default function CoachPage() {
   const profile = useApp((s) => s.profile)!;
@@ -43,7 +43,7 @@ export default function CoachPage() {
   useEffect(() => {
     if (coachLog.length === 0) {
       const r = coachReply("", ctx);
-      addCoachMessage({ role: "coach", text: `Bonjour ${profile.name}. Je suis Camille, votre coach.\n\n${r.text}`, action: r.action, ts: nowMs() });
+      addCoachMessage({ role: "coach", text: `Hello ${profile.name}. I am Camille, your coach.\n\n${r.text}`, action: r.action, ts: nowMs() });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -66,7 +66,7 @@ export default function CoachPage() {
       <header className="pb-3">
         <h1 className="font-display text-2xl font-semibold">Camille</h1>
         <p className="text-xs text-ink-3">
-          Coach d&apos;examen · connaît vos 14 derniers jours ({coachMemory.length} note{coachMemory.length > 1 ? "s" : ""}) · ne donne aucun conseil juridique
+          Exam coach · knows your last 14 days ({coachMemory.length} note{coachMemory.length !== 1 ? "s" : ""}) · no legal advice
         </p>
       </header>
 
@@ -115,11 +115,11 @@ export default function CoachPage() {
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Écrivez à Camille — en français de préférence…"
+          placeholder="Write to Camille — English or French…"
           className="flex-1 rounded-lg border border-line bg-white px-3.5 py-2.5 text-sm focus:border-accent"
-          aria-label="Message au coach"
+          aria-label="Message to the coach"
         />
-        <Btn type="submit" onClick={() => send(input)}>Envoyer</Btn>
+        <Btn type="submit" onClick={() => send(input)}>Send</Btn>
       </form>
     </div>
   );

@@ -7,14 +7,14 @@ import { useHydrated } from "@/lib/use-hydrated";
 import { Exam, Profile, Skill, SKILL_LABELS, SKILLS, TargetNCLC } from "@/lib/types";
 
 const LEVELS = [
-  { label: "Débutant", hint: "A1 — phrases simples", value: 8 },
-  { label: "Élémentaire", hint: "A2 — situations quotidiennes", value: 22 },
-  { label: "Intermédiaire", hint: "B1 — je me débrouille", value: 42 },
-  { label: "Intermédiaire +", hint: "B2 — à l'aise, avec fautes", value: 62 },
-  { label: "Avancé", hint: "C1 — presque naturel", value: 80 },
+  { label: "Beginner", hint: "A1 — simple sentences", value: 8 },
+  { label: "Elementary", hint: "A2 — everyday situations", value: 22 },
+  { label: "Intermediate", hint: "B1 — I can get by", value: 42 },
+  { label: "Upper-intermediate", hint: "B2 — comfortable, with mistakes", value: 62 },
+  { label: "Advanced", hint: "C1 — almost natural", value: 80 },
 ];
 
-const MOTIVATIONS = ["Résidence permanente", "Emploi", "Études", "Conjoint(e) / famille", "Québec / PEQ"];
+const MOTIVATIONS = ["Permanent residence", "Work", "Studies", "Spouse / family", "Quebec / PEQ"];
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -31,7 +31,7 @@ export default function OnboardingPage() {
   const [minutes, setMinutes] = useState(20);
   const [motivation, setMotivation] = useState(MOTIVATIONS[0]);
   const [levels, setLevels] = useState<Record<Skill, number>>({ listening: 42, reading: 42, writing: 22, speaking: 22 });
-  const [intentionTime, setIntentionTime] = useState("Ce soir après le dîner");
+  const [intentionTime, setIntentionTime] = useState("Tonight after dinner");
 
   useEffect(() => {
     if (!hydrated) return;
@@ -71,22 +71,22 @@ export default function OnboardingPage() {
       <div className="mb-8">
         <div className="flex items-center justify-between text-xs text-ink-3">
           <span className="font-display font-semibold text-accent">Lumen Français</span>
-          <span>Étape {step + 1} / {steps} · ~3 minutes</span>
+          <span>Step {step + 1} / {steps} · ~3 minutes</span>
         </div>
         <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-paper-2">
           <div className="bar-ease h-full rounded-full bg-accent" style={{ width: `${((step + 1) / steps) * 100}%` }} />
         </div>
       </div>
 
-      <h1 className="font-display text-2xl font-semibold sm:text-3xl">Quel score vous faut-il ?</h1>
+      <h1 className="font-display text-2xl font-semibold sm:text-3xl">What score do you need?</h1>
       <p className="mt-2 text-sm text-ink-2">
-        IRCC regarde quatre compétences. Votre niveau officiel est <strong>le plus bas des quatre</strong>. C&apos;est lui qu&apos;on entraîne.
+        IRCC looks at four skills. Your official level is <strong>the lowest of the four</strong>. That is what we train.
       </p>
 
       <div className="mt-8 space-y-6">
         {step === 0 && (
           <section>
-            <h2 className="font-semibold">1 · Votre examen</h2>
+            <h2 className="font-semibold">1 · Your exam</h2>
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
               {(["TEF", "TCF", "UNDECIDED"] as Exam[]).map((e) => (
                 <button
@@ -94,9 +94,9 @@ export default function OnboardingPage() {
                   onClick={() => setExam(e)}
                   className={`rounded-xl border-2 p-4 text-left transition-colors ${exam === e ? "border-accent bg-accent-soft" : "border-line bg-white hover:border-accent"}`}
                 >
-                  <div className="font-display text-lg font-semibold">{e === "UNDECIDED" ? "Pas décidé" : e + " Canada"}</div>
+                  <div className="font-display text-lg font-semibold">{e === "UNDECIDED" ? "Not decided" : e + " Canada"}</div>
                   <div className="mt-1 text-xs text-ink-2">
-                    {e === "TEF" ? "EE : 2 tâches · EO : 2 tâches" : e === "TCF" ? "EE : 3 tâches · EO : 3 tâches" : "On vous aidera à choisir"}
+                    {e === "TEF" ? "Writing: 2 tasks · Speaking: 2 tasks" : e === "TCF" ? "Writing: 3 tasks · Speaking: 3 tasks" : "We will help you choose"}
                   </div>
                 </button>
               ))}
@@ -106,7 +106,7 @@ export default function OnboardingPage() {
 
         {step === 1 && (
           <section>
-            <h2 className="font-semibold">2 · Votre cible NCLC</h2>
+            <h2 className="font-semibold">2 · Your NCLC target</h2>
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
               {([5, 7, 8] as TargetNCLC[]).map((n) => (
                 <button
@@ -116,29 +116,29 @@ export default function OnboardingPage() {
                 >
                   <div className="font-display text-2xl font-semibold">NCLC {n}</div>
                   <div className="mt-1 text-xs text-ink-2">
-                    {n === 5 ? "Plancher de certains programmes" : n === 7 ? "Cible Entrée express / francophone" : "Marge de sécurité"}
+                    {n === 5 ? "Floor for some programmes" : n === 7 ? "Express Entry / francophone target" : "Safety margin"}
                   </div>
                 </button>
               ))}
             </div>
-            <p className="mt-3 text-xs text-ink-3">La cible s&apos;applique aux quatre compétences séparément — vérifiez votre programme sur canada.ca.</p>
+            <p className="mt-3 text-xs text-ink-3">The target applies to each of the four skills separately — check your programme on canada.ca.</p>
           </section>
         )}
 
         {step === 2 && (
           <section className="space-y-5">
             <div>
-              <h2 className="font-semibold">3 · Date d&apos;examen (si réservée)</h2>
+              <h2 className="font-semibold">3 · Exam date (if booked)</h2>
               <input
                 type="date"
                 value={examDate}
                 onChange={(e) => setExamDate(e.target.value)}
                 className="mt-2 w-full rounded-lg border border-line bg-white px-3 py-2.5 text-sm"
               />
-              <p className="mt-1 text-xs text-ink-3">Optionnel — le plan s&apos;adapte : fondations, tâches d&apos;examen, puis dernière ligne droite.</p>
+              <p className="mt-1 text-xs text-ink-3">Optional — the plan adapts: foundations, exam tasks, then the final stretch.</p>
             </div>
             <div>
-              <h2 className="font-semibold">Votre motivation</h2>
+              <h2 className="font-semibold">Your motivation</h2>
               <div className="mt-2 flex flex-wrap gap-2">
                 {MOTIVATIONS.map((m) => (
                   <button
@@ -157,7 +157,7 @@ export default function OnboardingPage() {
         {step === 3 && (
           <section className="space-y-5">
             <div>
-              <h2 className="font-semibold">4 · Minutes par jour</h2>
+              <h2 className="font-semibold">4 · Minutes per day</h2>
               <div className="mt-3 grid grid-cols-3 gap-3">
                 {[10, 20, 40].map((m) => (
                   <button
@@ -166,20 +166,20 @@ export default function OnboardingPage() {
                     className={`rounded-xl border-2 p-4 text-center ${minutes === m ? "border-accent bg-accent-soft" : "border-line bg-white hover:border-accent"}`}
                   >
                     <div className="font-display text-2xl font-semibold">{m}</div>
-                    <div className="text-xs text-ink-2">min / jour</div>
+                    <div className="text-xs text-ink-2">min / day</div>
                   </button>
                 ))}
               </div>
-              <p className="mt-2 text-xs text-ink-3">La chaîne, elle, se garde dès 5 minutes concentrées. Ceci est votre plan, pas votre plancher.</p>
+              <p className="mt-2 text-xs text-ink-3">The streak itself is kept with 5 focused minutes. This is your plan, not your floor.</p>
             </div>
             <div>
-              <h2 className="font-semibold">Votre intention d&apos;implémentation</h2>
-              <p className="mt-1 text-xs text-ink-2">Quand + où : le cadre dans lequel le coach vous rappellera la session.</p>
+              <h2 className="font-semibold">Your implementation intention</h2>
+              <p className="mt-1 text-xs text-ink-2">When + where: the frame the coach will use to remind you.</p>
               <input
                 value={intentionTime}
                 onChange={(e) => setIntentionTime(e.target.value)}
                 className="mt-2 w-full rounded-lg border border-line bg-white px-3 py-2.5 text-sm"
-                placeholder="Ce soir après le dîner"
+                placeholder="Tonight after dinner"
               />
             </div>
           </section>
@@ -187,15 +187,15 @@ export default function OnboardingPage() {
 
         {step === 4 && (
           <section>
-            <h2 className="font-semibold">5 · Votre niveau actuel, compétence par compétence</h2>
+            <h2 className="font-semibold">5 · Your current level, skill by skill</h2>
             <p className="mt-1 text-xs text-ink-2">
-              Auto-évaluation honnête (un placement de 12 min affinera ces estimations au fil des exercices notés).
+              Honest self-assessment (a 12-min placement later will refine these estimates as you score drills).
             </p>
             <div className="mt-4 space-y-4">
               {SKILLS.map((s) => (
                 <div key={s}>
                   <div className="mb-1.5 flex items-baseline justify-between">
-                    <span className="text-sm font-semibold">{SKILL_LABELS[s].fr}</span>
+                    <span className="text-sm font-semibold">{SKILL_LABELS[s].en}</span>
                     <span className="text-xs text-ink-3">{SKILL_LABELS[s].short}</span>
                   </div>
                   <div className="grid grid-cols-5 gap-1.5">
@@ -216,8 +216,8 @@ export default function OnboardingPage() {
               ))}
             </div>
             <div className="mt-5 rounded-xl bg-accent-soft p-4 text-sm text-accent">
-              Compétence de départ estimée la plus faible : <strong>{SKILL_LABELS[weakest].fr}</strong>. Votre
-              première session (8 minutes) commencera là — puis retour à l&apos;accueil.
+              Estimated weakest starting skill: <strong>{SKILL_LABELS[weakest].en}</strong>. Your
+              first session (8 minutes) starts there — then back to Today.
             </div>
           </section>
         )}
@@ -228,15 +228,15 @@ export default function OnboardingPage() {
           onClick={() => setStep((s) => Math.max(0, s - 1))}
           className={`rounded-lg px-4 py-2.5 text-sm font-semibold text-ink-2 hover:text-accent ${step === 0 ? "invisible" : ""}`}
         >
-          ← Retour
+          ← Back
         </button>
         {step < steps - 1 ? (
           <button onClick={() => setStep((s) => s + 1)} className="rounded-lg bg-accent px-6 py-2.5 text-sm font-semibold text-white hover:bg-accent-2">
-            Continuer
+            Continue
           </button>
         ) : (
           <button onClick={finish} className="rounded-lg bg-accent px-6 py-2.5 text-sm font-semibold text-white hover:bg-accent-2">
-            Commencer la première session →
+            Start the first session →
           </button>
         )}
       </div>

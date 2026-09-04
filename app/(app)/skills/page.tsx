@@ -13,24 +13,24 @@ import { SPEAKING_PROMPTS } from "@/content/speaking-prompts";
 
 const NEXT_TASKS: Record<Skill, string[]> = {
   listening: [
-    "Une écoute, pas deux : prédire → écouter la fonction → éliminer",
-    "Dictée mentale de nombres et d'horaires",
-    "Pièges d'options qui se ressemblent",
+    "One listen, not two: predict → hear the function → eliminate",
+    "Mental dictation of numbers and times",
+    "Traps among look-alike options",
   ],
   reading: [
-    "La question d'abord, puis balayer le texte",
-    "Fonction du paragraphe : exemple, contraste, cause",
-    "Français administratif : logement, travail, santé",
+    "The question first, then scan the text",
+    "Paragraph function: example, contrast, cause",
+    "Administrative French: housing, work, health",
   ],
   writing: [
-    "Tâche A : consigne couverte à 100 %, registre juste",
-    "Tâche B : thèse → 2 arguments + exemple → concession",
-    "Réutiliser 3 gabarits de la banque de formules",
+    "Task A: 100% of the brief, right register",
+    "Task B: thesis → 2 arguments + example → concession",
+    "Reuse 3 templates from the formula bank",
   ],
   speaking: [
-    "Structure forcée : opinion → raison → exemple → clôture",
-    "Remplisseurs français (alors, en fait…) au lieu de l'anglais",
-    "Deuxième prise : « redites-le, en mieux »",
+    "Forced structure: opinion → reason → example → close",
+    "French fillers (alors, en fait…) instead of English",
+    "Second take: “say it again, better”",
   ],
 };
 
@@ -53,8 +53,8 @@ export default function SkillsPage() {
   return (
     <div className="space-y-5">
       <header>
-        <h1 className="font-display text-2xl font-semibold">Compétences</h1>
-        <p className="mt-1 text-sm text-ink-2">Quatre épreuves, quatre estimations séparées. IRCC ne fait pas de moyenne.</p>
+        <h1 className="font-display text-2xl font-semibold">Skills</h1>
+        <p className="mt-1 text-sm text-ink-2">Four papers, four separate estimates. IRCC does not average.</p>
       </header>
       <div className="grid gap-4 sm:grid-cols-2">
         {SKILLS.map((s) => {
@@ -65,15 +65,15 @@ export default function SkillsPage() {
             <Card key={s} className={s === weakest ? "border-warn/40" : ""}>
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <h2 className="font-display text-lg font-semibold">{SKILL_LABELS[s].fr}</h2>
+                  <h2 className="font-display text-lg font-semibold">{SKILL_LABELS[s].en}</h2>
                   <div className="mt-1 flex flex-wrap items-center gap-2">
                     <span className="font-display text-xl font-semibold">{formatNCLCRange(e)}</span>
                     <Badge tone={e.confidence === "high" ? "ok" : e.confidence === "medium" ? "accent" : "ink"}>
-                      Confiance {e.confidence === "high" ? "élevée" : e.confidence === "medium" ? "moyenne" : "faible"} · {e.samples} tâche{e.samples > 1 ? "s" : ""} notée{e.samples > 1 ? "s" : ""}
+                      {e.confidence === "high" ? "High" : e.confidence === "medium" ? "Medium" : "Low"} confidence · {e.samples} scored task{e.samples !== 1 ? "s" : ""}
                     </Badge>
                   </div>
                 </div>
-                {s === weakest && <Badge tone="warn">Priorité</Badge>}
+                {s === weakest && <Badge tone="warn">Priority</Badge>}
               </div>
               <ul className="mt-4 space-y-1.5 text-sm text-ink-2">
                 {NEXT_TASKS[s].map((t) => (
@@ -81,16 +81,16 @@ export default function SkillsPage() {
                 ))}
               </ul>
               <div className="mt-4 flex items-center justify-between">
-                <span className="text-xs text-ink-3">{counts[s]} éléments d&apos;entraînement · {done} session{done > 1 ? "s" : ""} faite{done > 1 ? "s" : ""}</span>
+                <span className="text-xs text-ink-3">{counts[s]} practice items · {done} session{done !== 1 ? "s" : ""} done</span>
                 <Link href={href} className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent-2">
-                  S&apos;entraîner
+                  Practise
                 </Link>
               </div>
             </Card>
           );
         })}
       </div>
-      <p className="text-xs text-ink-3">Cible : NCLC {profile.targetNCLC} dans chacune des quatre compétences. Estimation pédagogique.</p>
+      <p className="text-xs text-ink-3">Target: NCLC {profile.targetNCLC} in each of the four skills. Pedagogical estimate.</p>
     </div>
   );
 }
