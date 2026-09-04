@@ -3,7 +3,7 @@ import { scoreToNCLC } from "./nclc";
 
 /**
  * Examiner-logic heuristic rubric. This is deliberately transparent and
- * labeled "estimation pédagogique" everywhere — it mirrors the five
+ * labeled "pedagogical estimate" everywhere — it mirrors the five
  * dimensions examiners score, without pretending to be an official
  * grade. Structured fields only, never a free-form grade.
  */
@@ -87,21 +87,21 @@ export function scoreWriting(text: string, ctx: WritingContext): WritingResult {
   const coverage = ctx.bullets.length > 0 ? covered.length / ctx.bullets.length : 1;
   const task = clamp5(lengthRatio * 2.5 + coverage * 2.5);
   if (words < ctx.minWords)
-    feedback.push(`Longueur : ${words} mots — le minimum officiel est ${ctx.minWords}. Une réponse trop courte plafonne la note.`);
+    feedback.push(`Length: ${words} words — the official minimum is ${ctx.minWords}. A short answer caps the mark.`);
   if (coverage < 1 && ctx.bullets.length > 0)
-    feedback.push(`Consigne : ${covered.length}/${ctx.bullets.length} points de la consigne traités. Chaque point oublié coûte cher.`);
+    feedback.push(`Brief: ${covered.length}/${ctx.bullets.length} required points covered. Each missed point costs.`);
 
   // 2. Coherence — connectors + paragraphing
   const conn = countMatches(text, CONNECTORS);
   const paragraphs = text.split(/\n\s*\n|\n/).filter((p) => p.trim().length > 0).length;
   const coherence = clamp5(Math.min(conn.count, 5) * 0.7 + Math.min(paragraphs, 3) * 0.5);
   if (conn.count < 2)
-    feedback.push("Cohérence : utilisez au moins 3 connecteurs (d'abord, cependant, par conséquent…) pour structurer.");
+    feedback.push("Coherence: use at least 3 connectors (d'abord, cependant, par conséquent…) to structure.");
 
   // 3. Lexical range — type/token + long words
   const ld = lexicalDensity(text);
   const lexicon = clamp5(ld * 7);
-  if (ld < 0.45) feedback.push("Vocabulaire : trop de répétitions. Variez les verbes et les noms.");
+  if (ld < 0.45) feedback.push("Vocabulary: too much repetition. Vary verbs and nouns.");
 
   // 4. Grammar control — sentence variety + structures (heuristic)
   const sentences = text.split(/[.!?]+/).filter((s) => s.trim().length > 2);
@@ -111,7 +111,7 @@ export function scoreWriting(text: string, ctx: WritingContext): WritingResult {
   const grammar = clamp5(
     (avgLen >= 8 && avgLen <= 22 ? 2.5 : 1.2) + Math.min(subj.count, 2) * 0.8 + Math.min(opinion.count, 2) * 0.5
   );
-  if (avgLen > 26) feedback.push("Grammaire : phrases trop longues — coupez-les, une idée par phrase.");
+  if (avgLen > 26) feedback.push("Grammar: sentences too long — cut them, one idea per sentence.");
 
   // 5. Register
   const formal = countMatches(text, FORMAL_MARKERS);
@@ -119,10 +119,10 @@ export function scoreWriting(text: string, ctx: WritingContext): WritingResult {
   if (ctx.register === "formal") {
     register = clamp5(1 + Math.min(formal.count, 4) * 1.0);
     if (formal.count < 2)
-      feedback.push("Registre : lettre formelle → « Madame, Monsieur », vouvoiement, « Cordialement ».");
+      feedback.push("Register: formal letter → « Madame, Monsieur », vous-form, « Cordialement ».");
   } else if (ctx.register === "argument") {
     register = clamp5(1.5 + Math.min(opinion.count, 3) * 0.8 + Math.min(conn.count, 3) * 0.4);
-    if (opinion.count < 1) feedback.push("Argumentation : annoncez votre thèse (« À mon avis… ») dès le début.");
+    if (opinion.count < 1) feedback.push("Argument: announce your thesis (« À mon avis… ») at the start.");
   } else {
     register = clamp5(3 + (lower.includes(" tu ") || lower.startsWith("salut") ? 1.5 : 0) - Math.min(formal.count, 2) * 0.7);
   }
@@ -131,7 +131,7 @@ export function scoreWriting(text: string, ctx: WritingContext): WritingResult {
   const leak = countMatches(lower, ENGLISH_LEAK);
   if (leak.count >= 2) {
     flags.push("english-leak");
-    feedback.push("Des mots anglais se sont glissés dans le texte. À l'examen, cela coûte des points : restez en français.");
+    feedback.push("English words slipped into the text. On the exam that costs marks: stay in French.");
   }
 
   // Native-jump / paste detection
@@ -142,7 +142,7 @@ export function scoreWriting(text: string, ctx: WritingContext): WritingResult {
     words > 60
   ) {
     flags.push("sudden-jump");
-    feedback.push("Ce texte est très au-dessus de votre niveau habituel. Si vous avez traduit ou collé, réécrivez avec vos mots : l'examen ne vous laissera pas d'outil.");
+    feedback.push("This text is well above your usual level. If you translated or pasted, rewrite in your own words: the exam will not give you a tool.");
   }
 
   const rubric: RubricScores = { task, coherence, lexicon, grammar, register };
@@ -150,10 +150,10 @@ export function scoreWriting(text: string, ctx: WritingContext): WritingResult {
   const score = Math.round((total / 25) * 100);
   const win =
     conn.found.length > 0
-      ? `Vous avez utilisé « ${conn.found[0]} » correctement — gardez-le pour la tâche argumentée.`
+      ? `You used « ${conn.found[0]} » correctly — keep it for the argument task.`
       : words >= ctx.minWords
-        ? `Vous avez atteint ${words} mots dans le temps imparti — la longueur officielle est acquise.`
-        : "Vous avez produit un texte complet du début à la fin — la prochaine fois, on vise la longueur officielle.";
+        ? `You reached ${words} words in the time — official length is in the bag.`
+        : "You produced a complete text from start to finish — next time we aim for official length.";
 
   return { rubric, score, estNCLC: Math.floor(scoreToNCLC(score)), flags, feedback: feedback.slice(0, 4), win, lexicalDensity: ld };
 }
@@ -173,12 +173,12 @@ export function scoreSpeaking(transcript: string, seconds: number, targetSeconds
 
   const durationRatio = Math.min(1, seconds / Math.max(1, targetSeconds));
   const task = clamp5(durationRatio * 3 + Math.min(words / 60, 1) * 2);
-  if (durationRatio < 0.7) feedback.push(`Durée : ${Math.round(seconds)} s sur ${targetSeconds} s attendues. Tenez le temps — le silence ne rapporte rien.`);
+  if (durationRatio < 0.7) feedback.push(`Duration: ${Math.round(seconds)} s of ${targetSeconds} s expected. Hold the time — silence scores nothing.`);
 
   const conn = countMatches(transcript, CONNECTORS);
   const opinion = countMatches(transcript, OPINION_MARKERS);
   const coherence = clamp5(1 + Math.min(conn.count, 4) * 0.7 + Math.min(opinion.count, 2) * 0.6);
-  if (opinion.count === 0) feedback.push("Structure : opinion → raison → exemple → conclusion. Annoncez l'opinion en premier.");
+  if (opinion.count === 0) feedback.push("Structure: opinion → reason → example → close. Announce the opinion first.");
 
   const ld = lexicalDensity(transcript);
   const lexicon = clamp5(ld * 7);
@@ -186,7 +186,7 @@ export function scoreSpeaking(transcript: string, seconds: number, targetSeconds
   const fillers = countMatches(transcript, FRENCH_FILLERS);
   const leak = countMatches(" " + transcript.toLowerCase() + " ", ENGLISH_LEAK);
   const grammar = clamp5(2 + Math.min(conn.count, 2) * 0.7 - leak.count * 0.8 + Math.min(opinion.count, 2) * 0.4);
-  if (leak.count >= 1) feedback.push("Panique en anglais détectée. Remplacez par des remplisseurs français : « alors », « en fait », « ce que je veux dire, c'est que… ».");
+  if (leak.count >= 1) feedback.push("English panic detected. Replace with French fillers: « alors », « en fait », « ce que je veux dire, c'est que… ».");
 
   // Fluency: words per minute (intelligibility target ~90–150 wpm), French fillers are fine
   let fluency: number;
@@ -195,17 +195,17 @@ export function scoreSpeaking(transcript: string, seconds: number, targetSeconds
   else if (wpm >= 40) fluency = 2.2;
   else fluency = 1;
   fluency = clamp5(fluency + Math.min(fillers.count, 2) * 0.25);
-  if (wpm < 65 && seconds > 10) feedback.push(`Débit : ~${Math.round(wpm)} mots/min. Visez 90+ — entraînez la même réponse une deuxième fois, plus vite.`);
+  if (wpm < 65 && seconds > 10) feedback.push(`Pace: ~${Math.round(wpm)} words/min. Aim for 90+ — drill the same answer a second time, faster.`);
 
   const rubric: RubricScores = { task, coherence, lexicon, grammar, register: fluency };
   const total = task + coherence + lexicon + grammar + fluency;
   const score = Math.round((total / 25) * 100);
   const win =
     fillers.found.length > 0
-      ? `« ${fillers.found[0]} » utilisé comme remplisseur français — exactement le bon réflexe.`
+      ? `« ${fillers.found[0]} » used as a French filler — exactly the right reflex.`
       : conn.found.length > 0
-        ? `Vous avez articulé avec « ${conn.found[0]} » — un connecteur que l'examinateur entend.`
-        : `${words} mots produits en ${Math.round(seconds)} secondes. La matière est là ; on structure au prochain essai.`;
+        ? `You structured with « ${conn.found[0]} » — a connector the examiner hears.`
+        : `${words} words in ${Math.round(seconds)} seconds. The material is there; we structure it on the next take.`;
 
   return { rubric, score, estNCLC: Math.floor(scoreToNCLC(score)), feedback: feedback.slice(0, 4), win };
 }

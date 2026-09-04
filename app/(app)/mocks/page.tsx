@@ -12,26 +12,26 @@ export default function MocksPage() {
 
   const options = [
     {
-      title: "Mini-blanc CO — écoute unique",
-      desc: "8 questions, 8 minutes. L'audio passe une fois : on entraîne la règle, pas l'exception.",
+      title: "Listening mini-mock — single listen",
+      desc: "8 questions, 8 minutes. The audio plays once: we train the rule, not the exception.",
       href: "/mocks/run?skill=listening&n=8&min=8",
       locked: false,
     },
     {
-      title: "Mini-blanc CE — lecture chronométrée",
-      desc: "8 questions, 12 minutes. La question d'abord, le texte ensuite.",
+      title: "Reading mini-mock — timed",
+      desc: "8 questions, 12 minutes. The question first, then the text.",
       href: "/mocks/run?skill=reading&n=8&min=12",
       locked: false,
     },
     {
-      title: "Blanc de section CO — format long",
-      desc: "20 questions, 20 minutes, sans pause. Se débloque après une chaîne de 7 jours.",
+      title: "Listening section mock — long format",
+      desc: "20 questions, 20 minutes, no pause. Unlocks after a 7-day streak.",
       href: "/mocks/run?skill=listening&n=20&min=20",
       locked: !ms.sectionMockUnlocked,
     },
     {
-      title: "Blanc de section CE — format long",
-      desc: "20 questions, 30 minutes. Endurance et gestion du temps.",
+      title: "Reading section mock — long format",
+      desc: "20 questions, 30 minutes. Endurance and time management.",
       href: "/mocks/run?skill=reading&n=20&min=30",
       locked: !ms.sectionMockUnlocked,
     },
@@ -40,10 +40,10 @@ export default function MocksPage() {
   return (
     <div className="space-y-5">
       <header>
-        <h1 className="font-display text-2xl font-semibold">Examens blancs</h1>
+        <h1 className="font-display text-2xl font-semibold">Mocks</h1>
         <p className="mt-1 text-sm text-ink-2">
-          Chronos stricts, revue détaillée après coup. Le score d&apos;un blanc est une donnée pour le
-          prochain bloc — pas un verdict sur vous.
+          Strict timers, detailed review afterwards. Questions stay in French. A mock score is data
+          for the next block — not a verdict on you.
         </p>
       </header>
 
@@ -52,28 +52,27 @@ export default function MocksPage() {
           <Card key={o.title} className={o.locked ? "opacity-70" : ""}>
             <div className="flex items-start justify-between gap-2">
               <h2 className="font-semibold">{o.title}</h2>
-              {o.locked && <Badge tone="ink">🔒 chaîne 7 j</Badge>}
+              {o.locked && <Badge tone="ink">🔒 7-day streak</Badge>}
             </div>
             <p className="mt-1.5 text-sm text-ink-2">{o.desc}</p>
             <Btn href={o.href} disabled={o.locked} className="mt-4">
-              {o.locked ? "Verrouillé" : "Commencer"}
+              {o.locked ? "Locked" : "Start"}
             </Btn>
           </Card>
         ))}
       </div>
 
       <Card className="bg-paper">
-        <h2 className="text-sm font-semibold">Blancs complets 4 épreuves &amp; mode examinateur</h2>
+        <h2 className="text-sm font-semibold">Full 4-paper mocks &amp; examiner mode</h2>
         <p className="mt-1 text-sm text-ink-2">
-          Le blanc complet (les quatre épreuves le même jour, comme le vrai {profile.exam === "UNDECIDED" ? "TEF/TCF" : profile.exam}) et le mode
-          examinateur (notation stricte, chaîne de 21 jours) arrivent après la V1 — priorité aux
-          blocs quotidiens qui font monter le score.
+          The full mock (all four papers the same day, like the real {profile.exam === "UNDECIDED" ? "TEF/TCF" : profile.exam}) and examiner
+          mode (strict scoring, 21-day streak) come after V1 — priority is the daily blocks that raise the score.
         </p>
       </Card>
 
       {mocks.length > 0 && (
         <Card>
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">Historique</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-2">History</h2>
           <ul className="mt-2 space-y-1.5 text-sm">
             {[...mocks].reverse().slice(0, 8).map((m) => (
               <li key={m.id} className="flex justify-between border-b border-line pb-1.5 text-ink-2 last:border-0">

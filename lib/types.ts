@@ -108,6 +108,13 @@ export interface SpeakingSubmission {
   win: string;
 }
 
+export interface VocabEntry {
+  id: string;
+  front: string; // mot ou expression
+  back: string; // sens, exemple, remarque
+  addedAt: string; // yyyy-mm-dd
+}
+
 export interface CoachMessage {
   role: "user" | "coach";
   text: string;

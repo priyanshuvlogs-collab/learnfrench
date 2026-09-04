@@ -129,14 +129,14 @@ export function Badge({ children, tone = "accent" }: { children: ReactNode; tone
 export function Disclaimer({ compact = false }: { compact?: boolean }) {
   return (
     <p className={`text-ink-3 ${compact ? "text-[11px]" : "text-xs"} leading-relaxed`}>
-      Lumen Français est un outil d&apos;entraînement indépendant, sans affiliation avec IRCC, Le
-      français des affaires (CCI Paris Île-de-France) ou France Éducation international. Les scores
-      affichés sont des <strong>estimations pédagogiques</strong>, pas des résultats officiels, et
-      rien ici ne constitue un conseil en immigration. En cas de divergence,{" "}
+      Lumen Français is an independent training tool, not affiliated with IRCC, Le français des
+      affaires (CCI Paris Île-de-France), or France Éducation international. Scores shown are{" "}
+      <strong>pedagogical estimates</strong>, not official results, and nothing here is immigration
+      advice. If anything conflicts,{" "}
       <a href="https://www.canada.ca" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">
         canada.ca
       </a>{" "}
-      fait foi.
+      prevails.
     </p>
   );
 }

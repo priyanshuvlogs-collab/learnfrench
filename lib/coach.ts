@@ -35,19 +35,19 @@ function looksEnglish(text: string): boolean {
 }
 
 const CORRECTIONS: { pattern: RegExp; better: string; why: string }[] = [
-  { pattern: /malgré que/i, better: "« bien que + subjonctif » ou « malgré + nom »", why: "« malgré que » est considéré fautif à l'écrit d'examen." },
-  { pattern: /je suis intéressé (à|de)/i, better: "« je m'intéresse à » ou « je suis intéressé par »", why: "la préposition correcte est « par » après « intéressé »." },
-  { pattern: /beaucoup des/i, better: "« beaucoup de »", why: "après un adverbe de quantité, « de » reste invariable." },
-  { pattern: /je veux que vous (faites|donnez|aidez)/i, better: "« je veux que vous fassiez / donniez / aidiez »", why: "« vouloir que » exige le subjonctif." },
-  { pattern: /si j'aurais/i, better: "« si j'avais »", why: "après « si », jamais de conditionnel : « si j'avais, je ferais »." },
-  { pattern: /je suis agree|je suis d'accord avec que/i, better: "« je suis d'accord avec cette idée »", why: "« d'accord avec + nom », sans « que »." },
+  { pattern: /malgré que/i, better: "« bien que + subjonctif » or « malgré + noun »", why: "« malgré que » is marked wrong in exam writing." },
+  { pattern: /je suis intéressé (à|de)/i, better: "« je m'intéresse à » or « je suis intéressé par »", why: "the correct preposition after « intéressé » is « par »." },
+  { pattern: /beaucoup des/i, better: "« beaucoup de »", why: "after a quantity adverb, « de » stays invariable." },
+  { pattern: /je veux que vous (faites|donnez|aidez)/i, better: "« je veux que vous fassiez / donniez / aidiez »", why: "« vouloir que » takes the subjunctive." },
+  { pattern: /si j'aurais/i, better: "« si j'avais »", why: "after « si », never the conditional: « si j'avais, je ferais »." },
+  { pattern: /je suis agree|je suis d'accord avec que/i, better: "« je suis d'accord avec cette idée »", why: "« d'accord avec + noun », without « que »." },
 ];
 
 function weakestLine(ctx: CoachContext): { skill: Skill; label: string; href: string } {
   const { weakest } = readiness(ctx.estimates);
   const href =
     weakest === "writing" ? "/writing" : weakest === "speaking" ? "/speaking" : `/skills/${weakest}`;
-  return { skill: weakest, label: SKILL_LABELS[weakest].fr, href };
+  return { skill: weakest, label: SKILL_LABELS[weakest].en, href };
 }
 
 function profileLine(ctx: CoachContext): string {
@@ -65,12 +65,12 @@ export function coachReply(input: string, ctx: CoachContext): CoachReply {
   if (/(garant|guarantee|promis|promet|assur[eé])/.test(t) && /(\d{1,2}\s*(jours|days|semaines|weeks)|clb|nclc)/.test(t)) {
     return {
       text:
-        `Je ne garantis pas un NCLC ${target} en 30 jours — personne d'honnête ne le fait. Ce que je peux garantir : un plan. ` +
-        `Pour viser NCLC ${target}, comptez environ 1 h de travail ciblé par jour : 40 % sur votre compétence faible (${weak.label}), ` +
-        `le reste en format d'examen chronométré. Dans 30 jours, vous aurez des données réelles sur vos quatre compétences, pas une promesse. ` +
-        `On commence par ce qui limite votre profil aujourd'hui.`,
-      action: { label: `Travailler ${SKILL_LABELS[weak.skill].short} maintenant`, href: weak.href },
-      memoryNote: "A demandé une garantie de score — recadré vers un plan.",
+        `I do not guarantee NCLC ${target} in 30 days — nobody honest does. What I can guarantee: a plan. ` +
+        `To aim for NCLC ${target}, count on about 1 hour of targeted work a day: 40% on your weak skill (${weak.label}), ` +
+        `the rest in timed exam format. In 30 days you will have real data on all four skills, not a promise. ` +
+        `We start with what is capping your profile today.`,
+      action: { label: `Work ${SKILL_LABELS[weak.skill].short} now`, href: weak.href },
+      memoryNote: "Asked for a score guarantee — redirected to a plan.",
     };
   }
 
@@ -78,12 +78,12 @@ export function coachReply(input: string, ctx: CoachContext): CoachReply {
   if (/(visa|ircc|immigration|refus|expir|panique|panic|peur|anxieu|anxious|stress|scared|inquiet)/.test(t)) {
     return {
       text:
-        `Je comprends — l'enjeu est réel et la peur aussi. Respirez : vous n'avez pas à résoudre l'immigration ce soir.\n\n` +
-        `Ce qui dépend de vous aujourd'hui, c'est un seul chiffre : votre compétence la plus faible, ${weak.label} ` +
-        `(${formatNCLCRange(ctx.estimates[weak.skill])}). C'est elle qui fixe votre niveau officiel. Huit minutes dessus maintenant valent mieux qu'une heure d'inquiétude. ` +
-        `Pour les questions juridiques, voyez canada.ca ou un consultant réglementé — moi, je fais monter le français.`,
-      action: { label: "8 minutes sur " + SKILL_LABELS[weak.skill].short, href: weak.href },
-      memoryNote: "Moment d'anxiété visa — redirigé vers la compétence faible.",
+        `I understand — the stake is real, and the fear is too. Breathe: you do not have to solve immigration tonight.\n\n` +
+        `What is in your hands today is one number: your weakest skill, ${weak.label} ` +
+        `(${formatNCLCRange(ctx.estimates[weak.skill])}). That is what sets your official level. Eight minutes on it now beat an hour of worry. ` +
+        `For legal questions, see canada.ca or a regulated consultant — I raise the French.`,
+      action: { label: "8 minutes on " + SKILL_LABELS[weak.skill].short, href: weak.href },
+      memoryNote: "Visa anxiety — redirected to the weak skill.",
     };
   }
 
@@ -91,10 +91,10 @@ export function coachReply(input: string, ctx: CoachContext): CoachReply {
   if (looksEnglish(input)) {
     return {
       text:
-        `Quick answer in English: your official level is the LOWEST of your four skills, and right now that is ${weak.label} ` +
+        `Your official level is the LOWEST of your four skills, and right now that is ${weak.label} ` +
         `(${formatNCLCRange(ctx.estimates[weak.skill])}). That is where today's minutes go.\n\n` +
-        `Maintenant, une phrase en français — répétez-la à voix haute :\n« Aujourd'hui, je travaille ${weak.label.toLowerCase()} pendant ${ctx.profile.dailyMinutes} minutes. »`,
-      action: { label: "Commencer le bloc du jour", href: "/today" },
+        `Now one French sentence — say it out loud:\n« Aujourd'hui, je travaille ${SKILL_LABELS[weak.skill].fr.toLowerCase()} pendant ${ctx.profile.dailyMinutes} minutes. »`,
+      action: { label: "Start today's block", href: "/today" },
     };
   }
 
@@ -103,10 +103,10 @@ export function coachReply(input: string, ctx: CoachContext): CoachReply {
     if (c.pattern.test(input)) {
       return {
         text:
-          `Bien vu de pratiquer en français. Une amélioration :\n\n` +
-          `Utilisez ${c.better} — ${c.why}\n\n` +
-          `Réécrivez votre phrase avec cette forme, puis passons à l'action : votre profil est ${profileLine(ctx)} et c'est ${weak.label} qui décide de votre NCLC officiel.`,
-        action: { label: `Un exercice ${SKILL_LABELS[weak.skill].short}`, href: weak.href },
+          `Good — you are practising in French. One improvement:\n\n` +
+          `Use ${c.better} — ${c.why}\n\n` +
+          `Rewrite your sentence with that form, then we act: your profile is ${profileLine(ctx)} and ${weak.label} decides your official NCLC.`,
+        action: { label: `A ${SKILL_LABELS[weak.skill].short} drill`, href: weak.href },
       };
     }
   }
@@ -114,33 +114,33 @@ export function coachReply(input: string, ctx: CoachContext): CoachReply {
   // 5. Plan requests
   if (/(plan|programme|semaine|organis|horaire|schedule)/.test(t)) {
     const ph = phase(ctx.profile);
-    const mix = PHASE_MIX[ph].fr;
+    const mix = PHASE_MIX[ph].en;
     const dayLine =
       days === null
-        ? "Sans date d'examen fixée, on construit les fondations."
+        ? "No exam date set — we build foundations."
         : days > 0
-          ? `Examen dans ${days} jours.`
-          : "Votre date d'examen est passée — mettez-la à jour dans les réglages.";
+          ? `Exam in ${days} day${days > 1 ? "s" : ""}.`
+          : "Your exam date is past — update it in Settings.";
     return {
       text:
-        `${dayLine} Répartition actuelle : ${mix}.\n\n` +
-        `Concrètement pour vous : chaque jour, ${ctx.profile.dailyMinutes} minutes, dont la moitié sur ${weak.label} ` +
-        `tant qu'elle reste sous NCLC ${target}. Rappel d'intention : « ${ctx.profile.intention.time}, ${ctx.profile.intention.minutes} minutes ». ` +
-        `Les jours difficiles, la session de secours de 5 minutes garde la chaîne.`,
-      action: { label: "Voir le bloc du jour", href: "/today" },
+        `${dayLine} Current mix: ${mix}.\n\n` +
+        `For you: every day, ${ctx.profile.dailyMinutes} minutes, half of them on ${weak.label} ` +
+        `while it stays under NCLC ${target}. Intention reminder: “${ctx.profile.intention.time}, ${ctx.profile.intention.minutes} minutes”. ` +
+        `On hard days, the 5-minute rescue keeps the streak.`,
+      action: { label: "See today's block", href: "/today" },
     };
   }
 
   // 6. Start / drill requests
   if (/(commenc|start|entraîn|exercice|drill|pratiqu|écout|lir|écrir|parl)/.test(t)) {
-    let target_: { label: string; href: string } = { label: "Bloc du jour", href: "/today" };
-    if (/(écout|listen|oral(?!e))/.test(t)) target_ = { label: "Compréhension orale", href: "/skills/listening" };
-    else if (/(lir|lecture|read)/.test(t)) target_ = { label: "Compréhension écrite", href: "/skills/reading" };
-    else if (/(écrir|writing|lettre|texte)/.test(t)) target_ = { label: "Atelier d'écriture", href: "/writing" };
-    else if (/(parl|speak|prononc)/.test(t)) target_ = { label: "Atelier d'expression orale", href: "/speaking" };
-    else target_ = { label: `Travailler ${SKILL_LABELS[weak.skill].short}`, href: weak.href };
+    let target_: { label: string; href: string } = { label: "Today's block", href: "/today" };
+    if (/(écout|listen|oral(?!e))/.test(t)) target_ = { label: "Listening", href: "/skills/listening" };
+    else if (/(lir|lecture|read)/.test(t)) target_ = { label: "Reading", href: "/skills/reading" };
+    else if (/(écrir|writing|lettre|texte)/.test(t)) target_ = { label: "Writing studio", href: "/writing" };
+    else if (/(parl|speak|prononc)/.test(t)) target_ = { label: "Speaking studio", href: "/speaking" };
+    else target_ = { label: `Work ${SKILL_LABELS[weak.skill].short}`, href: weak.href };
     return {
-      text: `Très bien. Une consigne avant de commencer : c'est un bloc d'examen, pas un jeu — chronomètre visible, une seule écoute pour l'audio, réponse engagée. Votre estimation actuelle : ${profileLine(ctx)}. Allons-y.`,
+      text: `Good. One instruction before you start: this is an exam block, not a game — timer visible, one listen for audio, a committed answer. Current estimate: ${profileLine(ctx)}. Let's go.`,
       action: target_,
     };
   }
@@ -148,21 +148,21 @@ export function coachReply(input: string, ctx: CoachContext): CoachReply {
   // 7. Default coaching status
   const streakLine =
     ctx.streak.current > 0
-      ? `Chaîne : ${ctx.streak.current} jour${ctx.streak.current > 1 ? "s" : ""} (${ctx.streak.freezesLeft} gel${ctx.streak.freezesLeft > 1 ? "s" : ""} restant${ctx.streak.freezesLeft > 1 ? "s" : ""}).`
-      : `La chaîne est à zéro — aucun drame. Le protocole de reprise fait 8 minutes.`;
+      ? `Streak: ${ctx.streak.current} day${ctx.streak.current !== 1 ? "s" : ""} (${ctx.streak.freezesLeft} freeze${ctx.streak.freezesLeft !== 1 ? "s" : ""} left).`
+      : `Streak is at zero — no drama. The resume protocol is 8 minutes.`;
   const minutesLine =
     ctx.minutesToday >= ctx.profile.dailyMinutes
-      ? `Vos ${ctx.profile.dailyMinutes} minutes du jour sont faites.`
-      : `${ctx.minutesToday}/${ctx.profile.dailyMinutes} minutes faites aujourd'hui.`;
+      ? `Your ${ctx.profile.dailyMinutes} minutes for today are done.`
+      : `${ctx.minutesToday}/${ctx.profile.dailyMinutes} minutes done today.`;
   return {
     text:
-      `Vous préparez le ${ctx.profile.exam === "UNDECIDED" ? "TEF ou TCF Canada" : ctx.profile.exam + " Canada"} pour NCLC ${target}` +
-      (days !== null && days > 0 ? ` dans ${days} jours` : "") +
-      `. Profil estimé : ${profileLine(ctx)} — votre niveau officiel sera le plus bas des quatre. ` +
+      `You are preparing ${ctx.profile.exam === "UNDECIDED" ? "TEF or TCF Canada" : ctx.profile.exam + " Canada"} for NCLC ${target}` +
+      (days !== null && days > 0 ? ` in ${days} day${days > 1 ? "s" : ""}` : "") +
+      `. Estimated profile: ${profileLine(ctx)} — your official level will be the lowest of the four. ` +
       `${streakLine} ${minutesLine}\n\n` +
-      `La priorité reste ${weak.label} (${formatNCLCRange(ctx.estimates[weak.skill])}). Une action, maintenant :`,
+      `Priority remains ${weak.label} (${formatNCLCRange(ctx.estimates[weak.skill])}). One action, now:`,
     action: {
-      label: ctx.minutesToday >= ctx.profile.dailyMinutes ? "Rappel espacé (5 min)" : `Travailler ${SKILL_LABELS[weak.skill].short}`,
+      label: ctx.minutesToday >= ctx.profile.dailyMinutes ? "Spaced review (5 min)" : `Work ${SKILL_LABELS[weak.skill].short}`,
       href: ctx.minutesToday >= ctx.profile.dailyMinutes ? "/review" : weak.href,
     },
   };
@@ -182,11 +182,11 @@ export function weeklyLetter(ctx: CoachContext): string {
   }, {});
   const most = Object.entries(bySkill).sort((a, b) => b[1] - a[1])[0];
   return (
-    `Cette semaine : ${mins} minutes de travail réel sur ${last7.length} session${last7.length > 1 ? "s" : ""}. ` +
-    (most ? `Vous avez surtout investi ${SKILL_LABELS[most[0] as Skill].fr.toLowerCase()} (${most[1]} min). ` : "") +
-    `Votre profil estimé est ${profileLine(ctx)} — et c'est ${weak.label} qui fixe votre niveau officiel. ` +
-    `${ctx.streak.current > 0 ? `La chaîne tient à ${ctx.streak.current} jour${ctx.streak.current > 1 ? "s" : ""}.` : "La chaîne s'est cassée cette semaine ; le protocole de reprise vous attend, sans leçon de morale."} ` +
-    `La semaine prochaine : la moitié des minutes sur ${weak.label}, une production notée par jour, et une session de secours les soirs difficiles. ` +
-    `Ce sont des estimations pédagogiques — l'examen officiel reste le seul juge. — Camille`
+    `This week: ${mins} minutes of real work across ${last7.length} session${last7.length !== 1 ? "s" : ""}. ` +
+    (most ? `You mostly invested ${SKILL_LABELS[most[0] as Skill].en.toLowerCase()} (${most[1]} min). ` : "") +
+    `Your estimated profile is ${profileLine(ctx)} — and ${weak.label} sets your official level. ` +
+    `${ctx.streak.current > 0 ? `The streak holds at ${ctx.streak.current} day${ctx.streak.current !== 1 ? "s" : ""}.` : "The streak broke this week; the resume protocol is waiting, no lecture."} ` +
+    `Next week: half the minutes on ${weak.label}, one scored production a day, and a rescue session on hard evenings. ` +
+    `These are pedagogical estimates — the official exam remains the only judge. — Camille`
   );
 }
