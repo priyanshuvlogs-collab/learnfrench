@@ -14,12 +14,14 @@ const NAV: { href: string; fr: string; icon: string }[] = [
   { href: "/writing", fr: "Écriture", icon: "¶" },
   { href: "/speaking", fr: "Oral", icon: "◍" },
   { href: "/review", fr: "Révision", icon: "⟳" },
+  { href: "/lab", fr: "Labo", icon: "⚗" },
+  { href: "/notebook", fr: "Carnet", icon: "✦" },
   { href: "/mocks", fr: "Examens blancs", icon: "▦" },
   { href: "/progress", fr: "Progrès", icon: "∿" },
   { href: "/settings", fr: "Réglages", icon: "⚙" },
 ];
 
-const MOBILE_NAV = NAV.filter((n) => ["/today", "/coach", "/skills", "/review", "/progress"].includes(n.href));
+const MOBILE_NAV = NAV.filter((n) => ["/today", "/coach", "/skills", "/lab", "/review", "/progress"].includes(n.href));
 
 export function AppShell({ children }: { children: ReactNode }) {
   const router = useRouter();

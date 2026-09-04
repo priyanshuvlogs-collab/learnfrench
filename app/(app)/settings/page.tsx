@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/lib/store";
 import { Exam, TargetNCLC } from "@/lib/types";
+import { todayKey } from "@/lib/dates";
 import { Btn, Card } from "@/components/ui";
+
+const STORAGE_KEY = "lumen-francais-v1";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -13,6 +16,40 @@ export default function SettingsPage() {
   const resetAll = useApp((s) => s.resetAll);
   const streak = useApp((s) => s.streak);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  function exportData() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const blob = new Blob([raw], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `lumen-francais-${todayKey()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importData(file: File) {
+    setImportError(null);
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const text = String(reader.result);
+        const parsed = JSON.parse(text);
+        if (!parsed || typeof parsed !== "object" || !("state" in parsed)) {
+          throw new Error("format");
+        }
+        localStorage.setItem(STORAGE_KEY, text);
+        // recharger pour que le store se réhydrate depuis la sauvegarde
+        window.location.reload();
+      } catch {
+        setImportError("Ce fichier n'est pas une sauvegarde Lumen Français valide.");
+      }
+    };
+    reader.readAsText(file);
+  }
 
   return (
     <div className="space-y-5">
@@ -111,6 +148,26 @@ export default function SettingsPage() {
           Version de démonstration : toutes vos données (profil, sessions, productions) vivent dans le stockage local de ce
           navigateur. Rien n&apos;est envoyé à un serveur. En production : Postgres chiffré, export et suppression sur demande.
         </p>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <Btn onClick={exportData} variant="ghost">Exporter mes données (JSON)</Btn>
+          <Btn onClick={() => fileRef.current?.click()} variant="ghost">Importer une sauvegarde</Btn>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="application/json,.json"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) importData(f);
+              e.target.value = "";
+            }}
+          />
+        </div>
+        <p className="mt-2 text-xs text-ink-3">
+          L&apos;export contient tout : profil, chaîne, cartes, carnet, productions. L&apos;import remplace les données
+          actuelles de ce navigateur — faites un export d&apos;abord si vous hésitez.
+        </p>
+        {importError && <p className="mt-2 text-xs font-semibold text-warn">{importError}</p>}
         <div className="mt-4">
           {confirmReset ? (
             <div className="flex flex-wrap items-center gap-3">

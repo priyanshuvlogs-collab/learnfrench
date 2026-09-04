@@ -13,6 +13,7 @@ import {
   SpeakingSubmission,
   SrsCardState,
   StreakState,
+  VocabEntry,
   WritingSubmission,
 } from "./types";
 import { initialStreak, reconcile, recordQualifyingDay } from "./streak";
@@ -35,6 +36,7 @@ export interface AppState {
   coachLog: CoachMessage[];
   coachMemory: CoachMemoryBullet[];
   mocks: MockResult[];
+  vocab: VocabEntry[];
 
   signIn: (name: string, email: string) => void;
   completeOnboarding: (profile: Profile, selfLevels: Record<Skill, number>) => void;
@@ -48,6 +50,8 @@ export interface AppState {
   addCoachMessage: (msg: CoachMessage) => void;
   addMemory: (text: string) => void;
   addMock: (m: MockResult) => void;
+  addVocabEntry: (front: string, back: string) => void;
+  removeVocabEntry: (id: string) => void;
   reconcileStreak: () => void;
   resetAll: () => void;
 }
@@ -80,6 +84,7 @@ export const useApp = create<AppState>()(
       coachLog: [],
       coachMemory: [],
       mocks: [],
+      vocab: [],
 
       signIn: (name, email) =>
         set((st) => ({
@@ -161,6 +166,19 @@ export const useApp = create<AppState>()(
 
       addMock: (m) => set((st) => ({ mocks: [...st.mocks, m] })),
 
+      addVocabEntry: (front, back) =>
+        set((st) => ({
+          vocab: [...st.vocab, { id: `vb-${uid()}`, front: front.trim(), back: back.trim(), addedAt: todayKey() }],
+        })),
+
+      removeVocabEntry: (id) =>
+        set((st) => {
+          // drop the SRS schedule of the deleted card too
+          const srs = { ...st.srs };
+          delete srs[id];
+          return { vocab: st.vocab.filter((v) => v.id !== id), srs };
+        }),
+
       reconcileStreak: () => set((st) => ({ streak: reconcile(st.streak) })),
 
       resetAll: () =>
@@ -176,6 +194,7 @@ export const useApp = create<AppState>()(
           coachLog: [],
           coachMemory: [],
           mocks: [],
+          vocab: [],
         }),
     }),
     { name: "lumen-francais-v1" }

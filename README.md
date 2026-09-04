@@ -33,14 +33,19 @@ message du coach existe pour faire monter l'une des quatre compétences vers la 
 | Compétences | Tableaux de bord CO/CE/EE/EO + joueur d'exercices (écoute unique en synthèse vocale, pièges expliqués) |
 | Atelier d'écriture | Consigne/éditeur en vis-à-vis, chrono officiel, compteur de mots, collage désactivé, détection de saut de niveau suspect, grille en 5 dimensions, paragraphe modèle + 3 formules |
 | Atelier oral | Chronos d'examen, enregistrement micro, transcription (reconnaissance vocale navigateur), notation 5 dimensions, « redites-le, en mieux » |
-| Révision | 120 cartes SRS (connecteurs, structures, pièges, gabarits), protocole de secours 5 min |
+| Révision | 120 cartes SRS (connecteurs, structures, pièges, gabarits) + cartes du carnet personnel, protocole de secours 5 min |
+| Labo | Dictée (2 écoutes, correction mot à mot qui distingue faute d'accent et mot faux, piège expliqué), nombres au vol (prix/heures/années/téléphones dictés une fois, générés à la volée), sprint de conjugaison (6 temps d'examen, ½ point si seuls les accents manquent) |
+| Mon carnet | Vocabulaire personnel ; chaque entrée devient une carte SRS mélangée au programme |
 | Examens blancs | Mini-blancs CO/CE + blancs de section (débloqués à 7 jours de chaîne), respiration en carré, revue question par question avec temps passé |
 | Progrès | Heatmap 14 jours, trajectoires par compétence, calendrier de chaîne 28 jours, modèle honnête « distance à la cible », lettre hebdomadaire du coach |
 | Tableaux officiels | 3 barèmes IRCC avec avertissement double-colonne TEF |
 
 Contenu d'origine (`source: original practice`) : 40 items d'écoute, 40 de lecture,
-25 sujets d'écriture (TEF A/B + TCF T1/T2/T3) avec modèles, 25 sujets d'oral, 120 cartes SRS.
+25 sujets d'écriture (TEF A/B + TCF T1/T2/T3) avec modèles, 25 sujets d'oral, 120 cartes SRS,
+24 phrases de dictée (3 niveaux), 48 items de conjugaison (6 temps).
 Aucune annale officielle n'est reproduite.
+
+Réglages : export/import de toutes les données en JSON (la démo vit dans `localStorage`).
 
 ## Lancer
 
