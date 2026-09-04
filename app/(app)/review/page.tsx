@@ -54,9 +54,11 @@ function Review() {
 
   const queue = useMemo(() => {
     const due = allCards.filter((c) => isDue(srs[c.id]));
+    // les cartes du carnet passent devant : elles sont rares et choisies par l'utilisateur
+    const dueOrdered = [...due.filter((c) => c.type === "vocab"), ...due.filter((c) => c.type !== "vocab")];
     const rest = allCards.filter((c) => !isDue(srs[c.id]));
     const n = rescue ? 10 : 12;
-    return [...due, ...rest].slice(0, n);
+    return [...dueOrdered, ...rest].slice(0, n);
     // freeze queue at mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

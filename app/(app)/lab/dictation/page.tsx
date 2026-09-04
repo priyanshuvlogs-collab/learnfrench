@@ -92,16 +92,20 @@ function Dictation({ level }: { level: "A" | "B" | "C" }) {
   }, []);
 
   function speak() {
-    if (plays >= MAX_PLAYS || typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    if (playing || plays >= MAX_PLAYS || typeof window === "undefined" || !("speechSynthesis" in window)) return;
     const u = new SpeechSynthesisUtterance(item.text);
     u.lang = "fr-FR";
     u.rate = plays === 0 ? 0.9 : 0.7; // seconde écoute plus lente, comme en dictée réelle
     const fr = window.speechSynthesis.getVoices().find((v) => v.lang.startsWith("fr"));
     if (fr) u.voice = fr;
-    u.onend = () => setPlaying(false);
+    const clear = () => setPlaying(false);
+    u.onend = clear;
+    u.onerror = clear;
     setPlays((p) => p + 1);
     setPlaying(true);
     window.speechSynthesis.speak(u);
+    // certains environnements ne déclenchent jamais onend : déverrouiller quand même
+    window.setTimeout(clear, 2000 + item.text.length * 130);
   }
 
   function check() {

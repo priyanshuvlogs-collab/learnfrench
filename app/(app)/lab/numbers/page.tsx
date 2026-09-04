@@ -43,13 +43,17 @@ export default function NumbersPage() {
     u.rate = 0.95;
     const fr = window.speechSynthesis.getVoices().find((v) => v.lang.startsWith("fr"));
     if (fr) u.voice = fr;
-    u.onend = () => {
+    const clear = () => {
       setPlaying(false);
       inputRef.current?.focus();
     };
+    u.onend = clear;
+    u.onerror = clear;
     setPlayed(true);
     setPlaying(true);
     window.speechSynthesis.speak(u);
+    // certains environnements ne déclenchent jamais onend : déverrouiller quand même
+    window.setTimeout(clear, 2000 + item.spoken.length * 130);
   }
 
   function check() {
